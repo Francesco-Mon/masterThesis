@@ -1,0 +1,19 @@
+{
+  "runId": "20261102-215232_llm_nvidia-nemotron-3.5-super-vl-free_dev",
+  "time": "2026-11-02T21:52:32.655601Z",
+  "grounder": "llm",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "provider": null,
+  "temperature": 0.0,
+  "split": "dev",
+  "repeats": 1,
+  "cases": 54,
+  "cache": true,
+  "dataset": "data/requests.jsonl",
+  "datasetSha256": "03d657b05c223f54",
+  "gitCommit": "d396aeb",
+  "callsLogRunId": "9ab6b1b6b756",
+  "promptSha256": "6552f9af276e7d3b",
+  "schemaSha256": "d00987ca62e50c53",
+  "promptVersion": "v1"
+}

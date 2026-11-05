@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cpsagent"
+version = "0.1.0"
+description = "Person Agent prototype: autonomous resource orchestration for CPS mediated by agentic AI (master's thesis)"
+readme = "README.md"
+requires-python = ">=3.12"
+# Core: contracts, emulator, engine, LLM grounder (OpenRouter client) and evaluation runner.
+# openai/httpx/numpy are small and imported at module level by the grounder, the runner,
+# the embedding grounder and the clip recorder, so they are core and `.[dev]` runs the tests.
+dependencies = [
+    "pydantic>=2.11",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+    "openai>=1.40",
+    "httpx>=0.27",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+# Heavy packages, only for the parts that load real models (their tests skip without them).
+embeddings = ["sentence-transformers>=3.0"]           # embedding grounder (Candidate C)
+# av < 17: faster-whisper 1.2.1 calls av.open(metadata_errors=...), which PyAV 19 rejects
+ui = ["streamlit>=1.38", "faster-whisper==1.2.1", "av>=11,<17", "sounddevice>=0.5"]  # UI + STT
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Import from src/ directly, so tests work even if the editable-install .pth is skipped
+pythonpath = ["src"]
+# Live tests (real LLM / network) are skipped unless run with: pytest -m live
+# Real embedding-model tests are skipped unless run with: pytest -m embeddings
+# Real speech-to-text tests are skipped unless run with: pytest -m stt
+addopts = "-m 'not live and not embeddings and not stt'"
+markers = [
+    "live: needs network and OPENROUTER_API_KEY (skipped by default)",
+    "embeddings: loads the real sentence-transformers model (skipped by default)",
+    "stt: loads the real faster-whisper model (skipped by default)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

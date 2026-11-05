@@ -1,0 +1,20 @@
+{"id": "stt-01", "language": "en", "voice": "Samantha", "text": "Turn on the light", "source": "en-002"}
+{"id": "stt-02", "language": "en", "voice": "Daniel", "text": "Close the blinds", "source": "en-005"}
+{"id": "stt-03", "language": "en", "voice": "Eddy (Inglese (USA))", "text": "Set the lights to 70 percent brightness", "source": "en-012"}
+{"id": "stt-04", "language": "en", "voice": "Flo (Inglese (UK))", "text": "Turn on the kitchen light", "source": "en-016"}
+{"id": "stt-05", "language": "en", "voice": "Reed (Inglese (USA))", "text": "Dim the office lamp to 25 percent", "source": "en-023"}
+{"id": "stt-06", "language": "en", "voice": "Samantha", "text": "It's getting chilly", "source": "en-036"}
+{"id": "stt-07", "language": "en", "voice": "Daniel", "text": "It's a bit dim in here", "source": "en-043"}
+{"id": "stt-08", "language": "en", "voice": "Eddy (Inglese (USA))", "text": "Light my way to the office, please", "source": "en-062"}
+{"id": "stt-09", "language": "en", "voice": "Flo (Inglese (UK))", "text": "Turn the heating up everywhere", "source": "en-081"}
+{"id": "stt-10", "language": "en", "voice": "Reed (Inglese (USA))", "text": "Turn on the ventilation", "source": "en-108"}
+{"id": "stt-11", "language": "it", "voice": "Alice", "text": "Accendi la luce della cucina", "source": "it-004"}
+{"id": "stt-12", "language": "it", "voice": "Eddy (Italiano (Italia))", "text": "Fai più caldo", "source": "it-011"}
+{"id": "stt-13", "language": "it", "voice": "Flo (Italiano (Italia))", "text": "Alza il riscaldamento ovunque", "source": "it-018"}
+{"id": "stt-14", "language": "it", "voice": "Reed (Italiano (Italia))", "text": "Accendi la ventilazione", "source": "it-023"}
+{"id": "stt-15", "language": "it", "voice": "Sandy (Italiano (Italia))", "text": "Accendi le luci del giardino", "source": "it-026"}
+{"id": "stt-16", "language": "it", "voice": "Alice", "text": "Metti la lampada dell'atrio al minimo", "source": "new"}
+{"id": "stt-17", "language": "it", "voice": "Eddy (Italiano (Italia))", "text": "Abbassa le tapparelle dell'ufficio", "source": "new"}
+{"id": "stt-18", "language": "it", "voice": "Flo (Italiano (Italia))", "text": "Non riesco a leggere, c'è poca luce", "source": "new"}
+{"id": "stt-19", "language": "it", "voice": "Reed (Italiano (Italia))", "text": "Porta il termostato della cucina a 21 gradi", "source": "new"}
+{"id": "stt-20", "language": "it", "voice": "Sandy (Italiano (Italia))", "text": "Illuminami la strada fino alla sala riunioni", "source": "new"}

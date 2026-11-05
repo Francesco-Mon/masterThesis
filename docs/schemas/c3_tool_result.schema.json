@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "Operation": {
+      "description": "Exactly the four allowed operations. Only INVOKE_COMMAND changes the environment.",
+      "enum": [
+        "listZones",
+        "listDevices",
+        "getDeviceState",
+        "invokeCommand"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "ToolError": {
+      "enum": [
+        "operation_not_allowed",
+        "invalid_args",
+        "unknown_zone",
+        "unknown_device",
+        "command_not_supported",
+        "out_of_scope",
+        "device_failure"
+      ],
+      "title": "ToolError",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Result of one operation.\n\n`state` is the observation: zones with adjacency (listZones), devices\n(listDevices), or a device state (getDeviceState / invokeCommand).\n`operation` is None only for a rejected call whose operation is not one of the four.",
+  "properties": {
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ToolError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "ok": {
+      "title": "Ok",
+      "type": "boolean"
+    },
+    "operation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Operation"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "state": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "State"
+    }
+  },
+  "required": [
+    "ok",
+    "operation"
+  ],
+  "title": "ToolResult",
+  "type": "object"
+}

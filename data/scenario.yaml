@@ -1,0 +1,73 @@
+# Reference scenario: "Follow the user with light".
+# Every test, the demo and the evaluation set refer to this file.
+# Entity and field names follow thesis Chapter 5 (Building, Zone, Device, PositioningSignal).
+#
+# Designed so that grounding is NOT trivial:
+#  - "hallway" and "corridor" have similar names and are adjacent;
+#  - storage and server_room have no lamps (storage has no device at all);
+#  - lamp_corridor and lamp_kitchen cannot "dim"; blind_meeting cannot "setPosition";
+#  - no device offers the capabilities listed in absentCapabilities;
+#  - server_room is outside the scope granted to the Person Agent (its device is not catalogued).
+
+building:
+  name: Lab Building
+  category: office
+  location: {type: Point, coordinates: [9.19, 45.46]}  # emulated, not a real address
+
+zones:
+  - {zoneId: lobby, name: Lobby, adjacency: [hallway]}
+  - {zoneId: hallway, name: Hallway, adjacency: [lobby, corridor, kitchen]}
+  - {zoneId: corridor, name: Corridor, adjacency: [hallway, office, meeting_room, storage, server_room]}
+  - {zoneId: office, name: Office, adjacency: [corridor]}
+  - {zoneId: meeting_room, name: Meeting room, adjacency: [corridor]}
+  - {zoneId: kitchen, name: Kitchen, adjacency: [hallway]}
+  - {zoneId: storage, name: Storage, adjacency: [corridor]}
+  - {zoneId: server_room, name: Server room, adjacency: [corridor]}
+
+# controlledProperty vocabulary: light (lamps), shading (blinds), temperature (thermostats).
+# Commands and their effect on `state` are defined per category in environment/commands.py.
+devices:
+  - {deviceId: lamp_lobby, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: lobby}
+  - {deviceId: lamp_hallway, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: hallway}
+  - {deviceId: lamp_corridor, category: lamp, controlledProperty: light, supportedCommand: ["on", "off"], refZone: corridor}
+  - {deviceId: lamp_office, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: office}
+  - {deviceId: lamp_meeting_room, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: meeting_room}
+  - {deviceId: lamp_kitchen, category: lamp, controlledProperty: light, supportedCommand: ["on", "off"], refZone: kitchen}
+  - {deviceId: blind_office, category: blind, controlledProperty: shading, supportedCommand: [open, close, setPosition], refZone: office}
+  - {deviceId: blind_meeting_room, category: blind, controlledProperty: shading, supportedCommand: [open, close], refZone: meeting_room}
+  - {deviceId: thermostat_office, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: office}
+  - {deviceId: thermostat_meeting_room, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: meeting_room}
+  - {deviceId: thermostat_server_room, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: server_room}
+
+# Capabilities a user may plausibly ask for but that NO device offers.
+# Requests about them must end in `unsupported` / Recover, never in a command.
+absentCapabilities: [sound, ventilation, humidity, lightColor]
+
+# Emulated broker (Binding steps Locate and Authenticate). No real secret: the token is
+# issued to any registered agent id; the scope says which zones it may act on.
+broker:
+  endpoint: emulator://lab-building
+  agents:
+    person-agent:
+      scopeZones: [lobby, hallway, corridor, office, meeting_room, kitchen, storage]
+
+# Scripted user paths for the mobility simulator.
+# A segment {zone, ticks} = the user stays in `zone` for `ticks` ticks.
+# Between two consecutive zones the user walks for `transitTicks` ticks.
+# A segment {doorway: [a, b], ticks} = the user stands on the boundary between a and b.
+paths:
+  walk_in_the_light:
+    subject: user-1
+    transitTicks: 4
+    segments:
+      - {zone: lobby, ticks: 4}
+      - {zone: hallway, ticks: 6}
+      - {zone: corridor, ticks: 6}
+      - {zone: office, ticks: 4}
+  doorway_linger:
+    subject: user-1
+    transitTicks: 4
+    segments:
+      - {zone: hallway, ticks: 4}
+      - {doorway: [hallway, corridor], ticks: 16}
+      - {zone: hallway, ticks: 4}

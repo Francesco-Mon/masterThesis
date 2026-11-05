@@ -1,0 +1,15 @@
+{
+  "runId": "stt_20261104-153432_recorded",
+  "date": "2026-11-04T15:34:32+00:00",
+  "source": "recorded",
+  "model": "Systran/faster-whisper-small@536b0662742c02347bc0e980a01041f333bce120",
+  "computeType": "int8",
+  "decoding": {
+    "beam_size": 5,
+    "temperature": 0.0,
+    "vad_filter": false
+  },
+  "loadS": 1.39,
+  "machine": "arm64 macOS 15.6.1",
+  "set": "data/stt_recorded_set.jsonl"
+}

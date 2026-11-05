@@ -1,0 +1,36 @@
+{
+  "runId": "20261102-223815_llm_openai-gpt-oss-120b_dev",
+  "time": "2026-11-02T22:38:15.863025Z",
+  "grounder": "llm",
+  "model": "openai/gpt-oss-120b",
+  "provider": "DekaLLM",
+  "temperature": 0.0,
+  "split": "dev",
+  "repeats": 1,
+  "cases": 54,
+  "cache": true,
+  "dataset": "data/requests.jsonl",
+  "datasetSha256": "32d5ccef09b243c4",
+  "gitCommit": "ed2fbbe",
+  "callsLogRunId": "89c57522c46a",
+  "promptVersion": "v2",
+  "promptSha256": "ed79f0d9ef604551",
+  "schemaSha256": "d00987ca62e50c53",
+  "retriedFailed": [
+    {
+      "id": "en-099",
+      "repeat": 0,
+      "recovered": true
+    },
+    {
+      "id": "en-126",
+      "repeat": 0,
+      "recovered": true
+    },
+    {
+      "id": "en-137",
+      "repeat": 0,
+      "recovered": true
+    }
+  ]
+}

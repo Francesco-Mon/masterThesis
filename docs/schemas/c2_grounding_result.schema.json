@@ -1,0 +1,196 @@
+{
+  "$defs": {
+    "Action": {
+      "enum": [
+        "activate",
+        "deactivate",
+        "increase",
+        "decrease",
+        "set",
+        "query"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "ClarificationReason": {
+      "enum": [
+        "ambiguous_target",
+        "ambiguous_action",
+        "missing_information",
+        "low_confidence",
+        "invalid_output",
+        "service_unavailable"
+      ],
+      "title": "ClarificationReason",
+      "type": "string"
+    },
+    "ClarificationResult": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "clarification",
+          "default": "clarification",
+          "title": "Kind",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/$defs/ClarificationReason"
+        }
+      },
+      "required": [
+        "question",
+        "reason"
+      ],
+      "title": "ClarificationResult",
+      "type": "object"
+    },
+    "IntentResult": {
+      "additionalProperties": false,
+      "properties": {
+        "intent": {
+          "$ref": "#/$defs/StructuredIntent"
+        },
+        "kind": {
+          "const": "intent",
+          "default": "intent",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "intent"
+      ],
+      "title": "IntentResult",
+      "type": "object"
+    },
+    "Persistence": {
+      "enum": [
+        "one_off",
+        "following"
+      ],
+      "title": "Persistence",
+      "type": "string"
+    },
+    "Scope": {
+      "enum": [
+        "current_zone",
+        "path",
+        "environment"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "StructuredIntent": {
+      "additionalProperties": false,
+      "description": "What the user wants, independent of devices: verb + property + where + how long.\n\n`controlledProperty` must exist in the catalogue, and `targetZoneId` (if given) must\nbe a catalogued zone. The model cannot know the catalogue by itself, so these checks\nrun only when the caller passes it as validation context:\n`model_validate(data, context={\"catalogue_properties\": {...}, \"catalogue_zones\": {...}})`.\n\n`targetZoneId` is set only when the user names a zone other than the current one\n(\"turn on the kitchen light\" said in the hallway); it then replaces the current zone,\nso it is allowed only with scope `current_zone`.\n\n`value` is the number the user asks for, in the property's unit: percent for light\n(brightness) and shading (0 = blinds open, 100 = closed, so it grows with the\nproperty as `increase` does), degrees Celsius for temperature. It is present exactly\nwhen `action` is `set` (\"set the thermostat to 22\", \"dim the lamp to 40%\"). Ranges\nare checked by the environment, not here.",
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "controlledProperty": {
+          "minLength": 1,
+          "title": "Controlledproperty",
+          "type": "string"
+        },
+        "persistence": {
+          "$ref": "#/$defs/Persistence"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "targetZoneId": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Targetzoneid"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "action",
+        "controlledProperty",
+        "scope",
+        "persistence",
+        "confidence"
+      ],
+      "title": "StructuredIntent",
+      "type": "object"
+    },
+    "UnsupportedReason": {
+      "enum": [
+        "capability_absent",
+        "command_absent",
+        "out_of_scope"
+      ],
+      "title": "UnsupportedReason",
+      "type": "string"
+    },
+    "UnsupportedResult": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "unsupported",
+          "default": "unsupported",
+          "title": "Kind",
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/$defs/UnsupportedReason"
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "title": "UnsupportedResult",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "clarification": "#/$defs/ClarificationResult",
+      "intent": "#/$defs/IntentResult",
+      "unsupported": "#/$defs/UnsupportedResult"
+    },
+    "propertyName": "kind"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/IntentResult"
+    },
+    {
+      "$ref": "#/$defs/ClarificationResult"
+    },
+    {
+      "$ref": "#/$defs/UnsupportedResult"
+    }
+  ]
+}

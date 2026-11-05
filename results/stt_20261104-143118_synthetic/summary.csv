@@ -1,0 +1,29 @@
+table,group,clips,WER,exact clips,language detected,audio ms (mean),p50 ms,p95 ms,RTF p50,RTF p95
+Per language,auto en,10,3.8%,9/10,10/10,1902,2590,2636,1.30,2.97
+Per language,auto it,10,40.0%,4/10,8/10,2243,2660,2777,1.21,1.91
+Per language,auto all,20,22.2%,13/20,18/20,2073,2607,2714,1.26,2.84
+Per language,forced en,10,3.8%,9/10,10/10,1902,1382,1470,0.72,1.67
+Per language,forced it,10,32.7%,4/10,10/10,2243,1510,1738,0.66,1.03
+Per language,forced all,20,18.5%,13/20,20/20,2073,1424,1630,0.70,1.47
+Per voice,auto it Alice,2,0.0%,2/2,2/2,1855,2567,2673,1.27,1.59
+Per voice,auto it other voices,8,51.2%,2/8,6/8,2340,2660,2777,1.13,1.91
+Per voice,auto en Daniel,2,0.0%,2/2,2/2,1285,2607,2636,1.95,2.14
+Per voice,auto en Eddy (Inglese (USA)),2,0.0%,2/2,2/2,2775,2562,2630,0.83,1.06
+Per voice,auto en Flo (Inglese (UK)),2,0.0%,2/2,2/2,1969,2459,2501,1.17,1.36
+Per voice,auto en Reed (Inglese (USA)),2,18.2%,1/2,2/2,2579,2468,2590,0.79,1.30
+Per voice,auto en Samantha,2,0.0%,2/2,2/2,904,2620,2627,2.84,2.97
+Per voice,auto it Eddy (Italiano (Italia)),2,62.5%,1/2,2/2,1839,2531,2665,1.13,1.91
+Per voice,auto it Flo (Italiano (Italia)),2,100.0%,0/2,0/2,2486,2684,2714,0.95,1.26
+Per voice,auto it Reed (Italiano (Italia)),2,9.1%,1/2,2/2,2532,2595,2660,0.84,1.36
+Per voice,auto it Sandy (Italiano (Italia)),2,33.3%,0/2,2/2,2502,2590,2777,0.97,1.21
+Per voice,forced it Alice,2,0.0%,2/2,2/2,1855,1446,1738,0.83,0.90
+Per voice,forced it other voices,8,41.9%,2/8,8/8,2340,1510,1630,0.66,1.03
+Per voice,forced en Daniel,2,0.0%,2/2,2/2,1285,1364,1431,1.06,1.12
+Per voice,forced en Eddy (Inglese (USA)),2,0.0%,2/2,2/2,2775,1424,1458,0.46,0.59
+Per voice,forced en Flo (Inglese (UK)),2,0.0%,2/2,2/2,1969,1374,1382,0.66,0.75
+Per voice,forced en Reed (Inglese (USA)),2,18.2%,1/2,2/2,2579,1370,1414,0.43,0.72
+Per voice,forced en Samantha,2,0.0%,2/2,2/2,904,1360,1470,1.47,1.67
+Per voice,forced it Eddy (Italiano (Italia)),2,62.5%,1/2,2/2,1839,1365,1556,0.66,1.03
+Per voice,forced it Flo (Italiano (Italia)),2,66.7%,0/2,2/2,2486,1417,1561,0.56,0.66
+Per voice,forced it Reed (Italiano (Italia)),2,9.1%,1/2,2/2,2532,1346,1595,0.51,0.71
+Per voice,forced it Sandy (Italiano (Italia)),2,33.3%,0/2,2/2,2502,1510,1630,0.57,0.70

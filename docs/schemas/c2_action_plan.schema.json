@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "NowGuard": {
+      "additionalProperties": false,
+      "description": "Execute the step immediately.",
+      "properties": {
+        "type": {
+          "const": "now",
+          "default": "now",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "NowGuard",
+      "type": "object"
+    },
+    "OnEnterZoneGuard": {
+      "additionalProperties": false,
+      "description": "Execute the step when the user arrives in `zoneId`.",
+      "properties": {
+        "type": {
+          "const": "on_enter_zone",
+          "default": "on_enter_zone",
+          "title": "Type",
+          "type": "string"
+        },
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId"
+      ],
+      "title": "OnEnterZoneGuard",
+      "type": "object"
+    },
+    "PlanStep": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "deviceId": {
+          "minLength": 1,
+          "title": "Deviceid",
+          "type": "string"
+        },
+        "guard": {
+          "discriminator": {
+            "mapping": {
+              "now": "#/$defs/NowGuard",
+              "on_enter_zone": "#/$defs/OnEnterZoneGuard"
+            },
+            "propertyName": "type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/NowGuard"
+            },
+            {
+              "$ref": "#/$defs/OnEnterZoneGuard"
+            }
+          ],
+          "title": "Guard"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "deviceId",
+        "command",
+        "guard"
+      ],
+      "title": "PlanStep",
+      "type": "object"
+    },
+    "ZoneEstimate": {
+      "additionalProperties": false,
+      "description": "Where Localization believes the user is (zone level only).\n\nWhether `zoneId` exists is checked against the bound spatial model, not here:\nthe contract alone does not know the building.",
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "observedAt": {
+          "format": "date-time",
+          "title": "Observedat",
+          "type": "string"
+        },
+        "previousZoneId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previouszoneid"
+        },
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId",
+        "confidence",
+        "observedAt"
+      ],
+      "title": "ZoneEstimate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Output of the Plan state.\n\n`steps` may be empty: an empty plan is how the planner says \"no applicable\nstep\", which the engine maps to Plan -> Recover (T5). `validFor` going stale\n(user changed zone) triggers Observe -> Plan (T9).",
+  "properties": {
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/PlanStep"
+      },
+      "title": "Steps",
+      "type": "array"
+    },
+    "validFor": {
+      "$ref": "#/$defs/ZoneEstimate"
+    }
+  },
+  "required": [
+    "steps",
+    "validFor"
+  ],
+  "title": "ActionPlan",
+  "type": "object"
+}

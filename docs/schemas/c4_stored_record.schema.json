@@ -1,0 +1,555 @@
+{
+  "$defs": {
+    "Action": {
+      "enum": [
+        "activate",
+        "deactivate",
+        "increase",
+        "decrease",
+        "set",
+        "query"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "EventRecord": {
+      "additionalProperties": false,
+      "description": "One record per transition, exactly one. `from` is a Python keyword, hence `from_`.",
+      "properties": {
+        "action": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "getDeviceState": "#/$defs/GetDeviceStateCall",
+                  "invokeCommand": "#/$defs/InvokeCommandCall",
+                  "listDevices": "#/$defs/ListDevicesCall",
+                  "listZones": "#/$defs/ListZonesCall"
+                },
+                "propertyName": "operation"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/ListZonesCall"
+                },
+                {
+                  "$ref": "#/$defs/ListDevicesCall"
+                },
+                {
+                  "$ref": "#/$defs/GetDeviceStateCall"
+                },
+                {
+                  "$ref": "#/$defs/InvokeCommandCall"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action"
+        },
+        "from": {
+          "$ref": "#/$defs/State"
+        },
+        "guard": {
+          "$ref": "#/$defs/Guard"
+        },
+        "intent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StructuredIntent"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ToolResult"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session": {
+          "minLength": 1,
+          "title": "Session",
+          "type": "string"
+        },
+        "time": {
+          "format": "date-time",
+          "title": "Time",
+          "type": "string"
+        },
+        "to": {
+          "$ref": "#/$defs/State"
+        },
+        "zone": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ZoneEstimate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "seq",
+        "time",
+        "session",
+        "from",
+        "to",
+        "guard"
+      ],
+      "title": "EventRecord",
+      "type": "object"
+    },
+    "GetDeviceStateArgs": {
+      "additionalProperties": false,
+      "properties": {
+        "deviceId": {
+          "minLength": 1,
+          "title": "Deviceid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "deviceId"
+      ],
+      "title": "GetDeviceStateArgs",
+      "type": "object"
+    },
+    "GetDeviceStateCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/GetDeviceStateArgs"
+        },
+        "operation": {
+          "const": "getDeviceState",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "args"
+      ],
+      "title": "GetDeviceStateCall",
+      "type": "object"
+    },
+    "Guard": {
+      "description": "Row id of the transition table (SPEC section 6, thesis Table 5.3).",
+      "enum": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "title": "Guard",
+      "type": "string"
+    },
+    "InvokeCommandArgs": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "deviceId": {
+          "minLength": 1,
+          "title": "Deviceid",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "deviceId",
+        "command"
+      ],
+      "title": "InvokeCommandArgs",
+      "type": "object"
+    },
+    "InvokeCommandCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/InvokeCommandArgs"
+        },
+        "operation": {
+          "const": "invokeCommand",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "args"
+      ],
+      "title": "InvokeCommandCall",
+      "type": "object"
+    },
+    "ListDevicesArgs": {
+      "additionalProperties": false,
+      "properties": {
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId"
+      ],
+      "title": "ListDevicesArgs",
+      "type": "object"
+    },
+    "ListDevicesCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/ListDevicesArgs"
+        },
+        "operation": {
+          "const": "listDevices",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "args"
+      ],
+      "title": "ListDevicesCall",
+      "type": "object"
+    },
+    "ListZonesCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/NoArgs",
+          "default": {}
+        },
+        "operation": {
+          "const": "listZones",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "title": "ListZonesCall",
+      "type": "object"
+    },
+    "NoArgs": {
+      "additionalProperties": false,
+      "properties": {},
+      "title": "NoArgs",
+      "type": "object"
+    },
+    "Operation": {
+      "description": "Exactly the four allowed operations. Only INVOKE_COMMAND changes the environment.",
+      "enum": [
+        "listZones",
+        "listDevices",
+        "getDeviceState",
+        "invokeCommand"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "Persistence": {
+      "enum": [
+        "one_off",
+        "following"
+      ],
+      "title": "Persistence",
+      "type": "string"
+    },
+    "Scope": {
+      "enum": [
+        "current_zone",
+        "path",
+        "environment"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "State": {
+      "enum": [
+        "Perceive",
+        "Interpret",
+        "Plan",
+        "Act",
+        "Observe",
+        "Recover"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "StructuredIntent": {
+      "additionalProperties": false,
+      "description": "What the user wants, independent of devices: verb + property + where + how long.\n\n`controlledProperty` must exist in the catalogue, and `targetZoneId` (if given) must\nbe a catalogued zone. The model cannot know the catalogue by itself, so these checks\nrun only when the caller passes it as validation context:\n`model_validate(data, context={\"catalogue_properties\": {...}, \"catalogue_zones\": {...}})`.\n\n`targetZoneId` is set only when the user names a zone other than the current one\n(\"turn on the kitchen light\" said in the hallway); it then replaces the current zone,\nso it is allowed only with scope `current_zone`.\n\n`value` is the number the user asks for, in the property's unit: percent for light\n(brightness) and shading (0 = blinds open, 100 = closed, so it grows with the\nproperty as `increase` does), degrees Celsius for temperature. It is present exactly\nwhen `action` is `set` (\"set the thermostat to 22\", \"dim the lamp to 40%\"). Ranges\nare checked by the environment, not here.",
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "controlledProperty": {
+          "minLength": 1,
+          "title": "Controlledproperty",
+          "type": "string"
+        },
+        "persistence": {
+          "$ref": "#/$defs/Persistence"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "targetZoneId": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Targetzoneid"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "action",
+        "controlledProperty",
+        "scope",
+        "persistence",
+        "confidence"
+      ],
+      "title": "StructuredIntent",
+      "type": "object"
+    },
+    "ToolError": {
+      "enum": [
+        "operation_not_allowed",
+        "invalid_args",
+        "unknown_zone",
+        "unknown_device",
+        "command_not_supported",
+        "out_of_scope",
+        "device_failure"
+      ],
+      "title": "ToolError",
+      "type": "string"
+    },
+    "ToolResult": {
+      "additionalProperties": false,
+      "description": "Result of one operation.\n\n`state` is the observation: zones with adjacency (listZones), devices\n(listDevices), or a device state (getDeviceState / invokeCommand).\n`operation` is None only for a rejected call whose operation is not one of the four.",
+      "properties": {
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ToolError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "operation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Operation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "State"
+        }
+      },
+      "required": [
+        "ok",
+        "operation"
+      ],
+      "title": "ToolResult",
+      "type": "object"
+    },
+    "ZoneEstimate": {
+      "additionalProperties": false,
+      "description": "Where Localization believes the user is (zone level only).\n\nWhether `zoneId` exists is checked against the bound spatial model, not here:\nthe contract alone does not know the building.",
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "observedAt": {
+          "format": "date-time",
+          "title": "Observedat",
+          "type": "string"
+        },
+        "previousZoneId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previouszoneid"
+        },
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId",
+        "confidence",
+        "observedAt"
+      ],
+      "title": "ZoneEstimate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One JSONL line of the local event store.\n\nAfter erasure, `record` and `salt` are null while `commitment` and `link`\nstay, so the chain still verifies and the position is reported as erased.",
+  "properties": {
+    "commitment": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Commitment",
+      "type": "string"
+    },
+    "link": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Link",
+      "type": "string"
+    },
+    "record": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EventRecord"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "salt": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Salt"
+    }
+  },
+  "required": [
+    "record",
+    "salt",
+    "commitment",
+    "link"
+  ],
+  "title": "StoredRecord",
+  "type": "object"
+}

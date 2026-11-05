@@ -1,0 +1,65 @@
+table,col1,col2,col3,col4,col5
+CLASSic overview,group,metric,value
+CLASSic overview,Accuracy,predictions,54
+CLASSic overview,Accuracy,kind accuracy,85.2% [73.4%-92.3%]
+CLASSic overview,Accuracy,strict accuracy,85.2% [73.4%-92.3%]
+CLASSic overview,Accuracy,outcome accuracy,85.2% [73.4%-92.3%]
+CLASSic overview,Accuracy,intent: all fields (gold intents),78.1% [61.2%-89.0%]
+CLASSic overview,Security,injection cases handled (outcome correct),20.0% [3.6%-62.4%]
+CLASSic overview,Security,injection-only cases with a command,0 / 1
+CLASSic overview,Security,mixed cases with commands beyond the legitimate part,0 / 4
+CLASSic overview,Security,raw grounder output off catalogue (all cases),0.0% [0.0%-6.6%]
+CLASSic overview,Security,final commands off catalogue (must be 0),0
+CLASSic overview,Cost,total USD,0.000000
+CLASSic overview,Cost,USD per 1000 requests,0.0000
+CLASSic overview,Cost,prompt / completion tokens,0 / 0
+CLASSic overview,Cost,tokens per request (prompt / completion),0 / 0
+CLASSic overview,Cost,LLM calls (incl. retries),0
+CLASSic overview,Cost,requests needing a retry,0
+CLASSic overview,Latency,requests measured (not cached),54
+CLASSic overview,Latency,mean s,4.8e-05
+CLASSic overview,Latency,p50 s,2.5e-05
+CLASSic overview,Latency,p95 s,1.2e-04
+CLASSic overview,Latency,p50 ms,0.03
+CLASSic overview,Latency,p95 ms,0.12
+CLASSic overview,Stability,repeat agreement (all repeats identical),-
+CLASSic overview,Stability,EN-IT agreement (paraphrase pairs),100.0% [61.0%-100.0%]
+CLASSic overview,Stability,EN-IT pairs,6
+CLASSic overview,Failures,invalid output after retries,0
+CLASSic overview,Failures,service unavailable,0
+"Intent fields (gold intents, n = 32)",field,accuracy
+"Intent fields (gold intents, n = 32)",action,78.1% [61.2%-89.0%]
+"Intent fields (gold intents, n = 32)",controlledProperty,81.2% [64.7%-91.1%]
+"Intent fields (gold intents, n = 32)",scope,81.2% [64.7%-91.1%]
+"Intent fields (gold intents, n = 32)",persistence,81.2% [64.7%-91.1%]
+"Intent fields (gold intents, n = 32)",targetZoneId,81.2% [64.7%-91.1%]
+"Intent fields (gold intents, n = 32)",value,81.2% [64.7%-91.1%]
+"Intent fields (gold intents, n = 32)",all fields,78.1% [61.2%-89.0%]
+"Result kinds (rows gold, columns predicted)",,pred intent,pred clarification,pred unsupported
+"Result kinds (rows gold, columns predicted)",gold intent,26,2,4
+"Result kinds (rows gold, columns predicted)",gold clarification,2,6,0
+"Result kinds (rows gold, columns predicted)",gold unsupported,0,0,14
+"Result kinds (rows gold, columns predicted)",clarification precision / recall,75.0% [40.9%-92.9%],75.0% [40.9%-92.9%],
+Reasons,gold kind,n,kind correct,reason correct (given kind)
+Reasons,clarification,8,75.0% [40.9%-92.9%],100.0% [61.0%-100.0%]
+Reasons,unsupported,14,100.0% [78.5%-100.0%],92.9% [68.5%-98.7%]
+Strict errors by type (n = 8),type,errors,share
+Strict errors by type (n = 8),"non-intent predicted, intent expected",5,62%
+Strict errors by type (n = 8),"intent predicted, non-intent expected",2,25%
+Strict errors by type (n = 8),"polarity (activate/deactivate, increase/decrease)",1,12%
+Per category,category,n,strict,outcome
+Per category,adversarial,5,20.0% [3.6%-62.4%],20.0% [3.6%-62.4%]
+Per category,ambiguous,5,60.0% [23.1%-88.2%],60.0% [23.1%-88.2%]
+Per category,environment,5,100.0% [56.6%-100.0%],100.0% [56.6%-100.0%]
+Per category,explicit,5,100.0% [56.6%-100.0%],100.0% [56.6%-100.0%]
+Per category,explicit_other_zone,6,100.0% [61.0%-100.0%],100.0% [61.0%-100.0%]
+Per category,following,5,100.0% [56.6%-100.0%],100.0% [56.6%-100.0%]
+Per category,implicit,5,60.0% [23.1%-88.2%],60.0% [23.1%-88.2%]
+Per category,out_of_scope,6,100.0% [61.0%-100.0%],100.0% [61.0%-100.0%]
+Per category,unsupported,6,100.0% [61.0%-100.0%],100.0% [61.0%-100.0%]
+Per category,zone_dependent,6,100.0% [61.0%-100.0%],100.0% [61.0%-100.0%]
+Per language,language,n,strict,outcome
+Per language,en,48,85.4% [72.8%-92.8%],85.4% [72.8%-92.8%]
+Per language,it,6,83.3% [43.6%-97.0%],83.3% [43.6%-97.0%]
+Per source,source,n,strict,outcome
+Per source,llm,54,85.2% [73.4%-92.3%],85.2% [73.4%-92.3%]

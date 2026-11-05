@@ -1,0 +1,157 @@
+{
+  "$defs": {
+    "DeviceDescriptor": {
+      "additionalProperties": false,
+      "description": "One catalogue entry: what a device can do (read from `supportedCommand`).",
+      "properties": {
+        "category": {
+          "minLength": 1,
+          "title": "Category",
+          "type": "string"
+        },
+        "controlledProperty": {
+          "minLength": 1,
+          "title": "Controlledproperty",
+          "type": "string"
+        },
+        "deviceId": {
+          "minLength": 1,
+          "title": "Deviceid",
+          "type": "string"
+        },
+        "supportedCommand": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Supportedcommand",
+          "type": "array"
+        }
+      },
+      "required": [
+        "deviceId",
+        "category",
+        "controlledProperty",
+        "supportedCommand"
+      ],
+      "title": "DeviceDescriptor",
+      "type": "object"
+    },
+    "ZoneCatalogue": {
+      "additionalProperties": false,
+      "description": "Capability catalogue for one zone (the catalogue is indexed by zone).",
+      "properties": {
+        "devices": {
+          "items": {
+            "$ref": "#/$defs/DeviceDescriptor"
+          },
+          "title": "Devices",
+          "type": "array"
+        },
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId",
+        "devices"
+      ],
+      "title": "ZoneCatalogue",
+      "type": "object"
+    },
+    "ZoneEstimate": {
+      "additionalProperties": false,
+      "description": "Where Localization believes the user is (zone level only).\n\nWhether `zoneId` exists is checked against the bound spatial model, not here:\nthe contract alone does not know the building.",
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "observedAt": {
+          "format": "date-time",
+          "title": "Observedat",
+          "type": "string"
+        },
+        "previousZoneId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previouszoneid"
+        },
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId",
+        "confidence",
+        "observedAt"
+      ],
+      "title": "ZoneEstimate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "R7: what the engine passes to any Intent Grounding candidate.",
+  "properties": {
+    "adjacency": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "title": "Adjacency",
+      "type": "object"
+    },
+    "catalogue": {
+      "items": {
+        "$ref": "#/$defs/ZoneCatalogue"
+      },
+      "title": "Catalogue",
+      "type": "array"
+    },
+    "history": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "History",
+      "type": "array"
+    },
+    "language": {
+      "pattern": "^[a-z]{2}$",
+      "title": "Language",
+      "type": "string"
+    },
+    "text": {
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "zone": {
+      "$ref": "#/$defs/ZoneEstimate"
+    }
+  },
+  "required": [
+    "text",
+    "language",
+    "zone",
+    "catalogue",
+    "adjacency"
+  ],
+  "title": "GroundingRequest",
+  "type": "object"
+}

@@ -1,0 +1,181 @@
+{
+  "$defs": {
+    "GetDeviceStateArgs": {
+      "additionalProperties": false,
+      "properties": {
+        "deviceId": {
+          "minLength": 1,
+          "title": "Deviceid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "deviceId"
+      ],
+      "title": "GetDeviceStateArgs",
+      "type": "object"
+    },
+    "GetDeviceStateCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/GetDeviceStateArgs"
+        },
+        "operation": {
+          "const": "getDeviceState",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "args"
+      ],
+      "title": "GetDeviceStateCall",
+      "type": "object"
+    },
+    "InvokeCommandArgs": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "deviceId": {
+          "minLength": 1,
+          "title": "Deviceid",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "deviceId",
+        "command"
+      ],
+      "title": "InvokeCommandArgs",
+      "type": "object"
+    },
+    "InvokeCommandCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/InvokeCommandArgs"
+        },
+        "operation": {
+          "const": "invokeCommand",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "args"
+      ],
+      "title": "InvokeCommandCall",
+      "type": "object"
+    },
+    "ListDevicesArgs": {
+      "additionalProperties": false,
+      "properties": {
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId"
+      ],
+      "title": "ListDevicesArgs",
+      "type": "object"
+    },
+    "ListDevicesCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/ListDevicesArgs"
+        },
+        "operation": {
+          "const": "listDevices",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "args"
+      ],
+      "title": "ListDevicesCall",
+      "type": "object"
+    },
+    "ListZonesCall": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/NoArgs",
+          "default": {}
+        },
+        "operation": {
+          "const": "listZones",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "title": "ListZonesCall",
+      "type": "object"
+    },
+    "NoArgs": {
+      "additionalProperties": false,
+      "properties": {},
+      "title": "NoArgs",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "getDeviceState": "#/$defs/GetDeviceStateCall",
+      "invokeCommand": "#/$defs/InvokeCommandCall",
+      "listDevices": "#/$defs/ListDevicesCall",
+      "listZones": "#/$defs/ListZonesCall"
+    },
+    "propertyName": "operation"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ListZonesCall"
+    },
+    {
+      "$ref": "#/$defs/ListDevicesCall"
+    },
+    {
+      "$ref": "#/$defs/GetDeviceStateCall"
+    },
+    {
+      "$ref": "#/$defs/InvokeCommandCall"
+    }
+  ]
+}

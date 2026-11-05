@@ -1,0 +1,15 @@
+table,group,clips,WER,exact clips,language detected,audio ms (mean),p50 ms,p95 ms,RTF p50,RTF p95
+Per language,auto en,10,3.8%,9/10,10/10,1902,2796,4817,1.54,3.02
+Per language,auto it,10,40.0%,4/10,8/10,2243,2979,3633,1.30,2.27
+Per language,auto all,20,22.2%,13/20,18/20,2073,2830,3633,1.38,2.93
+Per voice,auto it Alice,2,0.0%,2/2,2/2,1855,3197,3633,1.52,2.25
+Per voice,auto it other voices,8,51.2%,2/8,6/8,2340,2882,3100,1.27,2.27
+Per voice,auto en Daniel,2,0.0%,2/2,2/2,1285,2515,2867,2.06,2.12
+Per voice,auto en Eddy (Inglese (USA)),2,0.0%,2/2,2/2,2775,2620,2820,0.92,1.06
+Per voice,auto en Flo (Inglese (UK)),2,0.0%,2/2,2/2,1969,2579,2830,1.23,1.54
+Per voice,auto en Reed (Inglese (USA)),2,18.2%,1/2,2/2,2579,2998,4817,0.92,2.54
+Per voice,auto en Samantha,2,0.0%,2/2,2/2,904,2584,2796,2.93,3.02
+Per voice,auto it Eddy (Italiano (Italia)),2,62.5%,1/2,2/2,1839,2979,3012,1.27,2.27
+Per voice,auto it Flo (Italiano (Italia)),2,100.0%,0/2,0/2,2486,2882,3038,1.02,1.41
+Per voice,auto it Reed (Italiano (Italia)),2,9.1%,1/2,2/2,2532,2621,2828,0.90,1.38
+Per voice,auto it Sandy (Italiano (Italia)),2,33.3%,0/2,2/2,2502,2786,3100,1.08,1.30

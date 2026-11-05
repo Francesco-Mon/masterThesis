@@ -1,0 +1,16 @@
+{
+  "runId": "20261102-215232_keyword_keyword_dev",
+  "time": "2026-11-02T21:52:32.337152Z",
+  "grounder": "keyword",
+  "model": null,
+  "provider": null,
+  "temperature": 0.0,
+  "split": "dev",
+  "repeats": 1,
+  "cases": 54,
+  "cache": true,
+  "dataset": "data/requests.jsonl",
+  "datasetSha256": "03d657b05c223f54",
+  "gitCommit": "d396aeb",
+  "callsLogRunId": null
+}

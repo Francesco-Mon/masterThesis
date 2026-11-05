@@ -1,0 +1,63 @@
+{
+  "$defs": {
+    "ZoneEstimate": {
+      "additionalProperties": false,
+      "description": "Where Localization believes the user is (zone level only).\n\nWhether `zoneId` exists is checked against the bound spatial model, not here:\nthe contract alone does not know the building.",
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "observedAt": {
+          "format": "date-time",
+          "title": "Observedat",
+          "type": "string"
+        },
+        "previousZoneId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previouszoneid"
+        },
+        "zoneId": {
+          "minLength": 1,
+          "title": "Zoneid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zoneId",
+        "confidence",
+        "observedAt"
+      ],
+      "title": "ZoneEstimate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "R6: pushed by Localization when the estimated zone changes.",
+  "properties": {
+    "estimate": {
+      "$ref": "#/$defs/ZoneEstimate"
+    },
+    "type": {
+      "const": "zone_changed",
+      "default": "zone_changed",
+      "title": "Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "estimate"
+  ],
+  "title": "ZoneChangedEvent",
+  "type": "object"
+}
