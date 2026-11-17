@@ -97,16 +97,35 @@
     },
     "ListDevicesArgs": {
       "additionalProperties": false,
+      "description": "Both optional. No `zoneId`: every zone of the granted scope (how an intent with\nscope environment asks). No `controlledProperty`: every property of the zone(s).\nThe environment does the filtering.",
       "properties": {
+        "controlledProperty": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlledproperty"
+        },
         "zoneId": {
-          "minLength": 1,
-          "title": "Zoneid",
-          "type": "string"
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zoneid"
         }
       },
-      "required": [
-        "zoneId"
-      ],
       "title": "ListDevicesArgs",
       "type": "object"
     },

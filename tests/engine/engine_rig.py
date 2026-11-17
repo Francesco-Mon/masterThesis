@@ -5,7 +5,7 @@ from datetime import UTC, datetime
 from cpsagent.binding import EnvironmentBinding
 from cpsagent.contracts import StructuredIntent, ZoneChangedEvent, ZoneEstimate
 from cpsagent.engine import EngineConfig, OrchestrationEngine
-from cpsagent.environment import EmulatedEnvironment
+from cpsagent.environment import EmulatedEnvironment, PositioningSignal
 from cpsagent.grounding import FakeGrounder
 from cpsagent.interface import EnvironmentInterface
 
@@ -13,13 +13,29 @@ T0 = datetime(2026, 11, 10, 9, 30, tzinfo=UTC)
 
 
 class ScriptedLocalization:
-    """R5/R6 double: the test decides the zone and when it changes."""
+    """R5/R6 double: the test decides the zone and when it changes.
 
-    def __init__(self, zone: str, confidence: float = 0.9, previous: str | None = None):
+    With `env`, each zone is also announced to the emulated environment as a strong
+    beacon reading, so the environment follows the person (Enumerate) like in a walk:
+    its trigger fires, and the new neighbourhood reaches the session, before the
+    engine hears of the zone change."""
+
+    def __init__(self, zone: str, confidence: float = 0.9, previous: str | None = None, env=None):
         self.current = ZoneEstimate(
             zone_id=zone, confidence=confidence, observed_at=T0, previous_zone_id=previous
         )
         self._listeners = []
+        self._env = env
+        self._announce(None, zone)
+
+    def _announce(self, old: str | None, new: str) -> None:
+        if self._env is None:
+            return
+        readings = ([(old, -90.0)] if old else []) + [(new, -50.0)]
+        for zone, rssi in readings:
+            self._env.publish(
+                PositioningSignal(rssi=rssi, observed_at=T0, ref_zone=zone, ref_subject="user-1")
+            )
 
     def estimate(self):
         return self.current
@@ -28,6 +44,7 @@ class ScriptedLocalization:
         self._listeners.append(listener)
 
     def move_to(self, zone: str, confidence: float = 0.9):
+        self._announce(self.current.zone_id, zone)
         self.current = ZoneEstimate(
             zone_id=zone,
             confidence=confidence,
@@ -91,7 +108,7 @@ class Rig:
         self.session = EnvironmentBinding({self.env.endpoint: self.env}).bind(
             self.env.endpoint, "person-agent", "user-1"
         )
-        self.loc = ScriptedLocalization(zone, confidence, previous)
+        self.loc = ScriptedLocalization(zone, confidence, previous, env=self.env)
         self.grounder = FakeGrounder(SCRIPT)
         self.replies = []
         self.engine = OrchestrationEngine(
@@ -108,6 +125,15 @@ class Rig:
     @property
     def guards(self):
         return [t.guard.value for t in self.engine.trace]
+
+    @property
+    def queries(self):
+        """(zoneId, controlledProperty) of every catalogue query, in order."""
+        return [
+            (q.call.args.zone_id, q.call.args.controlled_property)
+            for t in self.engine.trace
+            for q in t.queries
+        ]
 
     def power(self, device_id):
         token = self.env.authenticate("person-agent")

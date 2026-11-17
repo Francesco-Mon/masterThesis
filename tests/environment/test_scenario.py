@@ -80,7 +80,7 @@ def test_emulator_requires_registered_agent_and_valid_token():
     with pytest.raises(AuthenticationError):
         env.zones("forged-token")
     token = env.authenticate("person-agent")
-    assert "server_room" not in env.scope_zones(token)
+    assert "server_room" not in env.scope(token)
 
 
 def test_emulator_executes_commands_and_rejects_bad_values():

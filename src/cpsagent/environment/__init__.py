@@ -1,7 +1,17 @@
 """Emulated Intelligent Environment: entities of thesis Ch.5, scenario loader, emulator."""
 
+from .backend import (
+    AuthenticationError,
+    CommandNotSupportedError,
+    DeviceFailure,
+    EnvironmentBackend,
+    Neighbourhood,
+    OutOfScopeError,
+    ScopeDescription,
+    UnknownEntityError,
+)
 from .commands import CATEGORY_COMMANDS, InvalidValue
-from .emulator import AuthenticationError, DeviceFailure, EmulatedEnvironment
+from .emulator import EmulatedEnvironment
 from .model import (
     DEFAULT_SCENARIO,
     Building,
@@ -20,15 +30,21 @@ __all__ = [
     "DEFAULT_SCENARIO",
     "AuthenticationError",
     "Building",
+    "CommandNotSupportedError",
     "Device",
     "DeviceFailure",
     "DoorwaySegment",
     "DwellSegment",
     "EmulatedEnvironment",
+    "EnvironmentBackend",
     "InvalidValue",
+    "Neighbourhood",
+    "OutOfScopeError",
     "PathScript",
     "PositioningSignal",
     "Scenario",
+    "ScopeDescription",
+    "UnknownEntityError",
     "Zone",
     "load_scenario",
 ]

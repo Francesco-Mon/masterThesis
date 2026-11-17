@@ -59,7 +59,15 @@ R8 result - a discriminated union:
 {"ok": true, "operation": "invokeCommand", "state": {"deviceId": "lamp_hallway", "power": "on"}, "error": null}
 ```
 - `operation` is a closed enum of exactly: `listZones`, `listDevices`, `getDeviceState`, `invokeCommand`. Anything else is rejected by the Environment Interface with `ok:false, error:"operation_not_allowed"`.
-- `invokeCommand` is rejected if `command` is not in the device's `supportedCommand` (`error:"command_not_supported"`) or the device is outside the negotiated scope.
+- `listZones` takes no arguments and returns the zone of the person and the adjacent zones the environment follows for it (person's zone first), each `{"zoneId", "name", "adjacency"}`. It does not return the whole scope.
+- `listDevices` takes `zoneId` and `controlledProperty`, both optional: no `controlledProperty` means every property of the zone; no `zoneId` means every zone of the granted scope (how an intent with scope `environment` asks). The environment filters, and each device comes with its `refZone`:
+```json
+{"operation": "listDevices", "args": {"zoneId": "corridor", "controlledProperty": "light"}}
+```
+```json
+{"ok": true, "operation": "listDevices", "state": [{"deviceId": "lamp_corridor", "category": "lamp", "controlledProperty": "light", "supportedCommand": ["on", "off"], "refZone": "corridor"}], "error": null}
+```
+- `invokeCommand` is rejected if `command` is not in the device's `supportedCommand` (`error:"command_not_supported"`) or the device is outside the scope granted to the token (`error:"out_of_scope"`). The environment is the authority on scope and refuses such calls itself; the Interface checks first only as defence in depth.
 
 ## C4 - Event record (R16)
 

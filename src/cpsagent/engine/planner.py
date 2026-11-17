@@ -15,6 +15,9 @@ section 6 allows it; see DECISIONS.md). The rules:
 
 A step the device cannot perform is dropped, so the plan may be empty: that is how the
 planner says "no applicable step" (T5).
+
+The catalogue given to `make_plan` is the environment's answer to the listDevices queries
+of the Plan state (`catalogue_queries` says which zones to ask), used for that plan only.
 """
 
 from cpsagent.contracts import (
@@ -69,6 +72,24 @@ def _target_zones(
         ahead = [z for z in adjacency.get(zone.zone_id, []) if z != zone.previous_zone_id]
         return [(zone.zone_id, now)] + [(z, OnEnterZoneGuard(zone_id=z)) for z in ahead]
     return [(c.zone_id, now) for c in catalogue]
+
+
+def catalogue_queries(
+    intent: StructuredIntent,
+    zone: ZoneEstimate,
+    adjacency: dict[str, list[str]],
+    scope_zones: frozenset[str] | set[str],
+) -> list[str | None]:
+    """Zones to ask the environment about (listDevices with the intent's property).
+
+    current_zone: the user's zone (or `targetZoneId`); path: the user's zone and the
+    adjacent zones ahead; environment: [None], one query without zoneId (the environment
+    answers for every zone of the granted scope). Zones outside the scope are not asked.
+    """
+    if intent.scope == Scope.ENVIRONMENT:
+        return [None]
+    targets = _target_zones(intent, zone, [], adjacency)
+    return [z for z, _ in targets if z in scope_zones]
 
 
 def make_plan(

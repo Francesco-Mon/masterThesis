@@ -1,14 +1,17 @@
 """Environment Interface (R12, R15): the action space T, exactly four operations.
 
-  listZones                          -> zones with adjacency            (observation)
-  listDevices(zoneId)                -> devices with supportedCommand   (observation)
-  getDeviceState(deviceId)           -> current state                   (observation)
-  invokeCommand(deviceId, command, value) -> outcome, resulting state   (the only actuation)
+  listZones                                  -> the person's zone and its followed
+                                                neighbours, with adjacency (observation)
+  listDevices(zoneId?, controlledProperty?)  -> devices with supportedCommand (observation)
+  getDeviceState(deviceId)                   -> current state                 (observation)
+  invokeCommand(deviceId, command, value)    -> outcome, resulting state      (the only actuation)
 
 Every call goes through `execute`, which checks, in this order: operation in the
-allow-list, arguments valid for the operation (C3), zone/device known, inside the scope
-negotiated at binding, command in the device's `supportedCommand`. A rejected call never
-reaches the environment and always comes back as `ToolResult(ok=False, error=...)`.
+allow-list, arguments valid for the operation (C3), zone/device inside the scope granted
+at binding, command in the device's `supportedCommand`. A call rejected here never reaches
+the environment. These checks are defence in depth: the environment is the authority on
+scope and refuses out-of-scope calls itself; its refusals are mapped to the same ToolError
+values. Either way the result is `ToolResult(ok=False, error=...)`.
 """
 
 from collections.abc import Callable
@@ -24,7 +27,14 @@ from cpsagent.contracts.tool import (
     ListDevicesCall,
     ListZonesCall,
 )
-from cpsagent.environment import Device, DeviceFailure, InvalidValue
+from cpsagent.environment import (
+    CommandNotSupportedError,
+    Device,
+    DeviceFailure,
+    InvalidValue,
+    OutOfScopeError,
+    UnknownEntityError,
+)
 
 # The allow-list, in code. Adding an operation here is a change to the thesis' action space.
 ALLOWED_OPERATIONS: frozenset[Operation] = frozenset(
@@ -72,15 +82,29 @@ class EnvironmentInterface:
                 return _fail(Operation(name), ToolError.INVALID_ARGS)
         if call.operation not in ALLOWED_OPERATIONS:  # defence in depth for typed calls
             return _fail(None, ToolError.OPERATION_NOT_ALLOWED)
-        return self._handlers[call.operation](call)
+        try:
+            return self._handlers[call.operation](call)
+        except OutOfScopeError:  # the environment refused, whatever was checked here
+            return _fail(call.operation, ToolError.OUT_OF_SCOPE)
+        except UnknownEntityError:
+            unknown_zone = call.operation == Operation.LIST_DEVICES
+            return _fail(
+                call.operation, ToolError.UNKNOWN_ZONE if unknown_zone else ToolError.UNKNOWN_DEVICE
+            )
+        except CommandNotSupportedError:
+            return _fail(call.operation, ToolError.COMMAND_NOT_SUPPORTED)
 
     # --- convenience wrappers (same path as execute) ------------------------------------
 
     def list_zones(self) -> ToolResult:
         return self.execute({"operation": "listZones"})
 
-    def list_devices(self, zone_id: str) -> ToolResult:
-        return self.execute({"operation": "listDevices", "args": {"zoneId": zone_id}})
+    def list_devices(
+        self, zone_id: str | None = None, controlled_property: str | None = None
+    ) -> ToolResult:
+        args = {"zoneId": zone_id, "controlledProperty": controlled_property}
+        args = {k: v for k, v in args.items() if v is not None}
+        return self.execute({"operation": "listDevices", "args": args})
 
     def get_device_state(self, device_id: str) -> ToolResult:
         return self.execute({"operation": "getDeviceState", "args": {"deviceId": device_id}})
@@ -100,9 +124,9 @@ class EnvironmentInterface:
 
     def _list_devices(self, call: ListDevicesCall) -> ToolResult:
         zone_id = call.args.zone_id
-        if zone_id not in self._session.spatial_model.zones:
-            return _fail(call.operation, ToolError.UNKNOWN_ZONE)
-        if zone_id not in self._session.scope_zones:
+        # Agent-side Scope Guard: it only knows its scope, so any other zone (unknown or
+        # not granted) is out of scope from here.
+        if zone_id is not None and zone_id not in self._session.scope_zones:
             return _fail(call.operation, ToolError.OUT_OF_SCOPE)
         devices = [
             {
@@ -110,16 +134,15 @@ class EnvironmentInterface:
                 "category": d.category,
                 "controlledProperty": d.controlled_property,
                 "supportedCommand": list(d.supported_command),
+                "refZone": d.ref_zone,
             }
-            for d in self._broker.devices(self._token, zone_id)
+            for d in self._broker.devices(self._token, zone_id, call.args.controlled_property)
         ]
         return ToolResult(ok=True, operation=call.operation, state=devices)
 
     def _device_in_scope(self, operation: Operation, device_id: str) -> Device | ToolResult:
         device = self._broker.device(self._token, device_id)
-        if device is None:
-            return _fail(operation, ToolError.UNKNOWN_DEVICE)
-        if device.ref_zone not in self._session.scope_zones:
+        if device.ref_zone not in self._session.scope_zones:  # defence in depth
             return _fail(operation, ToolError.OUT_OF_SCOPE)
         return device
 

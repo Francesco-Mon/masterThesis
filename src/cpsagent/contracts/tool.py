@@ -23,7 +23,12 @@ class NoArgs(Contract):
 
 
 class ListDevicesArgs(Contract):
-    zone_id: str = Field(min_length=1)
+    """Both optional. No `zoneId`: every zone of the granted scope (how an intent with
+    scope environment asks). No `controlledProperty`: every property of the zone(s).
+    The environment does the filtering."""
+
+    zone_id: str | None = Field(default=None, min_length=1)
+    controlled_property: str | None = Field(default=None, min_length=1)
 
 
 class GetDeviceStateArgs(Contract):
@@ -72,14 +77,15 @@ class ToolError(StrEnum):
     UNKNOWN_ZONE = "unknown_zone"
     UNKNOWN_DEVICE = "unknown_device"
     COMMAND_NOT_SUPPORTED = "command_not_supported"
-    OUT_OF_SCOPE = "out_of_scope"  # device outside the negotiated scope
+    OUT_OF_SCOPE = "out_of_scope"  # zone or device outside the scope granted to the token
     DEVICE_FAILURE = "device_failure"  # command accepted but the device did not execute it
 
 
 class ToolResult(Contract):
     """Result of one operation.
 
-    `state` is the observation: zones with adjacency (listZones), devices
+    `state` is the observation: the person's zone and the adjacent zones the environment
+    follows, with adjacency (listZones, person's zone first), devices with their zone
     (listDevices), or a device state (getDeviceState / invokeCommand).
     `operation` is None only for a rejected call whose operation is not one of the four.
     """

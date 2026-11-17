@@ -1,11 +1,19 @@
 """Environment Interface: 4 operations, allow-list, scope, only invokeCommand mutates."""
 
+from datetime import UTC, datetime
+
 import pytest
 
 from cpsagent.binding import EnvironmentBinding
 from cpsagent.contracts import Operation, ToolResult
 from cpsagent.contracts.tool import InvokeCommandArgs, InvokeCommandCall
-from cpsagent.environment import EmulatedEnvironment
+from cpsagent.environment import (
+    CommandNotSupportedError,
+    EmulatedEnvironment,
+    OutOfScopeError,
+    PositioningSignal,
+    UnknownEntityError,
+)
 from cpsagent.interface import ALLOWED_OPERATIONS, MUTATING_OPERATIONS, EnvironmentInterface
 
 
@@ -15,14 +23,25 @@ def env():
 
 
 @pytest.fixture
-def api(env):
+def session(env):
     session = EnvironmentBinding({env.endpoint: env}).bind(env.endpoint, "person-agent", "user-1")
+    signal = PositioningSignal(
+        rssi=-50.0,
+        observed_at=datetime(2026, 11, 10, 9, 30, tzinfo=UTC),
+        ref_zone="hallway",
+        ref_subject="user-1",
+    )
+    env.publish(signal)  # the environment hears the person in the hallway
+    return session
+
+
+@pytest.fixture
+def api(session):
     return EnvironmentInterface(session)
 
 
 def snapshot(env):
-    token = env.authenticate("person-agent")
-    return {d.device_id: dict(env.device(token, d.device_id).state) for d in env.scenario.devices}
+    return env.device_states()  # observer view, whatever the scope
 
 
 def assert_rejected(result: ToolResult, error: str):
@@ -35,11 +54,17 @@ def test_allow_list_is_exactly_the_four_operations():
     assert MUTATING_OPERATIONS == {Operation.INVOKE_COMMAND}
 
 
-def test_list_zones_returns_adjacency(api):
+def test_list_zones_returns_only_the_followed_neighbourhood(api):
     r = api.list_zones()
     assert r.ok and r.operation == "listZones"
     zones = {z["zoneId"]: z["adjacency"] for z in r.state}
+    assert list(zones) == ["hallway", "lobby", "corridor", "kitchen"]  # person's zone first
     assert zones["corridor"] == ["hallway", "office", "meeting_room", "storage", "server_room"]
+
+
+def test_list_zones_is_empty_until_the_person_is_heard(env):
+    session = EnvironmentBinding({env.endpoint: env}).bind(env.endpoint, "person-agent", "user-1")
+    assert EnvironmentInterface(session).list_zones().state == []
 
 
 def test_list_devices_returns_supported_commands(api):
@@ -50,9 +75,22 @@ def test_list_devices_returns_supported_commands(api):
             "category": "lamp",
             "controlledProperty": "light",
             "supportedCommand": ["on", "off"],
+            "refZone": "corridor",
         }
     ]
     assert api.list_devices("storage").state == []
+
+
+def test_list_devices_filters_by_property_and_covers_the_scope_without_zone(api):
+    office = api.list_devices("office", "shading").state
+    assert [d["deviceId"] for d in office] == ["blind_office"]
+    assert [d["deviceId"] for d in api.list_devices("office").state] == [
+        "lamp_office", "blind_office", "thermostat_office"
+    ]  # fmt: skip
+    every = api.list_devices(controlled_property="temperature").state
+    assert [d["deviceId"] for d in every] == ["thermostat_office", "thermostat_meeting_room"]
+    assert api.list_devices(controlled_property="humidity").state == []  # capability absent
+    assert len(api.list_devices().state) == 10  # all devices of the scope, not server_room
 
 
 def test_invoke_command_changes_state_and_get_reads_it(api):
@@ -73,8 +111,10 @@ def test_typed_tool_call_is_accepted(api):
 def test_only_invoke_command_changes_the_environment(api, env):
     before = snapshot(env)
     api.list_zones()
+    api.list_devices()
     for zone in env.scenario.zones:
         api.list_devices(zone.zone_id)
+        api.list_devices(zone.zone_id, "light")
     for device in env.scenario.devices:
         api.get_device_state(device.device_id)
     assert snapshot(env) == before
@@ -104,7 +144,8 @@ def test_operation_outside_allow_list_rejected(api, env, call):
     "call",
     [
         {"operation": "invokeCommand", "args": {"deviceId": "lamp_hallway"}},  # no command
-        {"operation": "listDevices", "args": {}},
+        {"operation": "listDevices"},  # args may be empty but not missing
+        {"operation": "listDevices", "args": {"zoneId": ""}},
         {"operation": "listZones", "args": {"zoneId": "hallway"}},  # listZones takes none
         {
             "operation": "invokeCommand",
@@ -140,7 +181,37 @@ def test_device_and_zone_outside_scope_rejected(api, env):
 def test_unknown_device_and_zone_rejected(api):
     assert_rejected(api.invoke_command("lamp_attic", "on"), "unknown_device")
     assert_rejected(api.get_device_state("lamp_attic"), "unknown_device")
-    assert_rejected(api.list_devices("attic"), "unknown_zone")
+    # the agent only knows its scope: any other zone is out of scope from its side
+    assert_rejected(api.list_devices("attic"), "out_of_scope")
+
+
+def test_environment_refuses_out_of_scope_calls_itself(env):
+    token = env.authenticate("person-agent")
+    before = snapshot(env)
+    with pytest.raises(OutOfScopeError):
+        env.execute(token, "thermostat_server_room", "setSetpoint", 18)
+    with pytest.raises(OutOfScopeError):
+        env.device(token, "thermostat_server_room")
+    with pytest.raises(OutOfScopeError):
+        env.devices(token, "server_room")
+    with pytest.raises(UnknownEntityError):
+        env.devices(token, "attic")
+    with pytest.raises(CommandNotSupportedError):
+        env.execute(token, "lamp_corridor", "dim", 40)
+    assert "thermostat_server_room" not in {d.device_id for d in env.devices(token)}
+    assert snapshot(env) == before
+
+
+def test_environment_refuses_even_when_the_interface_check_is_bypassed(session, env):
+    """Defence in depth: widen the agent's own view of the scope; the environment, which
+    granted the token, still refuses and the Interface maps its refusal to C3."""
+    session.scope_zones = frozenset(z.zone_id for z in env.scenario.zones)
+    api = EnvironmentInterface(session)
+    before = snapshot(env)
+    assert_rejected(api.invoke_command("thermostat_server_room", "setSetpoint", 18), "out_of_scope")
+    assert_rejected(api.get_device_state("thermostat_server_room"), "out_of_scope")
+    assert_rejected(api.list_devices("server_room"), "out_of_scope")
+    assert snapshot(env) == before
 
 
 def test_invalid_value_rejected_without_changing_state(api, env):

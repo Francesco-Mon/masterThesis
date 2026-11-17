@@ -26,7 +26,7 @@
     }
   },
   "additionalProperties": false,
-  "description": "Result of one operation.\n\n`state` is the observation: zones with adjacency (listZones), devices\n(listDevices), or a device state (getDeviceState / invokeCommand).\n`operation` is None only for a rejected call whose operation is not one of the four.",
+  "description": "Result of one operation.\n\n`state` is the observation: the person's zone and the adjacent zones the environment\nfollows, with adjacency (listZones, person's zone first), devices with their zone\n(listDevices), or a device state (getDeviceState / invokeCommand).\n`operation` is None only for a rejected call whose operation is not one of the four.",
   "properties": {
     "error": {
       "anyOf": [

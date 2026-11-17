@@ -62,9 +62,11 @@ class AgentSession:
         self.session = EnvironmentBinding({self.env.endpoint: self.env}).bind(
             self.env.endpoint, AGENT, SUBJECT
         )
-        adjacency = self.session.spatial_model.adjacency
-        self._adjacency = {z: set(n) for z, n in adjacency.items()}
-        self.localization = ZoneEstimator(adjacency, SUBJECT)
+        # the simulated walk follows the building's real map (ground truth, not the agent's)
+        self._adjacency = {z.zone_id: set(z.adjacency) for z in self.scenario.zones}
+        # Localization learns the adjacency from the neighbourhoods the environment pushes
+        self.localization = ZoneEstimator(dict(self.session.known_adjacency), SUBJECT)
+        self.session.on_neighbourhood(lambda n: self.localization.add_adjacency(n.adjacency))
         self.session.subscription.add_listener(self.localization.on_signal)  # R13
 
         self.log_path = Path(log_dir) / f"ui_{self.session.session_id}.jsonl"
@@ -134,12 +136,22 @@ class AgentSession:
     # --- what the page shows ----------------------------------------------------------------
 
     def devices(self) -> list[dict[str, Any]]:
-        token = self.env.authenticate(AGENT)
-        rows = []
-        for d in self.scenario.devices:
-            live = self.env.device(token, d.device_id)
-            rows.append({"device": d.device_id, "zone": d.ref_zone, **live.state})
-        return rows
+        """Every device of the building (observer view, not the agent's)."""
+        states = self.env.device_states()
+        return [
+            {"device": d.device_id, "zone": d.ref_zone, **states[d.device_id]}
+            for d in self.scenario.devices
+        ]
+
+    def environment_view(self) -> dict[str, Any]:
+        """What the page shows of the binding: the granted scope, and the person's zone and
+        armed neighbours as the environment knows them (updated by its triggers)."""
+        n = self.session.neighbourhood
+        return {
+            "scope": sorted(self.session.scope_zones),
+            "zone": n.zone_id,
+            "armed": n.armed,
+        }
 
     def events(self) -> list[dict[str, Any]]:
         self.log.flush()
@@ -225,6 +237,21 @@ def plan_status(turn: Turn) -> list[tuple[PlanStep, str]]:
         a = c.action.args
         sent[(a.device_id, a.command, a.value)] = "done" if c.outcome.ok else "failed"
     return [(s, sent.get((s.device_id, s.command, s.value), "pending")) for s in turn.plan.steps]
+
+
+def catalogue_queries(turn: Turn) -> list[str]:
+    """The listDevices calls of the Plan state in this turn and what the environment
+    answered, one line each."""
+    lines = []
+    for t in turn.transitions:
+        for q in t.queries:
+            a = q.call.args
+            answer = [d["deviceId"] for d in q.result.state] if q.result.ok else q.result.error
+            zone = a.zone_id or "every zone of the scope"
+            lines.append(
+                f"{q.call.operation}(zone={zone}, property={a.controlled_property}) -> {answer}"
+            )
+    return lines
 
 
 def result_summary(turn: Turn) -> str:

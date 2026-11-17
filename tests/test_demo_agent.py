@@ -12,4 +12,7 @@ def test_demo_agent_runs(monkeypatch, capsys, tmp_path):
     out = capsys.readouterr().out
     assert "T9   Observe   -> Plan" in out and "[zone_changed]" in out
     assert "invokeCommand(lamp_corridor, on)" in out
+    assert "listDevices(zone=corridor, light) -> ['lamp_corridor']" in out  # asked in Plan
+    assert "environment: person in corridor" in out  # trigger of the environment
+    assert "11 records" in out
     assert "chain VERIFIED" in out and log.exists()

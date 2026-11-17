@@ -5,8 +5,10 @@ the activity of each state; *which* transition fires is always decided by the ta
 `transitions.py`. It talks to the other components only through their contracts:
   R5/R6  Localization: `estimate()` and zone_changed events (C1)
   R7/R8  Grounder:     `ground(GroundingRequest) -> GroundingResult` (C2), once per request
-  R10    Binding:      the BoundSession (catalogue, spatial model, bound flag)
-  R12    Interface:    `execute(ToolCall) -> ToolResult` (C3)
+  R10    Binding:      the BoundSession (bound flag, scope, adjacency known from the
+                       neighbourhoods the environment pushed)
+  R12    Interface:    `execute(ToolCall) -> ToolResult` (C3); in the Plan state the engine
+                       asks it for the devices offering the intent's property (listDevices)
   R16    recorder:     called once per transition, must not block (the Event Log queues)
 
 External events (a request, a zone change, closing) are queued and handled one at a
@@ -19,10 +21,11 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, Literal, Protocol
 
-from cpsagent.binding import BoundSession
+from cpsagent.binding import BoundSession, temporary_grounding_context
 from cpsagent.contracts import (
     ActionPlan,
     ClarificationResult,
+    DeviceDescriptor,
     GroundingRequest,
     Guard,
     IntentResult,
@@ -32,14 +35,20 @@ from cpsagent.contracts import (
     StructuredIntent,
     ToolCall,
     ToolResult,
+    ZoneCatalogue,
     ZoneChangedEvent,
     ZoneEstimate,
 )
-from cpsagent.contracts.tool import InvokeCommandArgs, InvokeCommandCall
+from cpsagent.contracts.tool import (
+    InvokeCommandArgs,
+    InvokeCommandCall,
+    ListDevicesArgs,
+    ListDevicesCall,
+)
 from cpsagent.grounding import Grounder
 
 from .config import EngineConfig
-from .planner import explain_no_step, make_plan
+from .planner import catalogue_queries, explain_no_step, make_plan
 from .transitions import Context, Row, Trigger, select
 
 
@@ -50,6 +59,15 @@ class Localization(Protocol):
 
 class Interface(Protocol):
     def execute(self, call: ToolCall) -> ToolResult: ...  # R12
+
+
+@dataclass(frozen=True)
+class CatalogueQuery:
+    """One listDevices call made in the Plan state and the environment's answer."""
+
+    time: datetime
+    call: ListDevicesCall
+    result: ToolResult
 
 
 @dataclass(frozen=True)
@@ -64,6 +82,9 @@ class Transition:
     intent: StructuredIntent | None
     action: ToolCall | None
     outcome: ToolResult | str | None
+    # Catalogue queries of the Plan state this row leaves (empty for other rows). Shown by
+    # the UI and checked by the tests; not part of the event record (C4 is unchanged).
+    queries: tuple[CatalogueQuery, ...] = ()
 
     def record_fields(self) -> dict[str, Any]:
         """EventRecord fields except `seq` and `session`, which the Event Log adds."""
@@ -206,6 +227,7 @@ class OrchestrationEngine:
         *,
         action: ToolCall | None = None,
         outcome: ToolResult | str | dict[Guard, ToolResult | str] | None = None,
+        queries: tuple[CatalogueQuery, ...] = (),
     ) -> Row | None:
         """Ask the table which row fires; if one does, take it and record it."""
         row = select(self.state, trigger, ctx)
@@ -222,6 +244,7 @@ class OrchestrationEngine:
             intent=self._intent,
             action=action,
             outcome=outcome,
+            queries=queries,
         )
         self.state = row.target
         self.trace.append(transition)
@@ -252,22 +275,24 @@ class OrchestrationEngine:
         elif zone is None or zone.confidence < self.config.theta:
             reason = "zone_confidence_low"  # do not spend a grounding call on a bad zone
         else:
+            # Temporary: the frozen grounders take the catalogue as input (see
+            # binding/grounding_context.py). Built here, before interpretation.
+            context = temporary_grounding_context(self._session.broker, self._session.token)
             result = self._grounder.ground(  # R7 -> R8, once per request
                 GroundingRequest(
                     text=self._text,
                     language=self._language,
                     zone=zone,
-                    catalogue=self._session.catalogue,
-                    adjacency=self._session.spatial_model.adjacency,
+                    catalogue=context.catalogue,
+                    adjacency=context.adjacency,
                     history=self.history[-5:],
                 )
             )
             if isinstance(result, IntentResult):
                 intent = result.intent
-                catalogued_zones = {c.zone_id for c in self._session.catalogue}
-                if intent.controlled_property not in self._session.catalogue_properties():
+                if intent.controlled_property not in context.catalogue_properties():
                     reason = "unsupported:capability_absent"  # never trust the grounder
-                elif intent.target_zone_id not in catalogued_zones | {None}:
+                elif intent.target_zone_id not in context.catalogue_zones() | {None}:
                     reason = "unsupported:out_of_scope"
                 else:
                     self._intent = intent
@@ -286,14 +311,37 @@ class OrchestrationEngine:
         )
         self._fire(ctx, Trigger.ZONE_ESTIMATE_AVAILABLE, outcome=reason)
 
+    def _ask_catalogue(self) -> tuple[list[ZoneCatalogue], tuple[CatalogueQuery, ...]]:
+        """Ask the environment (listDevices) for the devices offering the intent's property
+        in the target zones. The answer is used for this plan only; a refused call or an
+        empty answer means capability absent there."""
+        assert self._intent is not None and self._zone is not None
+        prop = self._intent.controlled_property
+        adjacency = self._session.known_adjacency
+        by_zone: dict[str, list[DeviceDescriptor]] = {}
+        queries = []
+        for zone_id in catalogue_queries(
+            self._intent, self._zone, adjacency, self._session.scope_zones
+        ):
+            call = ListDevicesCall(
+                operation="listDevices",
+                args=ListDevicesArgs(zone_id=zone_id, controlled_property=prop),
+            )
+            result = self._interface.execute(call)  # R12, observation only
+            queries.append(CatalogueQuery(self._clock(), call, result))
+            if zone_id is not None:
+                by_zone.setdefault(zone_id, [])
+            for d in result.state if result.ok else []:
+                by_zone.setdefault(d["refZone"], []).append(
+                    DeviceDescriptor.model_validate({k: v for k, v in d.items() if k != "refZone"})
+                )
+        catalogue = [ZoneCatalogue(zone_id=z, devices=ds) for z, ds in by_zone.items()]
+        return catalogue, tuple(queries)
+
     def _plan_steps(self) -> None:
         assert self._intent is not None and self._zone is not None
-        plan = make_plan(
-            self._intent,
-            self._zone,
-            self._session.catalogue,
-            self._session.spatial_model.adjacency,
-        )
+        catalogue, queries = self._ask_catalogue()
+        plan = make_plan(self._intent, self._zone, catalogue, self._session.known_adjacency)
         # Steps already done in this zone are not repeated (re-plan after "steps_pending").
         steps = [s for s in plan.steps if _step_key(s) not in self._done]
         self._plan = ActionPlan(steps=steps, valid_for=self._zone)
@@ -301,11 +349,14 @@ class OrchestrationEngine:
         step = self._next_step()
         if step is not None:
             self._fire(
-                self._ctx(has_applicable_step=True), Trigger.PLAN_PRODUCED, action=self._call(step)
+                self._ctx(has_applicable_step=True),
+                Trigger.PLAN_PRODUCED,
+                action=self._call(step),
+                queries=queries,
             )
         else:
-            reason = explain_no_step(self._intent, self._zone, self._session.catalogue)
-            self._fire(self._ctx(), Trigger.NO_APPLICABLE_STEP, outcome=reason)
+            reason = explain_no_step(self._intent, self._zone, catalogue)
+            self._fire(self._ctx(), Trigger.NO_APPLICABLE_STEP, outcome=reason, queries=queries)
 
     def _act(self) -> None:
         step = self._next_step()

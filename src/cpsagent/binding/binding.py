@@ -1,51 +1,45 @@
 """Environment Binding (R9/R10, R14): discovery and binding protocol of thesis Ch.5.
 
+Executed once, when the person enters the environment:
   1. Locate       broker endpoint from configuration -> broker
-  2. Authenticate emulated token for the agent id
-  3. Enumerate    Building + Zones (spatial model, with adjacency)
-  4. Catalogue    Devices per zone, reading `supportedCommand` (catalogue indexed by zone)
-  5. Subscribe    positioning signals pushed for the user (R13), so re-planning is event-driven
+  2. Authenticate token; its scope (zones, operations) is fixed by the environment
+  3. Enumerate    the environment follows the person: it places the person in a zone, arms
+                  triggers on the adjacent zones and returns that neighbourhood; each time
+                  a trigger fires it re-arms and pushes the new neighbourhood
+  4. Subscribe    positioning signals of the followed zones are pushed to the agent (R13),
+                  so re-planning stays event driven
 
-Output: a BoundSession. The engine enters Perceive only once a session is bound, and the
-Environment Interface is configured by injecting the session (R11).
+No capability catalogue is built here: the engine asks the environment for the devices it
+needs in the Plan state (listDevices). Output: a BoundSession. What the engine needs to
+reason (neighbourhood, known adjacency) and what the Interface needs to act (endpoint,
+token, scope) are kept apart (R10/R11).
 """
 
 import itertools
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
-from cpsagent.contracts import DeviceDescriptor, ZoneCatalogue
 from cpsagent.environment import (
     AuthenticationError,
-    Building,
-    EmulatedEnvironment,
+    EnvironmentBackend,
+    Neighbourhood,
     PositioningSignal,
-    Zone,
 )
 
+from .grounding_context import GroundingContext, temporary_grounding_context
+
 SignalListener = Callable[[PositioningSignal], None]
+NeighbourhoodListener = Callable[[Neighbourhood], None]
 
 
 class BindingError(Exception):
     """A protocol step failed; the message says which one."""
 
 
-@dataclass(frozen=True)
-class SpatialModel:
-    """Every zone of the building (also those outside the scope) with its adjacency."""
-
-    building: Building
-    zones: dict[str, Zone]
-
-    @property
-    def adjacency(self) -> dict[str, list[str]]:
-        return {zid: list(z.adjacency) for zid, z in self.zones.items()}
-
-
 @dataclass
 class Subscription:
     """Active position subscription (the Subscribe step of the protocol). Listeners
-    (e.g. Localization) attach later, once they have been built from the spatial model."""
+    (e.g. Localization) attach later."""
 
     subscription_id: str
     subject: str
@@ -65,28 +59,62 @@ class BoundSession:
     session_id: str
     endpoint: str
     agent_id: str
+    subject: str
     token: str
-    broker: EmulatedEnvironment  # the "connection" the Environment Interface will use
-    scope_zones: frozenset[str]
-    spatial_model: SpatialModel
-    catalogue: list[ZoneCatalogue]  # only zones in scope; a zone may have no device
+    broker: EnvironmentBackend  # the "connection" the Environment Interface will use
+    scope_zones: frozenset[str]  # granted by the environment
     subscription: Subscription
+    # Enumerate: the person's zone and armed neighbours as the environment last pushed
+    # them, and the union of every neighbourhood received (never shrinks), so a reader
+    # whose own zone lags behind the environment's still finds its adjacency.
+    neighbourhood: Neighbourhood = field(default_factory=lambda: Neighbourhood(None))
+    known_adjacency: dict[str, list[str]] = field(default_factory=dict)
+    _neighbourhood_listeners: list[NeighbourhoodListener] = field(default_factory=list)
 
     @property
     def bound(self) -> bool:
         return self.subscription.active
 
-    def catalogue_properties(self) -> set[str]:
-        return {d.controlled_property for z in self.catalogue for d in z.devices}
+    def on_neighbourhood(self, listener: NeighbourhoodListener) -> None:
+        """Called with each new neighbourhood, before the signal that caused it."""
+        self._neighbourhood_listeners.append(listener)
+
+    def _neighbourhood_changed(self, neighbourhood: Neighbourhood) -> None:
+        self.neighbourhood = neighbourhood
+        for zone, adjacent in neighbourhood.adjacency.items():
+            self.known_adjacency.setdefault(zone, list(adjacent))
+        for listener in list(self._neighbourhood_listeners):
+            listener(neighbourhood)
 
     def close(self) -> None:
         self.broker.unsubscribe(self.subscription.subscription_id)
         self.subscription.active = False
 
+    # --- for the frozen evaluation code only ---------------------------------------------
+    # The evaluation (cpsagent.eval) reads these names from the session it binds and is
+    # frozen. They hold nothing: each read asks the environment through the temporary
+    # grounding-context function. The engine, the planner, the Interface and Binding call
+    # `temporary_grounding_context` directly and never use them (tested).
+
+    def _grounding_context(self) -> GroundingContext:
+        return temporary_grounding_context(self.broker, self.token)
+
+    @property
+    def catalogue(self):
+        return self._grounding_context().catalogue
+
+    @property
+    def spatial_model(self) -> GroundingContext:
+        """Has `.adjacency`, the attribute the evaluation reads."""
+        return self._grounding_context()
+
+    def catalogue_properties(self) -> set[str]:
+        return self._grounding_context().catalogue_properties()
+
 
 class EnvironmentBinding:
-    def __init__(self, brokers: Mapping[str, EmulatedEnvironment]) -> None:
-        """`brokers`: endpoint -> emulated broker (stands for the network in Locate)."""
+    def __init__(self, brokers: Mapping[str, EnvironmentBackend]) -> None:
+        """`brokers`: endpoint -> environment backend (stands for the network in Locate)."""
         self._brokers = dict(brokers)
         self._session_ids = itertools.count(1)
 
@@ -100,38 +128,21 @@ class EnvironmentBinding:
             token = broker.authenticate(agent_id)
         except AuthenticationError as exc:
             raise BindingError(f"authenticate: {exc}") from exc
-        scope = frozenset(broker.scope_zones(token))
-        # 3. Enumerate
-        zones = broker.zones(token)
-        spatial = SpatialModel(broker.building, {z.zone_id: z for z in zones})
-        # 4. Catalogue: queried from the devices' supportedCommand, never assumed
-        catalogue = [
-            ZoneCatalogue(
-                zone_id=z.zone_id,
-                devices=[
-                    DeviceDescriptor(
-                        device_id=d.device_id,
-                        category=d.category,
-                        controlled_property=d.controlled_property,
-                        supported_command=list(d.supported_command),
-                    )
-                    for d in broker.devices(token, z.zone_id)
-                ],
-            )
-            for z in zones
-            if z.zone_id in scope
-        ]
-        # 5. Subscribe
-        subscription = Subscription("", subject)
-        subscription.subscription_id = broker.subscribe(token, subject, subscription.deliver)
-        return BoundSession(
+        session = BoundSession(
             session_id=f"sess-{next(self._session_ids):03d}",
             endpoint=endpoint,
             agent_id=agent_id,
+            subject=subject,
             token=token,
             broker=broker,
-            scope_zones=scope,
-            spatial_model=spatial,
-            catalogue=catalogue,
-            subscription=subscription,
+            scope_zones=frozenset(broker.scope(token)),
+            subscription=Subscription("", subject),
         )
+        # 3. Enumerate: the environment follows the person and arms its triggers
+        session._neighbourhood_changed(
+            broker.follow(token, subject, session._neighbourhood_changed)
+        )
+        # 4. Subscribe
+        subscription = session.subscription
+        subscription.subscription_id = broker.subscribe(token, subject, subscription.deliver)
+        return session

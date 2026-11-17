@@ -1,4 +1,4 @@
-"""Offline demo of the emulated environment: binding, catalogue, localization, interface.
+"""Offline demo of the emulated environment: binding, triggers, localization, interface.
 
 Run: python -m cpsagent.demo [--path walk_in_the_light|doorway_linger] [--seed 0]
 """
@@ -24,19 +24,17 @@ def main() -> None:
         env.endpoint, "person-agent", path.subject
     )
     print(f"Bound session {session.session_id} at {session.endpoint} (agent {session.agent_id})")
-    print(f"Scope: {sorted(session.scope_zones)}\n")
+    print(f"Scope granted by the environment: {sorted(session.scope_zones)}")
+    print(f"Person's zone known to the environment: {session.neighbourhood.zone_id or 'not yet'}")
+    print("No catalogue at binding: the engine asks for devices in the Plan state.\n")
 
-    print("Capability catalogue (R10):")
-    for zone in session.catalogue:
-        adjacent = ", ".join(session.spatial_model.adjacency[zone.zone_id])
-        print(f"  {zone.zone_id:<13} adjacent to: {adjacent}")
-        for d in zone.devices:
-            print(f"      {d.device_id:<24} {d.controlled_property:<12} {d.supported_command}")
-        if not zone.devices:
-            print("      (no devices)")
-
-    print(f"\nWalking path '{args.path}' (seed {args.seed}); R6 zone_changed events:")
-    estimator = ZoneEstimator(session.spatial_model.adjacency, path.subject)
+    print(f"Walking path '{args.path}' (seed {args.seed}).")
+    print("  [env] = a trigger of the environment fired; plain lines = R6 zone_changed events")
+    estimator = ZoneEstimator(dict(session.known_adjacency), path.subject)
+    session.on_neighbourhood(lambda n: estimator.add_adjacency(n.adjacency))
+    session.on_neighbourhood(
+        lambda n: print(f"  [env] person in {n.zone_id}, armed {', '.join(n.armed)}")
+    )
     session.subscription.add_listener(estimator.on_signal)
     estimator.subscribe(
         lambda e: print(
@@ -54,6 +52,10 @@ def main() -> None:
     print("\nEnvironment Interface (R12):")
     api = EnvironmentInterface(session)
     calls = [
+        {"operation": "listZones", "args": {}},
+        {"operation": "listDevices", "args": {"zoneId": "corridor", "controlledProperty": "light"}},
+        {"operation": "listDevices", "args": {"controlledProperty": "temperature"}},
+        {"operation": "listDevices", "args": {"zoneId": "server_room"}},
         {"operation": "invokeCommand", "args": {"deviceId": "lamp_hallway", "command": "on"}},
         {"operation": "getDeviceState", "args": {"deviceId": "lamp_hallway"}},
         {

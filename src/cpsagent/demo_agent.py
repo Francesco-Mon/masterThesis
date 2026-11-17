@@ -2,8 +2,10 @@
 
 The user walks the scripted path lobby -> hallway -> corridor -> office. Once Localization
 places them in the hallway, they make the request; the FakeGrounder stands for Intent
-Grounding. The engine plans hallway lamp now, corridor lamp on arrival, and re-plans at
-every zone change without grounding again. Every transition goes to the event log, which
+Grounding. In the Plan state the engine asks the environment which devices offer the
+intent's property in the zones concerned (listDevices), then plans hallway lamp now,
+corridor lamp on arrival, and re-plans at every zone change (asking again for the new
+zone) without grounding again. Every transition goes to the event log, which
 is verified at the end.
 
 Run: python -m cpsagent.demo_agent [--seed 0] [--log logs/demo_agent.jsonl]
@@ -42,6 +44,12 @@ SCRIPT = {
 }
 
 
+def describe_query(q) -> str:
+    a = q.call.args
+    answer = [d["deviceId"] for d in q.result.state] if q.result.ok else q.result.error
+    return f"{'':14}listDevices(zone={a.zone_id or '*'}, {a.controlled_property}) -> {answer}"
+
+
 def describe(t: Transition) -> str:
     zone = f"{t.zone.zone_id} ({t.zone.confidence:.2f})" if t.zone else "-"
     line = f"  {t.time:%H:%M:%S}  {t.guard.value:<4} {t.source:<9} -> {t.target:<9} zone {zone}"
@@ -52,7 +60,7 @@ def describe(t: Transition) -> str:
         line += f"  -> {t.outcome.state if t.outcome.ok else t.outcome.error}"
     elif t.outcome is not None:
         line += f"  [{t.outcome}]"
-    return line
+    return "\n".join([describe_query(q) for q in t.queries] + [line])
 
 
 def make_grounder(kind: str, model: str | None):
@@ -78,7 +86,9 @@ def main() -> None:
     session = EnvironmentBinding({env.endpoint: env}).bind(
         env.endpoint, "person-agent", path.subject
     )
-    localization = ZoneEstimator(session.spatial_model.adjacency, path.subject)
+    # Localization learns the adjacency from the neighbourhoods the environment pushes
+    localization = ZoneEstimator(dict(session.known_adjacency), path.subject)
+    session.on_neighbourhood(lambda n: localization.add_adjacency(n.adjacency))
     session.subscription.add_listener(localization.on_signal)  # R13
 
     log_path = Path(args.log)
@@ -101,7 +111,11 @@ def main() -> None:
         notify=lambda r: print(f"  agent says ({r.status}): {r.message}"),
         clock=lambda: now[0],
     )
-    print(f"Session {session.session_id}; walking path walk_in_the_light (seed {args.seed})\n")
+    print(f"Session {session.session_id}; scope {sorted(session.scope_zones)}")
+    session.on_neighbourhood(
+        lambda n: print(f"{'':14}environment: person in {n.zone_id}, armed {n.armed}")
+    )
+    print(f"Walking path walk_in_the_light (seed {args.seed})\n")
 
     asked = False
     for tick in MobilitySimulator(env.scenario, path, seed=args.seed).ticks():
@@ -117,9 +131,9 @@ def main() -> None:
     engine.close()  # end of session: the following intent ends (T8)
     log.close()  # flush the queue
 
-    token = env.authenticate("person-agent")
+    states = env.device_states()  # observer view of the emulator, not the agent's
     lamps = {
-        d.device_id: env.device(token, d.device_id).state["power"]
+        d.device_id: states[d.device_id]["power"]
         for d in env.scenario.devices
         if d.category == "lamp"
     }

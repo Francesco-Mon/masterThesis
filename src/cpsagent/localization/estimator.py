@@ -55,6 +55,14 @@ class ZoneEstimator:
         self._listeners: list[ZoneListener] = []
         self._scan: list[PositioningSignal] = []  # readings of the scan in progress
 
+    def add_adjacency(self, adjacency: dict[str, list[str]]) -> None:
+        """Merge a neighbourhood pushed by the environment (Enumerate). The local adjacency
+        only grows: forgetting a zone could make the estimator drop the signals of the zone
+        it is still in while the environment has already moved on (race between the
+        environment's trigger and this estimator's own zone change)."""
+        for zone, adjacent in adjacency.items():
+            self._adjacency.setdefault(zone, set()).update(adjacent)
+
     # --- R13 input ----------------------------------------------------------------------
 
     def on_signal(self, signal: PositioningSignal) -> None:
