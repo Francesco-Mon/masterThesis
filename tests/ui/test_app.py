@@ -41,6 +41,11 @@ def test_text_request_drives_the_engine_and_the_log(app):
     next(b for b in app.sidebar.button if b.label == "Walk there").click().run()
     assert not app.exception
     assert "invokeCommand(lamp_office, on)" in captions(app)
+    # the catalogue query of the Plan state, and the environment's view in the sidebar
+    assert "listDevices(zone=office, property=light) -> ['lamp_office']" in captions(app)
+    sidebar = [c.value for c in app.sidebar.caption]
+    assert "Person's zone (environment): office" in sidebar
+    assert "Armed neighbours: corridor" in sidebar
 
 
 def say(app, text: str):

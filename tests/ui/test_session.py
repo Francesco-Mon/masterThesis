@@ -2,7 +2,7 @@ import pytest
 
 from cpsagent.contracts import State
 from cpsagent.grounding import FakeGrounder
-from cpsagent.ui.session import AgentSession, plan_status, result_summary
+from cpsagent.ui.session import AgentSession, catalogue_queries, plan_status, result_summary
 
 WALK = {
     "I want to walk in the light": {
@@ -28,6 +28,9 @@ def agent(tmp_path):
 def test_starts_localized_in_the_start_zone(agent):
     assert agent.localization.estimate().zone_id == "hallway"
     assert agent.turns == [] and agent.verify().length == 0
+    view = agent.environment_view()
+    assert view["zone"] == "hallway" and view["armed"] == ["lobby", "corridor", "kitchen"]
+    assert "server_room" not in view["scope"]
 
 
 def test_route_follows_the_adjacency(agent):
@@ -41,8 +44,12 @@ def test_following_request_replans_on_walk_without_grounding_again(agent):
     assert result_summary(turn).startswith("intent: action=activate")
     assert [c.action.args.device_id for c in turn.commands] == ["lamp_hallway"]
     assert turn.plan.valid_for.zone_id == "hallway"
+    assert catalogue_queries(turn)[0] == (
+        "listDevices(zone=hallway, property=light) -> ['lamp_hallway']"
+    )
     walk = agent.walk_to("office")
     assert [c.action.args.device_id for c in walk.commands] == ["lamp_corridor", "lamp_office"]
+    assert "listDevices(zone=office, property=light) -> ['lamp_office']" in catalogue_queries(walk)
     assert all(t.source != State.INTERPRET for t in walk.transitions)  # no re-grounding
     assert len(agent.engine._grounder.calls) == 1
     report = agent.verify()

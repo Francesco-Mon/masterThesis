@@ -18,7 +18,13 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from cpsagent.contracts import ToolResult
-from cpsagent.ui.session import AgentSession, Turn, plan_status, result_summary
+from cpsagent.ui.session import (
+    AgentSession,
+    Turn,
+    catalogue_queries,
+    plan_status,
+    result_summary,
+)
 
 # LLM calls made from the page are demo traffic, not experimental data: they go to a
 # git-ignored log instead of results/llm_calls.jsonl (which the evaluation runner writes).
@@ -100,6 +106,15 @@ def new_session(config) -> None:
     st.session_state.config = config
 
 
+def environment(agent: AgentSession) -> None:
+    """What the binding gave: the scope, and the person's zone as the environment follows it."""
+    view = agent.environment_view()
+    st.sidebar.header("Environment")
+    st.sidebar.caption(f"Granted scope: {', '.join(view['scope'])}")
+    st.sidebar.caption(f"Person's zone (environment): {view['zone'] or 'not heard yet'}")
+    st.sidebar.caption(f"Armed neighbours: {', '.join(view['armed']) or '-'}")
+
+
 def movement(agent: AgentSession) -> None:
     st.sidebar.header("Movement")
     st.sidebar.caption(f"True position: {agent.position} (the agent only sees the estimate)")
@@ -165,6 +180,8 @@ def show_turn(turn: Turn) -> None:
 
 
 def show_details(turn: Turn) -> None:
+    for line in catalogue_queries(turn):  # asked in the Plan state, before the plan
+        st.caption(line)
     if turn.plan is not None:
         steps = [
             f"{s.device_id}.{s.command}" + (f"({s.value})" if s.value is not None else "")
@@ -226,6 +243,7 @@ def main() -> None:
     st.title("Person Agent")
     (kind, _, _), language = sidebar()
     agent: AgentSession = st.session_state.agent
+    environment(agent)  # drawn before movement: a walk reruns the page, so it stays current
     movement(agent)
 
     st.caption(f'Grounder: {kind}. Say or type a request, e.g. "I want to walk in the light".')
