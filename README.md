@@ -9,6 +9,10 @@ emulated version** of it and evaluates one component in depth: **Intent Groundin
 that turns a natural-language request into a structured intent checked against the building's
 capability catalogue.
 
+The environment keeps control and the agent is a mere client: the environment fixes the scope
+of the agent's token, refuses calls outside it, follows the person with triggers on the adjacent
+zones, and lists the devices the agent asks for when it plans.
+
 Reference scenario, "follow the user with light": the user says something implicit such as
 *"I want to walk in the light"*; the agent knows the user's zone from localization, grounds the
 request to a `StructuredIntent`, plans guarded steps (hallway lamp now, corridor lamp on arrival),
@@ -18,7 +22,13 @@ transition in a verifiable event log.
 ## What is implemented
 
 - **Emulated environment** (`Building`, `Zone`, `Device`, `PositioningSignal`, as in thesis Ch. 5)
-  and a mobility simulator along scripted paths; zone-level localization with hysteresis.
+  behind a small `EnvironmentBackend` Protocol, and a mobility simulator along scripted paths;
+  zone-level localization with hysteresis.
+- **Environment Binding** in four steps (Locate, Authenticate, Enumerate, Subscribe): the
+  environment follows the person and pushes the neighbourhood when a trigger fires. No catalogue
+  is built at binding: the engine asks the environment (`listDevices`) at the start of Plan.
+  One temporary deviation remains: the grounders still take the whole-scope catalogue as input
+  (see `docs/SPEC.md`, section 3, and `docs/DECISIONS.md`).
 - **Orchestration Engine**: an explicit state machine
   Perceive -> Interpret -> Plan -> Act -> Observe -> [Recover], with bounded steps and retries.
 - **Intent Grounding** behind one interface, with interchangeable candidates:
@@ -45,7 +55,7 @@ src/cpsagent/
   contracts/              Pydantic models of the contracts (single source of truth)
   environment/            emulated building, devices, commands, mobility simulator
   localization/           zone estimator
-  binding/                Environment Binding: enumeration and capability catalogue
+  binding/                Environment Binding: locate, authenticate, follow, subscribe
   interface/              Environment Interface: the allowed operations and allow-list
   grounding/              grounder interface and candidates (llm, embedding, keyword, fake)
   engine/                 state machine, planner, guards
@@ -90,7 +100,7 @@ Run all commands from the repository root with the virtual environment active.
 | Tests with the real embedding model | `pytest -m embeddings` |
 | Tests with the real speech-to-text model | `pytest -m stt` |
 | Lint | `ruff check .` |
-| Demo: binding, catalogue, localization, interface | `python -m cpsagent.demo` (or `--path doorway_linger --seed 3`) |
+| Demo: binding, triggers, localization, interface | `python -m cpsagent.demo` (or `--path doorway_linger --seed 3`) |
 | Demo: engine + event log ("I want to walk in the light") | `python -m cpsagent.demo_agent` (log in `logs/demo_agent.jsonl`) |
 | Ground a single request with the LLM | `python -m cpsagent.grounding.try "it's too dark here" --zone hallway` |
 | Evaluation run of a grounder | `python -m cpsagent.eval.run --grounder keyword\|embedding\|llm --split dev` |

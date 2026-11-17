@@ -13,13 +13,13 @@ Components: User Interface (F1), Localization (F2), Intent Grounding (F3), Orche
 | R3 | Engine -> UI | status, message, optional clarification question | return value / callback |
 | R5 | Engine -> Localization | ZoneEstimate query | function call |
 | R6 | Localization -> Engine | zone-change event carrying new ZoneEstimate | asyncio queue / callback |
-| R7 | Engine -> Intent Grounding | request, ZoneEstimate, catalogue subset, short history | function call |
+| R7 | Engine -> Intent Grounding | request, ZoneEstimate, short history (and, temporarily, the catalogue and adjacency of the scope: see section 3) | function call |
 | R8 | Intent Grounding -> Engine | StructuredIntent or clarification-needed | return value, Pydantic-validated |
-| R9/R10 | Engine <-> Binding | binding request / session descriptor, spatial model, capability catalogue | function call |
+| R9/R10 | Engine <-> Binding | binding request / session descriptor: scope, person's zone and followed neighbourhood | function call |
 | R11 | Binding -> Env. Interface | configuration | object injection |
 | R12 | Engine <-> Env. Interface | tool call and result (the 4 operations) | function call |
 | R13 | Env. Interface -> Localization | raw positioning signal | callback |
-| R14/R15 | Binding / Env. Interface <-> Environment | NGSI-LD in the thesis | **emulator in-process** (same entity names) |
+| R14/R15 | Binding / Env. Interface <-> Environment | NGSI-LD in the thesis | `EnvironmentBackend` Protocol, implemented by the **emulator in-process** (same entity names) |
 | R16 | Engine -> Event Log | event record, asynchronous, never blocks the loop | in-process queue |
 | R17 | Event Log <-> Ledger | anchoring | **not implemented** (optional) |
 
@@ -35,12 +35,23 @@ Boundaries: (1) User <-> Agent, (2) Agent <-> Environment, (3) Agent <-> Ledger.
 | `PositioningSignal` | `signalType`, `rssi`, `observedAt` | `refZone`, `refSubject` |
 
 - `supportedCommand` is what makes capability discovery possible: the catalogue is *queried*, never assumed. A request for a capability no device in the environment offers ends in a clarification / Recover, never in a hallucinated command.
+- Control stays with the manager of the environment; the agent is a client. The environment fixes the scope of the agent's token, refuses any call outside it and decides what it lists.
 - `adjacency` lists which zones are reachable from which; the planner uses it to reason about movement.
 
 ## 3. Discovery and binding protocol
 
-1. Locate (broker endpoint from configuration) 2. Authenticate (emulated token) 3. Enumerate (Building + Zones) 4. Catalogue (Devices per zone, read `supportedCommand`; catalogue indexed by zone) 5. Subscribe (position updates pushed, so re-planning is event-driven).
-Output: a **bound session** = endpoint, spatial model, capability catalogue, active subscription. The engine enters `Perceive` only after a session is bound.
+Executed once, when the person enters the environment:
+
+1. **Locate**: broker endpoint from configuration.
+2. **Authenticate**: the agent gets a token. Its scope (zones and operations) is fixed by the environment (`broker.agents[...].scopeZones` in the scenario); the agent cannot widen it.
+3. **Enumerate**: the agent asks the environment to follow the person. The environment identifies the person's zone from the positioning signals it receives (strongest beacon, no smoothing), arms triggers on the adjacent zones inside the scope and returns the zone with its adjacent zones (each with its adjacency). When a trigger fires (a reading from an armed zone is the strongest), the environment re-arms around the new zone and pushes the new neighbourhood to the agent before the signal that fired it. Zones outside the scope are never armed.
+4. **Subscribe**: positioning signals of the person's zone and of the armed zones are pushed to the agent (R13), so re-planning stays event driven.
+
+Output: a **bound session** = endpoint, token, granted scope, the person's zone and its neighbourhood (updated on trigger), active subscription. The engine enters `Perceive` only after a session is bound. Localization keeps a local adjacency that is the union of the neighbourhoods received so far (it never shrinks), so a trigger of the environment and a zone change of the agent's own estimator cannot race.
+
+**The capability catalogue is not built at binding.** At the start of the `Plan` state, after the request has been interpreted, the engine asks the environment (`listDevices`) for the devices that offer the intent's `controlledProperty` in the zones the intent concerns: the person's zone (or `targetZoneId`) for scope `current_zone`; the person's zone and the adjacent zones ahead for scope `path`; one call without `zoneId` for scope `environment`. The environment decides what to list, within the scope. The answer is used for that plan only; after a zone change (T9) `Plan` asks again for the new zone. An empty answer means capability absent: T5, no command.
+
+**Remaining deviation (temporary).** The grounders still take the catalogue and adjacency of the whole scope as input (`GroundingRequest.catalogue`, `adjacency`), because the frozen evaluation was built that way. That input is built by one function, `binding.grounding_context.temporary_grounding_context`, right before interpretation, from a non-standard environment query (`describe_scope`) that is not one of the four operations. See DECISIONS.md, "Temporary grounding context".
 
 ## 4. Internal data structures
 
@@ -52,12 +63,12 @@ Output: a **bound session** = endpoint, spatial model, capability catalogue, act
 
 | Operation | Parameters | Returns |
 |---|---|---|
-| `listZones` | - | zone set with adjacency |
-| `listDevices` | `zoneId` | devices with supported commands |
+| `listZones` | - | the person's zone and its adjacent zones (the neighbourhood the environment follows), with adjacency |
+| `listDevices` | `zoneId` (optional), `controlledProperty` (optional) | devices with supported commands and zone; no `zoneId` = every zone of the granted scope, no `controlledProperty` = every property |
 | `getDeviceState` | `deviceId` | current state |
 | `invokeCommand` | `deviceId`, `command`, `value` | outcome, resulting state |
 
-Only `invokeCommand` changes the environment; the other three are observations. The zone estimate is NOT an environment action (it comes from Localization through R5/R6). The Environment Interface rejects any call outside this set or outside the negotiated scope (allow-list in code).
+Only `invokeCommand` changes the environment; the other three are observations. The zone estimate is NOT an environment action (it comes from Localization through R5/R6). The Environment Interface rejects any call outside this set (allow-list in code). The environment is the authority on scope: it refuses any call outside the granted scope whatever the agent has checked; the Scope Guard and the allow-list in the agent are defence in depth only.
 
 ## 6. State machine transitions (Table 5.3)
 
@@ -113,7 +124,7 @@ Commitment and chaining (SHA-256, `||` = concatenation):
 ## 8. Reference scenario (Fig. "sequence")
 
 User: "I want to walk in the light" ->
-R2 request -> R5 zone query -> `{hallway, 0.87}` -> R7 (request, zone, catalogue) -> R8 `{activate, light, path, following}` ->
-Plan: hallway lamp now, corridor lamp on arrival -> R12 `invokeCommand(lamp_hallway, on)` -> result ->
-position signal -> R13 -> R6 zone changed -> `corridor` -> `validFor` stale => Observe -> Plan; next step fires.
-Intent is **reused**, only the plan is revised.
+R2 request -> R5 zone query -> `{hallway, 0.87}` -> R7 (request, zone) -> R8 `{activate, light, path, following}` ->
+Plan: R12 `listDevices(hallway, light)`, `listDevices(corridor, light)`, `listDevices(kitchen, light)` -> hallway lamp now, corridor lamp on arrival -> R12 `invokeCommand(lamp_hallway, on)` -> result ->
+environment trigger on `corridor` (new neighbourhood pushed) -> position signal -> R13 -> R6 zone changed -> `corridor` -> `validFor` stale => Observe -> Plan (asks again around `corridor`); next step fires.
+Intent is **reused**, only the plan is revised. The catalogue queries do not add event records: the reference run still has eleven.
