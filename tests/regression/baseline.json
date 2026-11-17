@@ -1,0 +1,1091 @@
+{
+ "about": "Baseline taken before the environment-control alignment (same dataset, same grounders). Regenerating it from the current code would defeat its purpose.",
+ "zoneEvents": {
+  "walk_in_the_light": [
+   [
+    "lobby",
+    null,
+    0
+   ],
+   [
+    "hallway",
+    "lobby",
+    7
+   ],
+   [
+    "corridor",
+    "hallway",
+    18
+   ],
+   [
+    "office",
+    "corridor",
+    28
+   ]
+  ],
+  "doorway_linger": [
+   [
+    "hallway",
+    null,
+    0
+   ]
+  ]
+ },
+ "groundingRequestSha256": {
+  "en-001": "72175b2638c72292ecfd3490f5ceb079a85f8614cc3d65217ad2f3bff700b071",
+  "en-002": "23e76aff55428747909a2233e9ca4fcb36dd9a9cba0749f98c0c82d7b0e821fa",
+  "en-003": "ac221d0de25f4d10fd69b65bd077effd51e754e4f48a1aa5d47b9eae55480789",
+  "en-004": "b5e42a79c8564cb55941ec2973472f06b2bbdfcbe688a83d42fd1cf1e712d192",
+  "en-005": "73d2ecfa97558d1438604ec064a9b253a21f86a26aa1f462b0dc24a363af9b7b",
+  "en-006": "8555b8bcc2e286ecb2175162e55ce8e0fee4bbe065f84a6ba0f2fc129769a866",
+  "en-007": "8255f8cc10eddf826aa82beb37e5490660d78247439fb6d3f7352a2040b7330d",
+  "en-008": "4f9ae8cbb8faf10e86b3462cb1a9ab919c0d760ad98ef752d395fab57fadbe6a",
+  "en-009": "d1f3b6f17b9aae2fb8786851305a2e4968dd249111dccda97711c578fff18ca5",
+  "en-010": "8066ef7c0f3c701170377ca7ff782011b2e551043027f011e209d53b8accb41b",
+  "en-011": "97908039a0f1015aec6434824f116e6bf3fb809efba1d369b35db8c48516dea2",
+  "en-012": "e56ee14790b0dc2d86a2b0f2dc4fd2b635277d9b1c2914670414503d15e1102b",
+  "en-013": "1ec3c66609a285fbff1a7c9336cbd12fc6db5a2232d09ec41acd392fcc0064e9",
+  "en-014": "5139ced05545c941ac40c373d2c5c36b9c6dc0c1353b325fcd887c1d18be19e8",
+  "en-015": "cda629d86f71783fc76aa610a9c5ca7d174249148066209ab8e4b29dc474d983",
+  "en-016": "8041e91b2a20e9374bd1444fec435f083f6d9299c3648e9d4ad93ac80d8c4fd5",
+  "en-017": "39a2e04fb3b1aa58018dbbb166fb1e9c33341f7d594a99e0e445aac283acb23c",
+  "en-018": "303f117b9d03005ba7f9af0a61ae2ee0e5199516985ae2a055882e40e1bb2243",
+  "en-019": "2ae19d8f831377fa098a72975c208f89d1f77c0711dc3c7830e5b0ed9f6dc9b9",
+  "en-020": "969479bad4849ffd05c69d985dbee5d6aa7c39b5ba29479d08ad509ad68f647c",
+  "en-021": "9df291ab131a82959bbe71a6e724f0a0f91200149605a849d2c6c8a7fab73dec",
+  "en-022": "3d9333df50d015c5fb1d6e5e0494309ebd383b16c20bec20af45bcec42064bd1",
+  "en-023": "a7d2eb9bb5a6b857efdc869b6800c577a416cb9be7d64cb031be88e8ff2f826d",
+  "en-024": "eed67e4215f70a470ef99d7626a5afe1ed734d71bca101e764659749cd67e5fc",
+  "en-025": "1f931a00793ee7c24994dc747469275b79c44c38f40bc149993a8d1e7820aa46",
+  "en-026": "b6fe3eb46b1f7f6ddfb9bcfc6b1be2ba5b4e8de80aee53e5ff78d3f3a92ec365",
+  "en-027": "8cc6f0a2d658446e37ebd154dc0a17600b112d8033a0e504362ac656d8e7495e",
+  "en-028": "673c120bdc224e13b349dcb7b98fbe84b3be232440c8eb2ae4304a85d72348d2",
+  "en-029": "a209707aa6d7d7e5a390d8687b96326984b00d7c166c54a70fb5d1c61710635d",
+  "en-030": "ed28e1729f26789183c345302acd4a17bbb1bdc1cee0e8644a639b368f744ced",
+  "en-031": "e844f81bc1883768eb4d91510a56731ecfc2f106f9a5d4258fd0a3eb0f0832ed",
+  "en-032": "150053c04dbbc4b9eb64cd335c29a685c7d41e7c7b42afb0a526b6056bad98bd",
+  "en-033": "f161ba80fa80c20378865f0a49998c06cf8e1df1bcc6fc05073461e341a9b7bb",
+  "en-034": "e126c3260748318e1666beb5cd4b5a5b4db30e20ba0b34914424603b95677345",
+  "en-035": "506394427636e1874d438837fb40c7fd9b6373a07d69aef51e3e64799c17c9cb",
+  "en-036": "5309e340cf3a2bea407710b11364dcda92207bd292ca7d1a7d98fdb82941ca04",
+  "en-037": "2673b34c8328d486105af827d956c903d1a41c5e8325f6e9a815e67a8e4fbae6",
+  "en-038": "7295576083793385f8355214ec3ab5c078215d0d214172d17029cac58b44148a",
+  "en-039": "cd4bc446c712ddb9093c274e6fe1b610f29b9a533c834f54da1dd6ccb0bc1d7f",
+  "en-040": "2d88be85c3db83251acc506a6f6dbc7dd03f0011ab04fd2698de8307636da202",
+  "en-041": "3f9a0f684b15bc1e52704d59ca3db6dd6ad9d8fccb70aa3cb399b1ea0e38bcf5",
+  "en-042": "8b54c40b533c8ad5fc829bc8fab695dd0eaeaf1e841aac167e719ff44dd27dd5",
+  "en-043": "5c17755fea376d3346a9fab81bde93005b8fee9942a9ad998c63e40a1c32b057",
+  "en-044": "36f4a2b37144cc1230e61ba1a3830f6e078dd8697a216c5869562eee9c016adb",
+  "en-045": "06924ad4c765ac99c820ed852010b52f8e59b6f6ca754c7d60e20023710dbcd2",
+  "en-046": "38c0792e1255586c07c273ddef6447a7fbc2237bf8894e837b74ea911a0cba9e",
+  "en-047": "d05dacfe45418f534a3b9de166a850262bacb203311c167157a436ba460362e7",
+  "en-048": "af833e40d8f160c3c5888738b2881a6dca32e871152efdd4de8e5dfa831cef79",
+  "en-049": "4dda3ac61b403f934c2ca1ebb872c6ace0ea9fd9765ecc88b93670d5a726e6f9",
+  "en-050": "ad0bc0f97300a2f38b5f72214d978df5e51690661cb8182f1ecbf8cb1118b0a6",
+  "en-051": "d5cc280a627dd3deb0565a6e8ad8710e95531fe509f41e7df915ea16296ebe11",
+  "en-052": "1756e2ef621271ce36d458fc5b422d1139d587baf87b0c341613a0ce1dacbcdd",
+  "en-053": "1e13395a81b0f7d7c65eeb8dd01d0607ce21da1b2ca9e213306cd061a795cdea",
+  "en-054": "df690c53edcafcb3f6556e181cb605fd82522a23cdc64141bd55a5d8ce98acb9",
+  "en-055": "dc2ef3ac6399267cfe03063ac333893b659b3292432276467d2a26cdd95af372",
+  "en-056": "df88957b2188d1f33c39cd86aeb11d06e7b2643ce3c50dd77bf6f3181170c358",
+  "en-057": "4353838fa3308c0f5b8ad613d5adba33152f75682bacd27ce95246a54d9d830e",
+  "en-058": "23bce9a80176590f5f46dc909cda67b4aed28de2bc22b11778f4ff3cc6580a7e",
+  "en-059": "5a06b09ecfac5b80e8ae21bed5c00429cd2db0e95b31566b5b1fc99b191816e1",
+  "en-060": "dd842143f81f71fd0187792336c2efaf45afc333d1ff380d870ae9f8a86ef532",
+  "en-061": "6aea1fe11400d61b548c0d810927674e6aff8200f285c37e1b4218d6792cf626",
+  "en-062": "659a5dd29871c7e8f0c818dac690f6c6d198e3012feb0ed3c5a015ffa2c536b8",
+  "en-063": "cb611e93f6fb21a5bf8618642f1b6312d0645152ae1c6bf0aa9b5fa0752ee44f",
+  "en-064": "539cf41cf981f8e74201a61942e003cbc2870ec5b38b57fec4b9a8287893c433",
+  "en-065": "5ab3f8887e22f6bcd421310ac08c1bc0810cd543e02872f399b63751f22db5f3",
+  "en-066": "432bbe8d20ee5593685dc4e729cece31d3de884a7a2c789d98c479cfd6b3300e",
+  "en-067": "fdb3a935b77e7fd7dd4be371846d27b2d2279b292213ec5d17347a476bf7d9c2",
+  "en-068": "ef8ba2adb305a223979e88eff2502a1e4f8f3517485ab2eee08709a053d0fb2e",
+  "en-069": "560172c7572694caf0e04843f8fc030bf89e8f53fcf83782c3a0e524b6a01af1",
+  "en-070": "d782962f9a7f940863ad1d1006f3fea42ec2a06e92702e45f0b3fe6c0c97bda9",
+  "en-071": "de51a47a5c30b2c82263b41027849d7f386edf8168b15af979aeba1418341741",
+  "en-072": "6917a6e3091e710d639076af78c3b3a7c64f1412307e1ed85a62f6b62b420e4f",
+  "en-073": "5de7214b96f1c61647e01a6e128e288e126fda5925e7d69598ed5807f23f2e7b",
+  "en-074": "a0547fa55e283e12980130deeab0277ac51a7040472a99657ffc2fe716ae63ed",
+  "en-075": "5a44a98e3ac25556c9703e3a4da3a56f52a30a9b1705101dee3c345e7d12b18a",
+  "en-076": "f06e1b66c78d26fe70fe315d50a5628e1f9d62a04a2018e0ad681c23e86af186",
+  "en-077": "5cb56ff6e008da98404a88e3471e9289d8383ecd1cd442fc1c026fdc38969412",
+  "en-078": "8a34252eee5f6626b4e44667dc6eee55f3c4f51ac18ace2b2f60787aaeb526a6",
+  "en-079": "85fa7b74594b8c532396bbf54d599a3c87a8bbb2119a515d1f099e4bf48caba6",
+  "en-080": "c8c08dbb002b17c949bc5c3364885098358886bd16118bb9a74916678eca19c3",
+  "en-081": "92e862ff1e614699c9027a306250962b7d55dfc1264ad39ad7dbd6f60763cdcf",
+  "en-082": "26a97f0f55d12c8d1752d579ad1344be0877357ea308a24a147b3787f4f41db6",
+  "en-083": "aeea8f389ee5f8235685a56d306f9d5a76753edb9855560992fd9c6020d50cbc",
+  "en-084": "3891debd2f75fde782bb12bd801f8f3415848efda9ad6d592a13faf039da7fb7",
+  "en-085": "ac235c098c724ee91acd7f5e7879ebeb1bbdd66364012ff767ece7e64d225988",
+  "en-086": "73f53cffa672da1de621b68b039bf8c18c9b1275e949769b183c0084c4992c9a",
+  "en-087": "39c746691490d6d6c2e49e872304067fafa2a794db25aaa8ae9126a9be2154d8",
+  "en-088": "8ad18d9250011603db82a96b328fcd3c83f2b3809a85bf38a2313db42dd803f4",
+  "en-089": "10db045b6c37a9766d82fdd340eac52c034c3b9f94a06a1058bbe24e90da7cce",
+  "en-090": "389d1e45326f97878106d54f9e92497e4e30c7ab0abd085c0882362c6ee68bff",
+  "en-091": "94086df180956a38f83d78728404ecac513e53ef3ec884735a48927330f72e33",
+  "en-092": "6c5dd82e34ae9cac00d03c9f0242305a3ed0c06d13102488327bad0acdbce64b",
+  "en-093": "67aa8e72d7083c2180b03bd501541196fd03fbf78d005a7e515e1c6b186d7789",
+  "en-094": "297b794460ab0d30ba581b27c573250eab5d96d640cab5db3b58b7e1d26578ba",
+  "en-095": "26d002a3d4876e77ec15ec756d1ecae11c4c156cfbaf0ef2e567edf391f2b4f3",
+  "en-096": "1a1721a4619a5e0c7e05c975a046bc050e2f272dd7cd274037d1d916ab6d6d78",
+  "en-097": "bfa460869c6d4860f62e9aff1a1b8e6a84e22618e8b22f30a1ba7c4ebc46a8a7",
+  "en-098": "83414ee743af7fbb8e9c2aa849e76ecb008391c6d34690a146ba1eb31a55dea5",
+  "en-099": "bed7177d067801728fb8098b799e75dd52088b3d9e39a7bc375909d78a54d2b8",
+  "en-100": "033561f5ef0ea6108c3c70e3c386bb08cfccd749973f84fbcf3cbd657196f378",
+  "en-101": "51a757abf1948b90845634c6740e9226832d786d74388b2d24746960ab3e1148",
+  "en-102": "f55dd471b7a8685cf5666f5ba1a8c9091ea20591615366e40f4df0bb90ace0d0",
+  "en-103": "9189f54876aa9473024ef96e6d90076f1a5404aaad980bf16affd8951b0dcb64",
+  "en-104": "74a18ab1de38a89f683bd410791a01412f93e5744305330be71c736fd19b5b1d",
+  "en-105": "40c65053d30a3e075f294c879900ebfd0b16828f5b9e81c4eafdbc8632dc1454",
+  "en-106": "eba0270ee9d8e6ce4a92c065d9d0619bfc580b9415c670a22d348acf920019d8",
+  "en-107": "ca2a8207470cc4d3717e330d9485032d351e0b89400ff1f99fb076cc8807561d",
+  "en-108": "8ff61eefe565d9f94dbd2256102062ad629444cf8e317105c8fd44d195df858d",
+  "en-109": "45bc4d8db32ac7dd2f3b357180d731e1bd41469bea3e0593afaf29a652213d55",
+  "en-110": "4d951b1f6144aad3dde64b8abc003f317e6b0fa97839b6e4bb9cb4ba16efe092",
+  "en-111": "b2f007bea662d6f264d5342e5f13d854672ee7822b54967415e743bc53e65843",
+  "en-112": "9d1d48fb8b27b080e3bbfa3bea9eb1f17c92039987fa0cba31f390a4a63aa1d6",
+  "en-113": "614aad874a34411701b1429a5e399bc5dbf5934922c767f5d97f032df3491ee8",
+  "en-114": "3c7cfc08fc1e4610e531077dba267bf86750377e242f06000f85f2b2d31054e7",
+  "en-115": "20de2713e46be92cb29c8e76dbca979fce738a6dd0d9f3061faebe685b0a46a6",
+  "en-116": "d26417752c666109fcc0b46b25b62e9bd3c40aa42992bc7d709cae71995fd241",
+  "en-117": "618ef8623f3f637d7bf10b2a4ac309530590b384187a2588117a0f381d764e27",
+  "en-118": "7708ad9a929a8284dd9ef23cc3c32a261f5fed52c06d41ea23626c0f84d80c11",
+  "en-119": "d50f85e8905776706bdca03b1dd809772c33d104e8bf52361481636b37ac3bf4",
+  "en-120": "c7d1e8e850530f1ceb26de147d39d5acffd3bf016556a58bb73a03bd23bafa71",
+  "en-121": "4edbc65f19bc9fe69c2710eb538cfa7339a0999aab75abe3d9027254b38dc995",
+  "en-122": "fce8500dfe54de73431729fccc6170226b39ab3829f1eeda6d027449a8c56e7a",
+  "en-123": "a0a704178b13a66949a09c2d20a7a2e756a7c960a5e1c7aabe072ca4daa27df4",
+  "en-124": "145a8f28fb637a02f3bdf3d05bc7e051582133aad50a4f27660143e87f421459",
+  "en-125": "3bf7e7a042fc426ac90ed52a4e5d4643c2db236da7971b939a984f369c20a12f",
+  "en-126": "c232331e5f922e611d5e27d53527bd9743077c981f1894a3cd6db9915c910614",
+  "en-127": "69fa718d196a18a785517857e56a3a3aa9bd73dd979bd99350b70c6eea0f9f0c",
+  "en-128": "36184fdcf94af89364d09bcae9868ef0efd81849c279d0f900fd86524e8356f1",
+  "en-129": "f04a5ec88f3026ad4dde0905cf56f7f85104f87adb32acb64cd1bb34cecbec6e",
+  "en-130": "565b883c40617139d58278741f504aad13bf92f52003b16a0565b3d83a72f190",
+  "en-131": "df06b6e16bf294849a6e65098fce2b058905314a75bc91247370d0fedffe4572",
+  "en-132": "64324d8ee7f9b156897203ee0b206356c9834c8c34bb3f697b897236c014c528",
+  "en-133": "4296415d22bec36ca281eba0ec4f5c010dbf833d272a51edb952b17c96d8b76a",
+  "en-134": "04904b51816f2690e71f78d985cc9b779eddc2dcc2cf118a1bb3fbc7145a5b8a",
+  "en-135": "b7abc27c62e0f873af2893b699f738ee5658e403e11c3e690dc1721567d3c6bb",
+  "en-136": "7e74549db20219cc5792ed51fe8c7529ce1a3dbf42d6fbc35251489d6bb12d16",
+  "en-137": "8c0d2ebff31cdbaee4f87e84d31641bf186f312ac09b0fd48faae0739eba7416",
+  "en-138": "604281c433283ee6fdfb9ceac1c6369753b2ccbc8e5d70a1f9cfcabb60f68bc5",
+  "en-139": "04029e2af0d16a3547b348b00a662a7695845b20a85eea8c4bcbea21db52b7ce",
+  "en-140": "dfbf43a69a1241662e857f9207994bbdf47772d2464ccdbb48f610fd23b25969",
+  "en-141": "76c3dace117b2cd617a7d9287eea9d5778ab0c4e646b5672904b5d6325de202d",
+  "en-142": "62db0b358089bd31c5340e1a0234c4722ccbcb04bacf43addc26cabd827d248d",
+  "en-143": "9157dee4826b3022e6dc599e55e515eb3ef194668a8d3070c35c0f722eccdcb4",
+  "en-144": "71f01ebc7dc0272c588d3e2ec916ba1e7804b292d68821d19fefc9c27b49c032",
+  "en-145": "ea4d77d9ea4fdb833b0c4457d4c21dcfd800e9b685eed967b3b4863a5419246d",
+  "en-146": "c6356d7954f52fac742ed3351cb4a82d3df8eaa78c5924579dc94a7faa415f12",
+  "en-147": "395b479b98ad202a78fdbe937ed9908a976119e36fe0e0306cf3fef756b99444",
+  "en-148": "e361fd7698a583f73448e2c8a184ed521af6d03e722a1796b6c16ccb930fe0db",
+  "en-149": "9ea0052a77741ef408f36ece743c55bb661a0a336cccc66e712ce5271f444b55",
+  "en-150": "64a1a53fb0f25d638347f8851a4d90d4f0670ddb33867c0c42f1fe425810849b",
+  "it-001": "01aaa20d3d1f30a0d913383a47a3771d4a25b646001eb2649ebe1bbf63e74114",
+  "it-002": "4696ba08f009d533dfc68ec6fa91d57d9bd9048a4ac63391f09ed2ba0aad8708",
+  "it-003": "5a77e32565a8906dc61fa6df43319c2de351943624d447b3a2afb8c3e176f062",
+  "it-004": "346287433f95269766dda7ad7578eed8b0e52e649123e1a007b0267999aa62e1",
+  "it-005": "e27f3e1dbbb52008164f16d76604d3fc79f919ae8b65dc889d32d44723830ea1",
+  "it-006": "684758861cf7e56295ae00513de760279b50ceb92a21b7c2c307252164c81f51",
+  "it-007": "91f6722a2123b03efc7981890fb75a0e380a7c533f3f07a3681a3ffc079bbe56",
+  "it-008": "cfbd1600a19a4242c18dc961fe466a656c8b679a1bb4ceb4b1fa0dfbf1a0eeec",
+  "it-009": "152809e6a78403fddb49d98c668831277ebce903d8702072874dec2036dbc772",
+  "it-010": "ca189c4092d91f65732dd807fb3dc4eb73707e601b388f704977533e9a72d113",
+  "it-011": "d18c0ad457c8ae19865d5c47e56c85468b7beb355ebe78bbbeae9153286917ba",
+  "it-012": "bc43c509e7ea180398e8657f941db424217f7986ef88a5b46735844a478a48a3",
+  "it-013": "21d772ec762d4f9a0f3568d9807dfffa51f4a8de5043961079de3c3ee4b580cd",
+  "it-014": "c049002129fe4992a5961a9c2f8f6f063402a8cb1b747a40cbe7fc6af5db452d",
+  "it-015": "0c2509c3c4330b3621d96133c590dce01864d8f4e3efaf1467d4e79ec0df5041",
+  "it-016": "f19ad2df16da61f78a2bd2afca7ab1a77692190ab217f10529f6e2b5fac73264",
+  "it-017": "f2fca4f106b36565291365ea61c40b4537947fcc9ce47a202ba3e0fc8fb142a1",
+  "it-018": "5622f9b1a070cbae55804d4fd9a332aef6e7d918ca76e84a7d498107986abccc",
+  "it-019": "031aad09dd8f82d6ba97b1a24371e409233d39ab576cfc5c196cc70b88e76eac",
+  "it-020": "587622451a409ca85e89560d7a725104ef31eed668c787f95b94671dc1453fb9",
+  "it-021": "4490d25a08fe6894381ac5f1d4122cf1062bdced83d48d25fa8bd149b868c5ac",
+  "it-022": "7c2f65b112b36270eeec816d9296df981be6693436e037ed621fa3443318a4d8",
+  "it-023": "83ef3cb443e5fb6eea9c64639c3cd3e43c6b205449502dffbcccbbfcdbc7ff2d",
+  "it-024": "95fed5da5fd45d47cd95db3dfbc0e8ef700b6494eacaafbe1ab2bc15be526617",
+  "it-025": "2ce8c466b7b96df4a88187005f10d9094f941a016789fca2e88c1eb4f1d24bb7",
+  "it-026": "eb6e0ef4dff4a5772fe4845b5998fc9d213e64ecd3315724059a1f9cc496817a",
+  "it-027": "595cb322c9fb13ad8396516c384fed9dc509d3e789a18cf8d9de1dddae86277f",
+  "it-028": "8ccf2586ee8ddac8ef03f10a7c4232bc617b491dec553a16cd1550caf2a1a12c",
+  "it-029": "31c2c7d15c0b98ba4d8cd538e0c1e5c79fabaf420db8ae08040dc0df42d553cb",
+  "it-030": "c5b92e13aa5bc34e72b253dab48085da25347c708b06c4bb48cf63b4a1cb6453",
+  "h-001": "4319f9dd46ff4db358baa9c08acbf67d8bd962df22155bd40b49617b90cfb770",
+  "h-002": "f00a4ed324c21fbc91ad9e862f16cb1e8d257f6fa61d3d96272c4af71a2c2d8f",
+  "h-003": "4458afe36c837174170d9a820d9f5fbcca20861787158e055a70d39ba4dec94c",
+  "h-004": "245baffcf72b53d47c44445022f3c381a4814bc3ed8ac462b38343238484597d",
+  "h-005": "8054c859ff3c22d8c7e5517542243d596ca32b399cdad39ff3f7c4c738bdf7ed",
+  "h-006": "23bc4b81b922b125a3ecb614963bbca74519a34848ab9785d7d76635dd1c5074",
+  "h-007": "66918fe0b6cf7274a7c12afc7603fedd7e469b91700ac87ba1654a0539d32ea1",
+  "h-008": "3b4b7332240dd9b53d18021ef362acb3f7d0f2ea395a4571478ace957ed5842d",
+  "h-009": "99d424fd263b8b42211fbf010cfba5b03ecfac93ace4dcb8a88b7c2ddf73d147",
+  "h-010": "5681df42e0e7291063348eb53b9f149d54162f08cdb3938f090ee10f1832c180",
+  "h-011": "a2a91ba8c3b9a5eb211fd97290f60bc07b364c95787074035cb5018cb79d6829",
+  "h-012": "0cbe30dea450865aae148fd02f8484393eabc56cb7b1196bb661203c6ff469e7",
+  "h-013": "d6c22bc3097f3cb0af0277a03de1e64ee7f23d099533005091bbfb9b1ae68fb4",
+  "h-014": "dca2659f1d48bdd315b727e631c1041e711eba55575238fd828c3dc7dc461951",
+  "h-015": "6825a3d589434554bc97f007034f0d8ab1afab28f8251bfe9c4c68ee1612a3f5",
+  "h-016": "11d575637718b8b2268c5482352ed93e5980198f7344c3cc12b38555d3ee0b3d",
+  "h-017": "1fce9c8cc6f840bdf4f60bad7021756fa432a51d0784b6c2fa423f1583936fc2",
+  "h-018": "b09868faca92cb29b271f45f697650a3da2ca0cb15f3b2db92e33aad3a2a7248",
+  "h-019": "139445d162c6236bbd284e0708e4ca5b1e8985a4e1f24edb280c08d0f569fbd2",
+  "h-020": "51d1e397737f5dd7dbc3226b50e03bb87e9b11e46911ef3d3f6f15ff369c7611",
+  "h-021": "133674f5502159540b8489de0dabb5adf731b43da3bb3268f0724cba38b20aaa",
+  "h-022": "bb2376008ddef9c57c18d35b2852f2371cde72735050b4a92a7fc85b81bc8912",
+  "h-023": "98358eef64355afcd9eff54e4c6e10d4acd52d0d9e2a29794c310e5a50457462",
+  "h-024": "6d028713038911f5724ddc681f7c9f762e263460a234eebccee522f90c13ef60",
+  "h-025": "1f54a4da336af7e183c1e941ccf78b2f898d170706eba151a1fe7c12fc5054ef",
+  "h-026": "bbeb09d24e42923007b74003846b9c5d5966d7550a23160444034ea0924b8b1d",
+  "h-027": "3dfb87c51aaf16da50b0b8f931606fb926f5872dad7cf2a06adccb99b5f896bd",
+  "h-028": "fa89e9b747a84c176ad2f0e240b04524219c3097fb511c15626ef7abecc155ff",
+  "h-029": "35ba6d8c5879d5bc6d2145b188427bea3fe3c809d23ffa56435b6ad077fca8de",
+  "h-030": "b2e1142968eecd6f3d1e42974491894cfae6256ed651ec860c2ea0b40d50ddae"
+ },
+ "devPredictions": {
+  "keyword": {
+   "en-002": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-005": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-009": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-012": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "value": 70.0
+    }
+   },
+   "en-015": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "value": 20.0
+    }
+   },
+   "en-016": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "kitchen"
+    }
+   },
+   "en-020": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "hallway"
+    }
+   },
+   "en-023": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "office",
+     "value": 25.0
+    }
+   },
+   "en-027": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "office",
+     "value": 50.0
+    }
+   },
+   "en-030": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "meeting_room",
+     "value": 23.0
+    }
+   },
+   "en-033": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-036": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-040": {
+    "kind": "clarification",
+    "question": "What would you like me to change?",
+    "reason": "ambiguous_target"
+   },
+   "en-043": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-045": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-047": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "en-051": {
+    "kind": "unsupported",
+    "reason": "command_absent"
+   },
+   "en-055": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-058": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "en-059": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-062": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-066": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-070": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-073": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-075": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-078": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-081": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-084": {
+    "kind": "clarification",
+    "question": "What would you like me to change?",
+    "reason": "ambiguous_target"
+   },
+   "en-088": {
+    "kind": "intent",
+    "intent": {
+     "action": "deactivate",
+     "controlledProperty": "light",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-092": {
+    "kind": "clarification",
+    "question": "Which value would you like?",
+    "reason": "missing_information"
+   },
+   "en-095": {
+    "kind": "clarification",
+    "question": "What would you like me to change?",
+    "reason": "ambiguous_target"
+   },
+   "en-099": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-103": {
+    "kind": "clarification",
+    "question": "What would you like me to change?",
+    "reason": "ambiguous_target"
+   },
+   "en-105": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-108": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-111": {
+    "kind": "unsupported",
+    "reason": "command_absent"
+   },
+   "en-113": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-114": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-118": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-122": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-126": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-131": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-134": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-135": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-137": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-141": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-144": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-148": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "it-004": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "kitchen"
+    }
+   },
+   "it-011": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "it-018": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "it-023": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "it-026": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "it-030": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   }
+  },
+  "embedding": {
+   "en-002": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-005": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-009": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-012": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "value": 70.0
+    }
+   },
+   "en-015": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "value": 20.0
+    }
+   },
+   "en-016": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "kitchen"
+    }
+   },
+   "en-020": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "hallway"
+    }
+   },
+   "en-023": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "office",
+     "value": 25.0
+    }
+   },
+   "en-027": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "office",
+     "value": 50.0
+    }
+   },
+   "en-030": {
+    "kind": "intent",
+    "intent": {
+     "action": "set",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "meeting_room",
+     "value": 23.0
+    }
+   },
+   "en-033": {
+    "kind": "intent",
+    "intent": {
+     "action": "deactivate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-036": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-040": {
+    "kind": "intent",
+    "intent": {
+     "action": "deactivate",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-043": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-045": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-047": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "en-051": {
+    "kind": "unsupported",
+    "reason": "command_absent"
+   },
+   "en-055": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-058": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "en-059": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-062": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-066": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-070": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-073": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-075": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "path",
+     "persistence": "following",
+     "confidence": 0.7
+    }
+   },
+   "en-078": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-081": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-084": {
+    "kind": "intent",
+    "intent": {
+     "action": "deactivate",
+     "controlledProperty": "light",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-088": {
+    "kind": "intent",
+    "intent": {
+     "action": "deactivate",
+     "controlledProperty": "light",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-092": {
+    "kind": "clarification",
+    "question": "Which value would you like?",
+    "reason": "missing_information"
+   },
+   "en-095": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-099": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-103": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-105": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-108": {
+    "kind": "intent",
+    "intent": {
+     "action": "decrease",
+     "controlledProperty": "temperature",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-111": {
+    "kind": "unsupported",
+    "reason": "command_absent"
+   },
+   "en-113": {
+    "kind": "intent",
+    "intent": {
+     "action": "deactivate",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "en-114": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "en-118": {
+    "kind": "unsupported",
+    "reason": "capability_absent"
+   },
+   "en-122": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-126": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-131": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-134": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-135": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-137": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-141": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-144": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "en-148": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "it-004": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "light",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7,
+     "targetZoneId": "kitchen"
+    }
+   },
+   "it-011": {
+    "kind": "clarification",
+    "question": "Which room do you mean?",
+    "reason": "ambiguous_target"
+   },
+   "it-018": {
+    "kind": "intent",
+    "intent": {
+     "action": "increase",
+     "controlledProperty": "temperature",
+     "scope": "environment",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "it-023": {
+    "kind": "intent",
+    "intent": {
+     "action": "activate",
+     "controlledProperty": "shading",
+     "scope": "current_zone",
+     "persistence": "one_off",
+     "confidence": 0.7
+    }
+   },
+   "it-026": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   },
+   "it-030": {
+    "kind": "unsupported",
+    "reason": "out_of_scope"
+   }
+  }
+ }
+}
