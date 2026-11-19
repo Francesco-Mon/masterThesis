@@ -365,3 +365,11 @@ def test_policy_and_restoration_are_shown(app):
     assert "lamp_hallway set to power=off, brightness=0" in captions(app)
     devices = app.dataframe[0].value
     assert "default" in devices.columns
+
+
+def test_interpretation_by_the_environment_is_shown(app):
+    sidebar = [c.value for c in app.sidebar.caption]
+    assert "Interpretation service: KeywordGrounder" in sidebar
+    assert "Interpreted by the environment (interpreter: KeywordGrounder)" in say(
+        app, "I want to walk in the light"
+    )

@@ -51,7 +51,7 @@ def test_following_request_replans_on_walk_without_grounding_again(agent):
     assert [c.action.args.device_id for c in walk.commands] == ["lamp_corridor", "lamp_office"]
     assert "listDevices(zone=office, property=light) -> ['lamp_office']" in catalogue_queries(walk)
     assert all(t.source != State.INTERPRET for t in walk.transitions)  # no re-grounding
-    assert len(agent.engine._grounder.calls) == 1
+    assert len(agent.env.interpreter.calls) == 1
     report = agent.verify()
     assert report.ok and report.length == len(turn.transitions) + len(walk.transitions)
 
@@ -137,3 +137,13 @@ def test_closing_the_session_restores_what_the_agent_changed(tmp_path):
     assert a.turns[-1].text == "Environment restored lamp_hallway to default (session closed)"
     assert all(r["power"] == "off" for r in a.devices() if r["device"].startswith("lamp_"))
     assert a.verify().ok
+
+
+# --- interpretation by the environment ----------------------------------------------------
+
+
+def test_the_chosen_grounder_is_the_environment_interpreter(agent):
+    assert agent.environment_view()["interpreter"] == "FakeGrounder"
+    turn = agent.say("I want to walk in the light", "en")
+    assert turn.interpreted == "Interpreted by the environment (interpreter: FakeGrounder)"
+    assert agent.say("", "en").interpreted is None  # nothing was sent to the environment

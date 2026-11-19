@@ -2,8 +2,9 @@
 
 Run: streamlit run src/cpsagent/ui/app.py
 
-Sidebar: grounder (keyword, embedding, LLM with a model id), speech language, start
-zone, the environment's view (scope, person's zone, management policy and the
+Sidebar: grounder of the environment's interpretation service (keyword, embedding, LLM
+with a model id), speech language, start zone, the environment's view (interpreter,
+scope, person's zone, management policy and the
 restorations it has pending), movement (go to a zone, stay, or play a scripted path).
 Main: chat with text, microphone or audio-file input; each turn shows transcript, zone,
 intent or clarification, plan, commands and replies; each restoration made by the
@@ -74,6 +75,8 @@ def make_grounder(kind: str, model: str):
 def sidebar() -> tuple[tuple, str | None]:
     st.sidebar.header("Agent")
     kind = st.sidebar.selectbox("Grounder", ["keyword", "embedding", "llm"])
+    st.sidebar.caption("Configures the environment's interpreter: interpretation is a "
+                       "service of the environment, the agent only sends the request.")  # fmt: skip
     model = ""
     if kind == "llm":
         from cpsagent.grounding.llm import default_model
@@ -113,6 +116,7 @@ def environment(agent: AgentSession) -> None:
     """What the binding gave: the scope, and the person's zone as the environment follows it."""
     view = agent.environment_view()
     st.sidebar.header("Environment")
+    st.sidebar.caption(f"Interpretation service: {view['interpreter']}")
     st.sidebar.caption(f"Granted scope: {', '.join(view['scope'])}")
     st.sidebar.caption(f"Person's zone (environment): {view['zone'] or 'not heard yet'}")
     st.sidebar.caption(f"Armed neighbours: {', '.join(view['armed']) or '-'}")
@@ -200,6 +204,8 @@ def show_turn(turn: Turn) -> None:
         st.write(turn.reply.message if turn.reply else "-")
         z = turn.zone
         st.caption(f"zone {z.zone_id} ({z.confidence:.2f})" if z else "zone unknown")
+        if turn.interpreted:
+            st.caption(turn.interpreted)
         st.caption(result_summary(turn))
         show_details(turn)
 
@@ -271,7 +277,10 @@ def main() -> None:
     environment(agent)  # drawn before movement: a walk reruns the page, so it stays current
     movement(agent)
 
-    st.caption(f'Grounder: {kind}. Say or type a request, e.g. "I want to walk in the light".')
+    st.caption(
+        f"Interpreter of the environment: {kind}. "
+        'Say or type a request, e.g. "I want to walk in the light".'
+    )
     # An error raised while handling audio is shown after the rerun that empties the widget.
     if notice := st.session_state.pop("audio_error", None):
         st.error(notice)

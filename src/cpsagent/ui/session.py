@@ -41,6 +41,7 @@ class Turn:
     reply: Reply | None = None
     plan: ActionPlan | None = None
     restoration: Restoration | None = None  # kind "restoration": what the environment did
+    interpreted: str | None = None  # who interpreted the request (see interpretation_note)
 
     @property
     def interpretation(self) -> Transition | None:
@@ -59,7 +60,8 @@ class Turn:
 
 class AgentSession:
     def __init__(self, grounder, *, start_zone: str = "hallway", seed: int = 0, log_dir="logs"):
-        self.env = EmulatedEnvironment()
+        # the chosen grounder is the environment's interpreter, not the agent's
+        self.env = EmulatedEnvironment(interpreter=grounder)
         self.scenario = self.env.scenario
         self.session = EnvironmentBinding({self.env.endpoint: self.env}).bind(
             self.env.endpoint, AGENT, SUBJECT
@@ -87,7 +89,6 @@ class AgentSession:
         self.engine = OrchestrationEngine(
             self.session,
             self.localization,
-            grounder,
             EnvironmentInterface(self.session),
             recorder=self._record,
             clock=lambda: self.now,
@@ -115,6 +116,7 @@ class AgentSession:
         )
         if any(t.source == State.PLAN for t in turn.transitions):
             turn.plan = self.engine.last_plan
+        turn.interpreted = interpretation_note(turn, type(self.env.interpreter).__name__)
         self.turns.append(turn)
         return turn
 
@@ -170,6 +172,7 @@ class AgentSession:
             left = None if due is None else max(0, int((due - self.now).total_seconds()))
             pending.append({"device": p["deviceId"], "zone": p["zoneId"], "inSeconds": left})
         return {
+            "interpreter": type(self.env.interpreter).__name__,
             "scope": sorted(self.session.scope_zones),
             "zone": n.zone_id,
             "armed": n.armed,
@@ -299,6 +302,20 @@ def catalogue_queries(turn: Turn) -> list[str]:
                 f"{q.call.operation}(zone={zone}, property={a.controlled_property}) -> {answer}"
             )
     return lines
+
+
+# Interpret outcomes reached without asking the environment to interpret.
+_NOT_INTERPRETED = {"request_unintelligible", "zone_confidence_low"}
+
+
+def interpretation_note(turn: Turn, interpreter: str) -> str | None:
+    """Who interpreted the request: the environment's service, or nobody (and why)."""
+    row = turn.interpretation
+    if row is None or row.outcome in _NOT_INTERPRETED:
+        return None
+    if row.outcome == "interpretation_refused:out_of_scope":
+        return "The environment refused to interpret here: the zone is outside the scope"
+    return f"Interpreted by the environment (interpreter: {interpreter})"
 
 
 def result_summary(turn: Turn) -> str:
