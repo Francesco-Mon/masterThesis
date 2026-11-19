@@ -6,7 +6,9 @@ Grounding. In the Plan state the engine asks the environment which devices offer
 intent's property in the zones concerned (listDevices), then plans hallway lamp now,
 corridor lamp on arrival, and re-plans at every zone change (asking again for the new
 zone) without grounding again. Every transition goes to the event log, which
-is verified at the end.
+is verified at the end. The building's management policy is applied by the environment:
+a lamp left behind goes back to its default state once the user has been out of its zone
+for the policy's delay; the demo prints each restoration (it adds no event record).
 
 Run: python -m cpsagent.demo_agent [--seed 0] [--log logs/demo_agent.jsonl]
                                   [--grounder fake|llm] [--model openai/gpt-oss-120b]
@@ -21,7 +23,7 @@ from pathlib import Path
 from cpsagent.binding import EnvironmentBinding
 from cpsagent.contracts import ToolResult
 from cpsagent.engine import OrchestrationEngine, Transition
-from cpsagent.environment import EmulatedEnvironment
+from cpsagent.environment import EmulatedEnvironment, Restoration
 from cpsagent.environment.mobility import DEFAULT_START, MobilitySimulator
 from cpsagent.eventlog import EventLog, EventStore, verify
 from cpsagent.grounding import FakeGrounder
@@ -61,6 +63,11 @@ def describe(t: Transition) -> str:
     elif t.outcome is not None:
         line += f"  [{t.outcome}]"
     return "\n".join([describe_query(q) for q in t.queries] + [line])
+
+
+def describe_restoration(r: Restoration) -> str:
+    why = f"person left {r.zone_id}" if r.reason == "person_left_zone" else "session closed"
+    return f"environment restored {r.device_id} to default {r.state} ({why})"
 
 
 def make_grounder(kind: str, model: str | None):
@@ -115,6 +122,12 @@ def main() -> None:
     session.on_neighbourhood(
         lambda n: print(f"{'':14}environment: person in {n.zone_id}, armed {n.armed}")
     )
+    session.on_restoration(lambda r: print(f"  {r.time:%H:%M:%S}  {describe_restoration(r)}"))
+    policy = env.building.management_policy
+    print(
+        f"Management policy: restore on exit {policy.restore_on_exit}, "
+        f"after {policy.restore_after_seconds:g} s"
+    )
     print(f"Walking path walk_in_the_light (seed {args.seed})\n")
 
     asked = False
@@ -138,6 +151,9 @@ def main() -> None:
         if d.category == "lamp"
     }
     print(f"\nLamps: {lamps}")
+    for p in env.pending_restorations():  # observer view: countdowns still running
+        due = f"due {p['restoreAt']:%H:%M:%S}" if p["restoreAt"] else "person in the zone"
+        print(f"Pending restoration: {p['deviceId']} ({p['zoneId']}), {due}")
     report = verify(store, session.session_id)
     status = "VERIFIED" if report.ok else f"FAILED {report.errors}"
     print(f"Log {log_path}: {report.length} records, chain {status}, head {report.head[:16]}...")
