@@ -108,6 +108,9 @@ class Reply:
     message: str
 
 
+_DESCRIPTOR_KEYS = ("deviceId", "category", "controlledProperty", "supportedCommand")
+
+
 def _step_key(step: PlanStep) -> tuple[str, str, Any]:
     return (step.device_id, step.command, step.value)
 
@@ -332,8 +335,10 @@ class OrchestrationEngine:
             if zone_id is not None:
                 by_zone.setdefault(zone_id, [])
             for d in result.state if result.ok else []:
+                # the plan needs what a device can do, not its zone or its defaultState
+                descriptor = {k: d[k] for k in _DESCRIPTOR_KEYS}
                 by_zone.setdefault(d["refZone"], []).append(
-                    DeviceDescriptor.model_validate({k: v for k, v in d.items() if k != "refZone"})
+                    DeviceDescriptor.model_validate(descriptor)
                 )
         catalogue = [ZoneCatalogue(zone_id=z, devices=ds) for z, ds in by_zone.items()]
         return catalogue, tuple(queries)

@@ -76,6 +76,7 @@ def test_list_devices_returns_supported_commands(api):
             "controlledProperty": "light",
             "supportedCommand": ["on", "off"],
             "refZone": "corridor",
+            "defaultState": {"power": "off", "brightness": 0},
         }
     ]
     assert api.list_devices("storage").state == []
@@ -98,6 +99,18 @@ def test_invoke_command_changes_state_and_get_reads_it(api):
     assert r.ok and r.state == {"deviceId": "lamp_hallway", "power": "on", "brightness": 100}
     assert api.get_device_state("lamp_hallway").state["power"] == "on"
     assert api.invoke_command("thermostat_office", "setSetpoint", 23).state["setpoint"] == 23.0
+
+
+def test_get_device_state_includes_the_default_state(api):
+    api.invoke_command("lamp_hallway", "on")
+    assert api.get_device_state("lamp_hallway").state == {
+        "deviceId": "lamp_hallway",
+        "power": "on",
+        "brightness": 100,
+        "defaultState": {"power": "off", "brightness": 0},
+    }
+    thermostat = api.get_device_state("thermostat_office").state
+    assert thermostat["defaultState"] == {"setpoint": 21.0}
 
 
 def test_typed_tool_call_is_accepted(api):

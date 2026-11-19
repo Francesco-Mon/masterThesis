@@ -213,3 +213,12 @@ def test_session_compatibility_properties_are_not_used_at_runtime(env, monkeypat
     rig.engine.handle_request("turn on all the lights")
     rig.engine.handle_request("make it humid")
     assert rig.power("lamp_corridor") == "on"
+
+
+def test_grounding_context_does_not_carry_the_default_state():
+    env = EmulatedEnvironment()
+    session = EnvironmentBinding({env.endpoint: env}).bind(env.endpoint, "person-agent", "user-1")
+    context = temporary_grounding_context(env, session.token)
+    for zone in context.catalogue:
+        for device in zone.model_dump(by_alias=True)["devices"]:
+            assert set(device) == {"deviceId", "category", "controlledProperty", "supportedCommand"}

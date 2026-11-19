@@ -2,8 +2,9 @@
 
   listZones                                  -> the person's zone and its followed
                                                 neighbours, with adjacency (observation)
-  listDevices(zoneId?, controlledProperty?)  -> devices with supportedCommand (observation)
-  getDeviceState(deviceId)                   -> current state                 (observation)
+  listDevices(zoneId?, controlledProperty?)  -> devices with supportedCommand and
+                                                defaultState                  (observation)
+  getDeviceState(deviceId)                   -> current state, defaultState   (observation)
   invokeCommand(deviceId, command, value)    -> outcome, resulting state      (the only actuation)
 
 Every call goes through `execute`, which checks, in this order: operation in the
@@ -135,6 +136,7 @@ class EnvironmentInterface:
                 "controlledProperty": d.controlled_property,
                 "supportedCommand": list(d.supported_command),
                 "refZone": d.ref_zone,
+                "defaultState": dict(d.default_state),
             }
             for d in self._broker.devices(self._token, zone_id, call.args.controlled_property)
         ]
@@ -150,7 +152,11 @@ class EnvironmentInterface:
         device = self._device_in_scope(call.operation, call.args.device_id)
         if isinstance(device, ToolResult):
             return device
-        state = {"deviceId": device.device_id, **device.state}
+        state = {
+            "deviceId": device.device_id,
+            **device.state,
+            "defaultState": dict(device.default_state),
+        }
         return ToolResult(ok=True, operation=call.operation, state=state)
 
     def _invoke_command(self, call: InvokeCommandCall) -> ToolResult:
