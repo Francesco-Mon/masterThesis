@@ -108,3 +108,65 @@ def test_emulators_sharing_a_scenario_do_not_share_state():
     a, b = EmulatedEnvironment(s), EmulatedEnvironment(s)
     a.execute(a.authenticate("person-agent"), "lamp_lobby", "on", None)
     assert b.device(b.authenticate("person-agent"), "lamp_lobby").state["power"] == "off"
+
+
+# --- environmental policy: defaultState and managementPolicy ----------------------------
+
+
+def test_building_starts_in_its_policy_state():
+    s = load_scenario()
+    policy = s.building.management_policy
+    assert policy.restore_on_exit and policy.restore_after_seconds > 0
+    for d in s.devices:
+        assert d.state == d.default_state
+    defaults = {d.device_id: d.default_state for d in s.devices}
+    assert defaults["lamp_hallway"] == {"power": "off", "brightness": 0}
+    assert defaults["blind_office"] == {"position": 0}
+    assert defaults["thermostat_office"] == {"setpoint": 21.0}
+
+
+@pytest.mark.parametrize(
+    "default",
+    [{"power": "on", "brightness": 100}, {"power": "on", "brightness": 50}],
+)
+def test_default_state_reachable_by_a_command_is_accepted(raw, default):
+    raw["devices"][0]["defaultState"] = default
+    device = Scenario.model_validate(raw).devices[0]
+    assert device.default_state == default and device.state == default
+
+
+@pytest.mark.parametrize(
+    "default",
+    [
+        {"power": "on", "brightness": 0},  # no command gives it
+        {"power": "off"},  # not the shape of a lamp's state
+        {"setpoint": 21.0},  # a thermostat's state on a lamp
+        {"power": "on", "brightness": 120},  # out of range
+    ],
+)
+def test_default_state_not_reachable_is_rejected(raw, default):
+    raw["devices"][0]["defaultState"] = default
+    with pytest.raises(ValidationError, match="defaultState"):
+        Scenario.model_validate(raw)
+
+
+def test_thermostat_default_outside_the_setpoint_range_is_rejected(raw):
+    device = next(d for d in raw["devices"] if d["category"] == "thermostat")
+    device["defaultState"] = {"setpoint": 35}
+    with pytest.raises(ValidationError, match="defaultState"):
+        Scenario.model_validate(raw)
+
+
+def test_missing_policy_fields_mean_no_restoration_and_initial_defaults(raw):
+    del raw["building"]["managementPolicy"]
+    for d in raw["devices"]:
+        del d["defaultState"]
+    s = Scenario.model_validate(raw)
+    assert not s.building.management_policy.restore_on_exit
+    assert all(d.default_state == d.state for d in s.devices)
+
+
+def test_negative_restoration_delay_is_rejected(raw):
+    raw["building"]["managementPolicy"]["restoreAfterSeconds"] = -1
+    with pytest.raises(ValidationError):
+        Scenario.model_validate(raw)

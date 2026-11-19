@@ -62,3 +62,20 @@ def initial_state(category: str) -> State:
 def apply(category: str, command: str, state: State, value: Any) -> State:
     """New state after `command`; raises InvalidValue for a bad value."""
     return CATEGORY_COMMANDS[category][command](state, value)
+
+
+def reachable(category: str, state: State) -> bool:
+    """True if one command of the category, applied to the initial state, gives exactly
+    `state`. Used to validate a device's `defaultState`: the manager may only fix a state
+    the device can be put in (e.g. a lamp "on" at 0% brightness is not one)."""
+    start = initial_state(category)
+    if set(state) != set(start):
+        return False
+    for fn in CATEGORY_COMMANDS[category].values():
+        for value in (None, *state.values()):
+            try:
+                if fn(start, value) == state:
+                    return True
+            except (InvalidValue, TypeError):
+                continue
+    return False

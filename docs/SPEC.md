@@ -29,14 +29,16 @@ Boundaries: (1) User <-> Agent, (2) Agent <-> Environment, (3) Agent <-> Ledger.
 
 | Entity | Key properties | Relationships |
 |---|---|---|
-| `Building` | `name`, `category`, `location` | - |
+| `Building` | `name`, `category`, `location`, `managementPolicy` | - |
 | `Zone` | `name`, `zoneId`, `adjacency` | `refBuilding` |
-| `Device` | `category`, `controlledProperty`, `supportedCommand`, `state` | `refZone` |
+| `Device` | `category`, `controlledProperty`, `supportedCommand`, `state`, `defaultState` | `refZone` |
 | `PositioningSignal` | `signalType`, `rssi`, `observedAt` | `refZone`, `refSubject` |
 
 - `supportedCommand` is what makes capability discovery possible: the catalogue is *queried*, never assumed. A request for a capability no device in the environment offers ends in a clarification / Recover, never in a hallucinated command.
 - Control stays with the manager of the environment; the agent is a client. The environment fixes the scope of the agent's token, refuses any call outside it and decides what it lists.
 - `adjacency` lists which zones are reachable from which; the planner uses it to reason about movement.
+- `defaultState` (NGSI-LD property of `Device`, same shape as `state`) is fixed by the manager of the environment: lamps off, blinds closed, thermostats at 21 °C in the reference scenario. The building starts in it. The scenario loader accepts only a state that one command of the device's category gives from the initial state (a lamp "on" at 0% brightness is rejected).
+- `managementPolicy` (property of `Building`) is the environmental policy of the manager: `restoreOnExit` (boolean) and `restoreAfterSeconds` (number). Without it nothing is restored. How the environment applies it is described in section 3, "Environmental policy".
 
 ## 3. Discovery and binding protocol
 

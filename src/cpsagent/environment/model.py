@@ -13,7 +13,7 @@ from pydantic.alias_generators import to_camel
 
 from cpsagent.contracts import UtcDatetime
 
-from .commands import CATEGORY_COMMANDS, initial_state
+from .commands import CATEGORY_COMMANDS, initial_state, reachable
 
 DEFAULT_SCENARIO = Path(__file__).resolve().parents[3] / "data" / "scenario.yaml"
 
@@ -31,10 +31,25 @@ class Entity(BaseModel):
     )
 
 
+class ManagementPolicy(Entity):
+    """General policy of the building, fixed by the manager of the environment.
+
+    `restoreOnExit`: the environment brings back to its `defaultState` every device a guest's
+    agent changed in a zone once the guest has left that zone (and everything the agent
+    changed when its subscription is closed). `restoreAfterSeconds`: how long the guest must
+    have been out of the zone, continuously, before the restoration (absorbs the flicker of
+    the environment's own placement at a doorway). Without a policy nothing is restored.
+    """
+
+    restore_on_exit: bool = False
+    restore_after_seconds: float = Field(default=0.0, ge=0)
+
+
 class Building(Entity):
     name: str
     category: str
     location: dict[str, Any]  # GeoJSON, as in NGSI-LD
+    management_policy: ManagementPolicy = ManagementPolicy()
 
 
 class Zone(Entity):
@@ -51,6 +66,9 @@ class Device(Entity):
     supported_command: list[str] = Field(min_length=1)
     ref_zone: str
     state: dict[str, Any] = {}
+    # Fixed by the manager of the environment: the state the device returns to when the
+    # guest who changed it leaves (see ManagementPolicy). Same shape as `state`.
+    default_state: dict[str, Any] = {}
 
 
 class PositioningSignal(Entity):
@@ -124,8 +142,15 @@ class Scenario(Entity):
             extra = set(device.supported_command) - set(known)
             if extra:
                 raise ValueError(f"{device.device_id}: commands {extra} not defined for category")
-            if not device.state:
-                device.state = initial_state(device.category)
+            if not device.default_state:
+                device.default_state = initial_state(device.category)
+            elif not reachable(device.category, device.default_state):
+                raise ValueError(
+                    f"{device.device_id}: defaultState {device.default_state} cannot be "
+                    f"reached by a {device.category} command"
+                )
+            if not device.state:  # the building starts in its policy state
+                device.state = dict(device.default_state)
 
         offered = {d.controlled_property for d in self.devices}
         if offered & set(self.absent_capabilities):

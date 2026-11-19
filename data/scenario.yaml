@@ -13,6 +13,11 @@ building:
   name: Lab Building
   category: office
   location: {type: Point, coordinates: [9.19, 45.46]}  # emulated, not a real address
+  # Environmental policy of the building manager: a device a guest's agent changed in a
+  # zone goes back to its defaultState once the guest has been out of that zone for
+  # restoreAfterSeconds (longer than the doorway flicker of the environment's placement),
+  # and when the agent's subscription is closed. Restoration is done by the environment.
+  managementPolicy: {restoreOnExit: true, restoreAfterSeconds: 12}
 
 zones:
   - {zoneId: lobby, name: Lobby, adjacency: [hallway]}
@@ -26,18 +31,20 @@ zones:
 
 # controlledProperty vocabulary: light (lamps), shading (blinds), temperature (thermostats).
 # Commands and their effect on `state` are defined per category in environment/commands.py.
+# defaultState: fixed by the building manager (lamps off, blinds closed, thermostats at
+# 21 degrees); the building starts in it. It is not part of the grounding catalogue.
 devices:
-  - {deviceId: lamp_lobby, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: lobby}
-  - {deviceId: lamp_hallway, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: hallway}
-  - {deviceId: lamp_corridor, category: lamp, controlledProperty: light, supportedCommand: ["on", "off"], refZone: corridor}
-  - {deviceId: lamp_office, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: office}
-  - {deviceId: lamp_meeting_room, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: meeting_room}
-  - {deviceId: lamp_kitchen, category: lamp, controlledProperty: light, supportedCommand: ["on", "off"], refZone: kitchen}
-  - {deviceId: blind_office, category: blind, controlledProperty: shading, supportedCommand: [open, close, setPosition], refZone: office}
-  - {deviceId: blind_meeting_room, category: blind, controlledProperty: shading, supportedCommand: [open, close], refZone: meeting_room}
-  - {deviceId: thermostat_office, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: office}
-  - {deviceId: thermostat_meeting_room, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: meeting_room}
-  - {deviceId: thermostat_server_room, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: server_room}
+  - {deviceId: lamp_lobby, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: lobby, defaultState: {power: "off", brightness: 0}}
+  - {deviceId: lamp_hallway, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: hallway, defaultState: {power: "off", brightness: 0}}
+  - {deviceId: lamp_corridor, category: lamp, controlledProperty: light, supportedCommand: ["on", "off"], refZone: corridor, defaultState: {power: "off", brightness: 0}}
+  - {deviceId: lamp_office, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: office, defaultState: {power: "off", brightness: 0}}
+  - {deviceId: lamp_meeting_room, category: lamp, controlledProperty: light, supportedCommand: ["on", "off", dim], refZone: meeting_room, defaultState: {power: "off", brightness: 0}}
+  - {deviceId: lamp_kitchen, category: lamp, controlledProperty: light, supportedCommand: ["on", "off"], refZone: kitchen, defaultState: {power: "off", brightness: 0}}
+  - {deviceId: blind_office, category: blind, controlledProperty: shading, supportedCommand: [open, close, setPosition], refZone: office, defaultState: {position: 0}}
+  - {deviceId: blind_meeting_room, category: blind, controlledProperty: shading, supportedCommand: [open, close], refZone: meeting_room, defaultState: {position: 0}}
+  - {deviceId: thermostat_office, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: office, defaultState: {setpoint: 21.0}}
+  - {deviceId: thermostat_meeting_room, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: meeting_room, defaultState: {setpoint: 21.0}}
+  - {deviceId: thermostat_server_room, category: thermostat, controlledProperty: temperature, supportedCommand: [setSetpoint], refZone: server_room, defaultState: {setpoint: 21.0}}
 
 # Capabilities a user may plausibly ask for but that NO device offers.
 # Requests about them must end in `unsupported` / Recover, never in a command.
