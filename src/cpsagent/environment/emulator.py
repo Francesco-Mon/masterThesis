@@ -16,11 +16,21 @@ heard within it, the track is lost and the next reading inside the scope places 
 again. No smoothing here: smoothing and hysteresis stay in the agent's Localization. Only
 readings of the person's zone and of the armed zones are forwarded to a subscriber that
 follows the person.
+
+Management policy (restoration). The building's `managementPolicy` belongs to the manager
+of the environment, so the environment applies it, never the agent. For each token the
+environment remembers the devices changed by `invokeCommand`, grouped by the device's zone.
+Once the person it follows has been outside that zone, continuously, for
+`restoreAfterSeconds` (its own placement, measured on the time of the positioning
+signals), it puts those devices back to their `defaultState` and tells the client
+(`on_restore`). Coming back to the zone before then cancels the countdown. When the
+subscription is closed, everything the token changed is restored at once. A device that
+another token has also changed and not yet seen restored is left as it is.
 """
 
 import itertools
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from . import commands
@@ -31,6 +41,9 @@ from .backend import (
     Neighbourhood,
     NeighbourhoodCallback,
     OutOfScopeError,
+    Restoration,
+    RestorationCallback,
+    RestorationReason,
     ScopeDescription,
     SignalCallback,
     UnknownEntityError,
@@ -50,6 +63,7 @@ class _Follow:
     subject: str
     scope: frozenset[str]
     notify: NeighbourhoodCallback
+    restore: RestorationCallback | None = None
     zone: str | None = None
     armed: tuple[str, ...] = ()
 
@@ -71,6 +85,13 @@ class EmulatedEnvironment:
         # subject -> zone -> (latest RSSI, observedAt)
         self._latest: dict[str, dict[str, tuple[float, datetime]]] = {}
         self._faults: dict[str, int] = {}  # device id -> remaining failures to emulate
+        # Management policy: token -> device id -> device's zone, for every device the
+        # token changed and the environment has not restored yet; token -> zone -> time
+        # the followed person was first seen outside that zone (countdown running).
+        self.policy = self.building.management_policy
+        self._changed: dict[str, dict[str, str]] = {}
+        self._out_since: dict[str, dict[str, datetime]] = {}
+        self._now: datetime | None = None  # environment time: latest positioning signal
 
     # --- access control -----------------------------------------------------------------
 
@@ -141,12 +162,27 @@ class EmulatedEnvironment:
             self._faults[device_id] -= 1
             raise DeviceFailure(device_id)
         device.state = commands.apply(device.category, command, device.state, value)
+        if self.policy.restore_on_exit:
+            self._changed.setdefault(token, {})[device_id] = device.ref_zone
         return dict(device.state)
 
     def device_states(self) -> dict[str, dict[str, Any]]:
         """Observer view for tests and the UI page, not part of EnvironmentBackend: the
         state of every device, whatever any token's scope."""
         return {d.device_id: dict(d.state) for d in self._devices.values()}
+
+    def pending_restorations(self) -> list[dict[str, Any]]:
+        """Observer view for tests and the UI page, not part of EnvironmentBackend: every
+        device changed by a token and not restored yet, with the time its restoration is
+        due (None while the person is in the device's zone)."""
+        delay = timedelta(seconds=self.policy.restore_after_seconds)
+        pending = []
+        for token, changed in self._changed.items():
+            out = self._out_since.get(token, {})
+            for device_id, zone in changed.items():
+                due = out[zone] + delay if zone in out else None
+                pending.append({"deviceId": device_id, "zoneId": zone, "restoreAt": due})
+        return pending
 
     def inject_failure(self, device_id: str, times: int = 1) -> None:
         """Test hook: the next `times` commands to this device fail (drives T10/T11)."""
@@ -162,8 +198,14 @@ class EmulatedEnvironment:
 
     # --- following the person (Enumerate) -----------------------------------------------
 
-    def follow(self, token: str, subject: str, on_change: NeighbourhoodCallback) -> Neighbourhood:
-        follow = _Follow(subject, self.scope(token), on_change)
+    def follow(
+        self,
+        token: str,
+        subject: str,
+        on_change: NeighbourhoodCallback,
+        on_restore: RestorationCallback | None = None,
+    ) -> Neighbourhood:
+        follow = _Follow(subject, self.scope(token), on_change, on_restore)
         heard = {z: r for z, (r, _) in self._latest.get(subject, {}).items() if z in follow.scope}
         if heard:  # the person was already heard: strongest beacon, ties by zone id
             self._place(follow, max(sorted(heard), key=heard.__getitem__))
@@ -220,16 +262,59 @@ class EmulatedEnvironment:
     def unsubscribe(self, sub_id: str) -> None:
         entry = self._subscriptions.pop(sub_id, None)
         if entry is not None:
-            self._follows.pop(entry[0], None)  # the client leaves: its triggers are disarmed
+            token = entry[0]
+            for zone in dict.fromkeys(self._changed.get(token, {}).values()):
+                self._restore(token, zone, "subscription_closed")
+            self._changed.pop(token, None)
+            self._out_since.pop(token, None)
+            self._follows.pop(token, None)  # the client leaves: its triggers are disarmed
 
     def publish(self, signal: PositioningSignal) -> None:
         """Called by the mobility simulator: update the follows (triggers), then push the
         signal to the matching subscriptions."""
         latest = self._latest.setdefault(signal.ref_subject, {})
         latest[signal.ref_zone] = (signal.rssi, signal.observed_at)
+        self._now = max(self._now or signal.observed_at, signal.observed_at)
         for follow in list(self._follows.values()):
             if follow.subject == signal.ref_subject:
                 self._track(follow, signal)
+        self._apply_policy()
         for token, subject, callback in list(self._subscriptions.values()):
             if subject == signal.ref_subject and self._forwarded(token, signal):
                 callback(signal)
+
+    # --- management policy (restoration) ------------------------------------------------
+
+    def _apply_policy(self) -> None:
+        """Start, cancel or complete the countdown of every zone where a token changed
+        devices, from the zone the environment places the followed person in."""
+        assert self._now is not None
+        delay = self.policy.restore_after_seconds
+        for token, changed in list(self._changed.items()):
+            follow = self._follows.get(token)
+            if follow is None or follow.zone is None:
+                continue  # nobody followed for this token: restored when it unsubscribes
+            out = self._out_since.setdefault(token, {})
+            for zone in dict.fromkeys(changed.values()):
+                if zone == follow.zone:
+                    out.pop(zone, None)  # back in the zone (or never left): no restoration
+                    continue
+                since = out.setdefault(zone, self._now)
+                if (self._now - since).total_seconds() >= delay:
+                    self._restore(token, zone, "person_left_zone")
+
+    def _restore(self, token: str, zone: str, reason: RestorationReason) -> None:
+        """Put back to defaultState the devices of `zone` changed by `token`."""
+        changed = self._changed.get(token, {})
+        self._out_since.get(token, {}).pop(zone, None)
+        follow = self._follows.get(token)
+        for device_id in [d for d, z in changed.items() if z == zone]:
+            del changed[device_id]
+            if any(device_id in other for other in self._changed.values()):
+                continue  # another token changed it too: restored when that token lets go
+            device = self._devices[device_id]
+            if device.state == device.default_state:
+                continue  # already in its default state (e.g. switched off by the agent)
+            device.state = dict(device.default_state)
+            if follow is not None and follow.restore is not None:
+                follow.restore(Restoration(device_id, zone, dict(device.state), reason, self._now))

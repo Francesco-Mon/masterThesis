@@ -9,6 +9,10 @@ Executed once, when the person enters the environment:
   4. Subscribe    positioning signals of the followed zones are pushed to the agent (R13),
                   so re-planning stays event driven
 
+The environment also tells the session each time its management policy restores a device
+the agent changed (`on_restoration`). The session only passes it on: the restoration is the
+environment's action, and the engine's state does not change for it.
+
 No capability catalogue is built here: the engine asks the environment for the devices it
 needs in the Plan state (listDevices). Output: a BoundSession. What the engine needs to
 reason (neighbourhood, known adjacency) and what the Interface needs to act (endpoint,
@@ -24,12 +28,14 @@ from cpsagent.environment import (
     EnvironmentBackend,
     Neighbourhood,
     PositioningSignal,
+    Restoration,
 )
 
 from .grounding_context import GroundingContext, temporary_grounding_context
 
 SignalListener = Callable[[PositioningSignal], None]
 NeighbourhoodListener = Callable[[Neighbourhood], None]
+RestorationListener = Callable[[Restoration], None]
 
 
 class BindingError(Exception):
@@ -70,6 +76,7 @@ class BoundSession:
     neighbourhood: Neighbourhood = field(default_factory=lambda: Neighbourhood(None))
     known_adjacency: dict[str, list[str]] = field(default_factory=dict)
     _neighbourhood_listeners: list[NeighbourhoodListener] = field(default_factory=list)
+    _restoration_listeners: list[RestorationListener] = field(default_factory=list)
 
     @property
     def bound(self) -> bool:
@@ -85,6 +92,15 @@ class BoundSession:
             self.known_adjacency.setdefault(zone, list(adjacent))
         for listener in list(self._neighbourhood_listeners):
             listener(neighbourhood)
+
+    def on_restoration(self, listener: RestorationListener) -> None:
+        """Called each time the environment restores a device this session's token changed
+        (management policy), including the restorations made when the session closes."""
+        self._restoration_listeners.append(listener)
+
+    def _restored(self, restoration: Restoration) -> None:
+        for listener in list(self._restoration_listeners):
+            listener(restoration)
 
     def close(self) -> None:
         self.broker.unsubscribe(self.subscription.subscription_id)
@@ -140,7 +156,7 @@ class EnvironmentBinding:
         )
         # 3. Enumerate: the environment follows the person and arms its triggers
         session._neighbourhood_changed(
-            broker.follow(token, subject, session._neighbourhood_changed)
+            broker.follow(token, subject, session._neighbourhood_changed, session._restored)
         )
         # 4. Subscribe
         subscription = session.subscription

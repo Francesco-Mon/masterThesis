@@ -9,7 +9,8 @@ Scope Guard) are defence in depth only.
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Protocol
+from datetime import datetime
+from typing import Any, Literal, Protocol
 
 from .model import Device, PositioningSignal, Zone
 
@@ -56,8 +57,25 @@ class ScopeDescription:
     devices: list[Device]
 
 
+RestorationReason = Literal["person_left_zone", "subscription_closed"]
+
+
+@dataclass(frozen=True)
+class Restoration:
+    """The environment put a device back to its `defaultState` (management policy): the
+    person left the device's zone (`person_left_zone`) or the client's subscription was
+    closed (`subscription_closed`). Sent to the client for information only."""
+
+    device_id: str
+    zone_id: str
+    state: dict[str, Any]  # the restored state, equal to the device's defaultState
+    reason: RestorationReason
+    time: datetime | None  # environment time (latest positioning signal); None if none yet
+
+
 SignalCallback = Callable[[PositioningSignal], None]
 NeighbourhoodCallback = Callable[[Neighbourhood], None]
+RestorationCallback = Callable[[Restoration], None]
 
 
 class EnvironmentBackend(Protocol):
@@ -71,10 +89,17 @@ class EnvironmentBackend(Protocol):
         """Zones granted to the token. The agent cannot widen it."""
         ...
 
-    def follow(self, token: str, subject: str, on_change: NeighbourhoodCallback) -> Neighbourhood:
+    def follow(
+        self,
+        token: str,
+        subject: str,
+        on_change: NeighbourhoodCallback,
+        on_restore: RestorationCallback | None = None,
+    ) -> Neighbourhood:
         """Enumerate: follow `subject`, arm triggers on the zones adjacent to its zone and
         return the neighbourhood. `on_change` receives each new neighbourhood when a trigger
-        fires, before the signal that fired it is delivered."""
+        fires, before the signal that fired it is delivered. `on_restore` receives each
+        restoration the environment applies to a device this token changed."""
         ...
 
     def zones(self, token: str) -> list[Zone]:
@@ -99,7 +124,10 @@ class EnvironmentBackend(Protocol):
         """Subscribe: positioning signals of the followed zones are pushed to `callback`."""
         ...
 
-    def unsubscribe(self, sub_id: str) -> None: ...
+    def unsubscribe(self, sub_id: str) -> None:
+        """The client leaves: its triggers are disarmed and, under the management policy,
+        every device its token changed is restored."""
+        ...
 
     def describe_scope(self, token: str) -> ScopeDescription:
         """TEMPORARY, not one of the four operations: every zone and device of the scope.

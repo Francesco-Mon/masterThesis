@@ -7,6 +7,7 @@ from .backend import (
     EnvironmentBackend,
     Neighbourhood,
     OutOfScopeError,
+    Restoration,
     ScopeDescription,
     UnknownEntityError,
 )
@@ -44,6 +45,7 @@ __all__ = [
     "OutOfScopeError",
     "PathScript",
     "PositioningSignal",
+    "Restoration",
     "Scenario",
     "ScopeDescription",
     "UnknownEntityError",

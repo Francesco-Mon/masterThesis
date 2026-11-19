@@ -99,7 +99,11 @@ def test_walk_with_real_localization_is_logged_and_verifies(tmp_path):
             asked = True
     engine.close()
     log.close()
-    assert [rig.power(d) for d in ("lamp_hallway", "lamp_corridor", "lamp_office")] == ["on"] * 3
+    # Management policy: the environment switched the hallway lamp back off once the person
+    # had been out of the hallway for restoreAfterSeconds; the corridor was left too
+    # recently (the walk ends a few seconds later), the person is in the office.
+    lamps = ("lamp_hallway", "lamp_corridor", "lamp_office")
+    assert [rig.power(d) for d in lamps] == ["off", "on", "on"]
     assert len(rig.grounder.calls) == 1
     assert verify(store, rig.session.session_id).length == len(engine.trace)
     assert verify(store, rig.session.session_id).ok
