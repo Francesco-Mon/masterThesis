@@ -2,8 +2,9 @@
 
 Kept apart from the Streamlit page so it can be tested offline. The wiring is the one
 of `cpsagent.demo_agent`; what is added here is a walk the user drives by hand (go to a
-zone along the adjacency, or play a scripted path tick by tick) and one `Turn` per
-request or movement, holding what the page shows.
+zone along the adjacency, play a scripted path tick by tick, or stay while time passes)
+and one `Turn` per request or movement, holding what the page shows. Each restoration
+the environment applies under the building's management policy is a turn of its own.
 """
 
 from collections import deque
@@ -15,7 +16,7 @@ from typing import Any
 from cpsagent.binding import EnvironmentBinding
 from cpsagent.contracts import ActionPlan, PlanStep, State, ToolResult, ZoneEstimate
 from cpsagent.engine import OrchestrationEngine, Reply, Transition
-from cpsagent.environment import EmulatedEnvironment
+from cpsagent.environment import EmulatedEnvironment, Restoration
 from cpsagent.environment.mobility import DEFAULT_START, MobilitySimulator, Tick
 from cpsagent.environment.model import PathScript
 from cpsagent.eventlog import EventLog, EventStore, verify
@@ -32,13 +33,14 @@ DWELL_TICKS = 5  # ticks spent in the destination zone: enough for the hysteresi
 class Turn:
     """What happened between two user actions: one request, or one stretch of walking."""
 
-    kind: str  # "request" | "movement"
+    kind: str  # "request" | "movement" | "restoration"
     text: str = ""
     transcript: Any = None  # ui.stt.Transcription when the request came from audio
     zone: ZoneEstimate | None = None
     transitions: list[Transition] = field(default_factory=list)
     reply: Reply | None = None
     plan: ActionPlan | None = None
+    restoration: Restoration | None = None  # kind "restoration": what the environment did
 
     @property
     def interpretation(self) -> Transition | None:
@@ -68,6 +70,9 @@ class AgentSession:
         self.localization = ZoneEstimator(dict(self.session.known_adjacency), SUBJECT)
         self.session.on_neighbourhood(lambda n: self.localization.add_adjacency(n.adjacency))
         self.session.subscription.add_listener(self.localization.on_signal)  # R13
+        # restorations of the management policy, shown as turns after the movement
+        self._restorations: list[Restoration] = []
+        self.session.on_restoration(self._restorations.append)
 
         self.log_path = Path(log_dir) / f"ui_{self.session.session_id}.jsonl"
         self.log_path.unlink(missing_ok=True)  # one UI session = one fresh chain
@@ -91,6 +96,7 @@ class AgentSession:
         self._enqueue([start_zone], dwell=DWELL_TICKS)
         self.advance("end")
         self.turns.clear()  # placing the user at the start is not a turn
+        self._restorations.clear()
 
     # --- what the user does -----------------------------------------------------------------
 
@@ -124,6 +130,11 @@ class AgentSession:
         self._enqueue(self.route(self.position, first_zone), dwell=1)
         self._pending.extend(self._ticks(script))
 
+    def stay(self, seconds: int) -> Turn:
+        """The user stays in the current zone for `seconds` ticks (time passes, so the
+        environment's restoration countdowns advance)."""
+        return self._movement(lambda: self._enqueue([self.position], dwell=seconds), "end")
+
     def advance(self, until: str = "tick") -> Turn:
         """Play queued ticks: one ("tick"), until the estimated zone changes ("zone"),
         or all of them ("end")."""
@@ -139,7 +150,12 @@ class AgentSession:
         """Every device of the building (observer view, not the agent's)."""
         states = self.env.device_states()
         return [
-            {"device": d.device_id, "zone": d.ref_zone, **states[d.device_id]}
+            {
+                "device": d.device_id,
+                "zone": d.ref_zone,
+                **states[d.device_id],
+                "default": format_state(d.default_state),
+            }
             for d in self.scenario.devices
         ]
 
@@ -147,10 +163,19 @@ class AgentSession:
         """What the page shows of the binding: the granted scope, and the person's zone and
         armed neighbours as the environment knows them (updated by its triggers)."""
         n = self.session.neighbourhood
+        policy = self.env.building.management_policy
+        pending = []
+        for p in self.env.pending_restorations():  # observer view of the countdowns
+            due = p["restoreAt"]
+            left = None if due is None else max(0, int((due - self.now).total_seconds()))
+            pending.append({"device": p["deviceId"], "zone": p["zoneId"], "inSeconds": left})
         return {
             "scope": sorted(self.session.scope_zones),
             "zone": n.zone_id,
             "armed": n.armed,
+            "restoreOnExit": policy.restore_on_exit,
+            "restoreAfterSeconds": policy.restore_after_seconds,
+            "pending": pending,
         }
 
     def events(self) -> list[dict[str, Any]]:
@@ -162,7 +187,12 @@ class AgentSession:
         return verify(self.store, self.session.session_id)
 
     def close(self) -> None:
+        """End of session: the following intent ends (T8), the subscription is closed (the
+        environment restores what the agent changed) and the log is flushed."""
         self.engine.close()
+        if self.session.bound:
+            self.session.close()
+            self._restoration_turns()
         self.log.close()
 
     # --- internals --------------------------------------------------------------------------
@@ -224,7 +254,24 @@ class AgentSession:
         if any(t.source == State.PLAN for t in turn.transitions):
             turn.plan = self.engine.last_plan
         self.turns.append(turn)
+        self._restoration_turns()
         return turn
+
+    def _restoration_turns(self) -> None:
+        for r in self._restorations:
+            self.turns.append(Turn("restoration", text=describe_restoration(r), restoration=r))
+        self._restorations.clear()
+
+
+def format_state(state: dict[str, Any]) -> str:
+    return ", ".join(f"{k}={v}" for k, v in state.items())
+
+
+def describe_restoration(r: Restoration) -> str:
+    """One line for the chat, e.g. "Environment restored lamp_hallway to default
+    (person left hallway)"."""
+    why = f"person left {r.zone_id}" if r.reason == "person_left_zone" else "session closed"
+    return f"Environment restored {r.device_id} to default ({why})"
 
 
 def plan_status(turn: Turn) -> list[tuple[PlanStep, str]]:

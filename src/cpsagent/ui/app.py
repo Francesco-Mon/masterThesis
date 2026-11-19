@@ -3,10 +3,12 @@
 Run: streamlit run src/cpsagent/ui/app.py
 
 Sidebar: grounder (keyword, embedding, LLM with a model id), speech language, start
-zone, movement (go to a zone, or play a scripted path). Main: chat with text,
-microphone or audio-file input; each turn shows transcript, zone, intent or
-clarification, plan, commands and replies. Below: device states and the event chain
-with its verification. The OpenRouter key stays in .env: the page only says whether it
+zone, the environment's view (scope, person's zone, management policy and the
+restorations it has pending), movement (go to a zone, stay, or play a scripted path).
+Main: chat with text, microphone or audio-file input; each turn shows transcript, zone,
+intent or clarification, plan, commands and replies; each restoration made by the
+environment is a turn of its own. Below: device states with their default state and the
+event chain with its verification. The OpenRouter key stays in .env: the page only says whether it
 is set.
 """
 
@@ -22,6 +24,7 @@ from cpsagent.ui.session import (
     AgentSession,
     Turn,
     catalogue_queries,
+    format_state,
     plan_status,
     result_summary,
 )
@@ -113,6 +116,15 @@ def environment(agent: AgentSession) -> None:
     st.sidebar.caption(f"Granted scope: {', '.join(view['scope'])}")
     st.sidebar.caption(f"Person's zone (environment): {view['zone'] or 'not heard yet'}")
     st.sidebar.caption(f"Armed neighbours: {', '.join(view['armed']) or '-'}")
+    if view["restoreOnExit"]:
+        st.sidebar.caption(
+            f"Policy: restore on exit, after {view['restoreAfterSeconds']:g} s out of the zone"
+        )
+    else:
+        st.sidebar.caption("Policy: no restoration on exit")
+    for p in view["pending"]:
+        due = "person in the zone" if p["inSeconds"] is None else f"in {p['inSeconds']} s"
+        st.sidebar.caption(f"Pending restoration: {p['device']} ({p['zone']}), {due}")
 
 
 def movement(agent: AgentSession) -> None:
@@ -126,8 +138,14 @@ def movement(agent: AgentSession) -> None:
     if st.sidebar.button("Walk there", disabled=queued) and not queued:
         agent.walk_to(target)
         st.rerun()  # "True position" above was drawn before the walk
+    stay = st.sidebar.number_input("Stay here (seconds)", min_value=1, max_value=60, value=5)
+    if st.sidebar.button("Stay", disabled=queued) and not queued:
+        agent.stay(int(stay))
+        st.rerun()
     if queued:
-        st.sidebar.caption('Walk there is disabled while ticks are queued: press "To end" first.')
+        st.sidebar.caption(
+            'Walk there and Stay are disabled while ticks are queued: press "To end" first.'
+        )
     path = st.sidebar.selectbox("Scripted path", list(agent.scenario.paths))
     # The queue changes below, after "True position" and "Walk there" were drawn: rerun
     # so that both always match the queue.
@@ -154,6 +172,13 @@ def transcribe(audio_bytes: bytes, suffix: str, language: str | None):
 
 
 def show_turn(turn: Turn) -> None:
+    if turn.kind == "restoration":
+        r = turn.restoration
+        with st.chat_message("Environment", avatar="🏢"):
+            st.write(turn.text)
+            when = f"{r.time:%H:%M:%S}" if r.time else "-"
+            st.caption(f"{when}: {r.device_id} set to {format_state(r.state)}")
+        return
     if turn.kind == "movement":
         if not turn.transitions:
             return

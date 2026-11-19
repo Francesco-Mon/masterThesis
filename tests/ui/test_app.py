@@ -231,7 +231,7 @@ def audio_app(tmp_path, monkeypatch):
 
 
 def requests_sent(app) -> list[str]:
-    return [t.text for t in app.session_state["agent"].turns if t.kind != "movement"]
+    return [t.text for t in app.session_state["agent"].turns if t.kind == "request"]
 
 
 def test_uploaded_file_is_not_resent_by_a_microphone_recording(audio_app):
@@ -345,3 +345,23 @@ def test_changing_language_or_grounder_after_an_audio_request(audio_app):
     assert not audio_app.exception
     audio_app.audio_input[0].set_value(("mic.wav", b"accendi la luce", "audio/wav")).run()
     assert requests_sent(audio_app) == ["accendi la luce"]  # new session, widget works
+
+
+def test_policy_and_restoration_are_shown(app):
+    sidebar = [c.value for c in app.sidebar.caption]
+    assert "Policy: restore on exit, after 12 s out of the zone" in sidebar
+    app.chat_input[0].set_value("I want to walk in the light").run()
+    next(s for s in app.sidebar.selectbox if s.label == "Go to zone").set_value("corridor")
+    sidebar_button(app, "Walk there").click().run()
+    assert any(
+        c.value.startswith("Pending restoration: lamp_hallway (hallway), in ")
+        for c in app.sidebar.caption
+    )
+    next(n for n in app.sidebar.number_input if n.label == "Stay here (seconds)").set_value(12)
+    sidebar_button(app, "Stay").click().run()
+    assert not app.exception
+    chat = [m.value for m in app.markdown]
+    assert "Environment restored lamp_hallway to default (person left hallway)" in chat
+    assert "lamp_hallway set to power=off, brightness=0" in captions(app)
+    devices = app.dataframe[0].value
+    assert "default" in devices.columns

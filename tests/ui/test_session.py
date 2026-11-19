@@ -90,3 +90,50 @@ def test_full_plan_is_kept_after_replanning(tmp_path):
     statuses = plan_status(turn)
     assert len(statuses) == len(turn.commands) > 1  # not only the last step left
     assert {st for _, st in statuses} == {"done"}
+
+
+# --- management policy of the environment -------------------------------------------------
+
+
+def test_devices_table_shows_the_default_state(agent):
+    rows = {r["device"]: r for r in agent.devices()}
+    assert rows["lamp_hallway"]["default"] == "power=off, brightness=0"
+    assert rows["thermostat_office"]["default"] == "setpoint=21.0"
+
+
+def test_environment_view_shows_the_policy_and_the_pending_restorations(agent):
+    view = agent.environment_view()
+    assert view["restoreOnExit"] and view["restoreAfterSeconds"] == 12
+    assert view["pending"] == []
+    agent.say("I want to walk in the light", "en")
+    assert agent.environment_view()["pending"] == [
+        {"device": "lamp_hallway", "zone": "hallway", "inSeconds": None}
+    ]
+    agent.walk_to("corridor")
+    pending = {p["device"]: p for p in agent.environment_view()["pending"]}
+    assert 0 < pending["lamp_hallway"]["inSeconds"] <= 12  # countdown running
+    assert pending["lamp_corridor"]["inSeconds"] is None  # the person is there
+
+
+def test_restoration_is_a_turn_of_its_own(agent):
+    agent.say("I want to walk in the light", "en")
+    agent.walk_to("corridor")
+    assert [t.kind for t in agent.turns] == ["request", "movement"]
+    agent.stay(12)
+    restored = [t for t in agent.turns if t.kind == "restoration"]
+    assert [t.text for t in restored] == [
+        "Environment restored lamp_hallway to default (person left hallway)"
+    ]
+    assert restored[0].restoration.state == {"power": "off", "brightness": 0}
+    assert restored[0].transitions == []  # no record: the engine did nothing
+    rows = {r["device"]: r for r in agent.devices()}
+    assert rows["lamp_hallway"]["power"] == "off" and rows["lamp_corridor"]["power"] == "on"
+
+
+def test_closing_the_session_restores_what_the_agent_changed(tmp_path):
+    a = AgentSession(FakeGrounder(WALK), start_zone="hallway", log_dir=tmp_path)
+    a.say("I want to walk in the light", "en")
+    a.close()
+    assert a.turns[-1].text == "Environment restored lamp_hallway to default (session closed)"
+    assert all(r["power"] == "off" for r in a.devices() if r["device"].startswith("lamp_"))
+    assert a.verify().ok
