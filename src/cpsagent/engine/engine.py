@@ -16,6 +16,18 @@ the activity of each state; *which* transition fires is always decided by the ta
 
 External events (a request, a zone change, closing) are queued and handled one at a
 time; each runs the machine until it reaches Perceive or waits in Observe.
+
+Several actions in one message. When the environment refuses the whole message or asks a
+clarification about it, the engine cuts it into parts (`splitter.py`) and asks the
+environment to interpret each part. The parts that give an intent are carried out one
+after the other, each as its own request cycle with its own records (the first in the
+cycle already open, the next ones as queued requests that reuse the interpretation they
+got); the user gets one reply saying which parts were done and which were not, and why. A
+message understood as a whole is never split. Safety: a whole message refused as
+`out_of_scope` (which includes attempts to override the rules) is not split, and if any
+part is refused as `out_of_scope` nothing is carried out. A part that asks to be followed
+(persistence `following`) is not combined with other parts: the user is asked to send it
+on its own.
 """
 
 from collections import deque
@@ -29,6 +41,7 @@ from cpsagent.contracts import (
     ActionPlan,
     ClarificationResult,
     DeviceDescriptor,
+    GroundingResult,
     Guard,
     IntentResult,
     Persistence,
@@ -49,8 +62,10 @@ from cpsagent.contracts.tool import (
 )
 from cpsagent.environment import OutOfScopeError
 
+from . import replies
 from .config import EngineConfig
 from .planner import catalogue_queries, explain_no_step, make_plan
+from .splitter import split_message
 from .transitions import Context, Row, Trigger, select
 
 
@@ -113,6 +128,23 @@ class Reply:
 _DESCRIPTOR_KEYS = ("deviceId", "category", "controlledProperty", "supportedCommand")
 
 
+@dataclass
+class _Split:
+    """A message carried out in parts: every part with the environment's answer to it, and
+    the reply of each part that ran its own cycle."""
+
+    text: str
+    language: str
+    parts: list[tuple[str, GroundingResult]]
+    replies: dict[int, Reply]
+    current: int | None = None
+
+
+def _refusal(result: GroundingResult) -> str | None:
+    """`kind:reason` of a result that is not an intent (None for an intent)."""
+    return None if isinstance(result, IntentResult) else f"{result.kind}:{result.reason}"
+
+
 def _step_key(step: PlanStep) -> tuple[str, str, Any]:
     return (step.device_id, step.command, step.value)
 
@@ -145,6 +177,7 @@ class OrchestrationEngine:
         self._events: deque[tuple[str, Any]] = deque()
         self._busy = False
         self._reply: Reply | None = None
+        self._split: _Split | None = None  # the message being carried out in parts
         self._reset_request()
         localization.subscribe(self.on_zone_changed)
 
@@ -160,6 +193,7 @@ class OrchestrationEngine:
         self._last: tuple[InvokeCommandCall, ToolResult] | None = None
         self._recover_reason = ""
         self._question: str | None = None
+        self._given: tuple[int, GroundingResult] | None = None  # a part already interpreted
 
     # --- external events (R2, R6, end of session) ----------------------------------------
 
@@ -167,6 +201,11 @@ class OrchestrationEngine:
         """R2 in, R3 out."""
         self._reply = None
         self._post("request", (text, language))
+        if self._split is not None and not self._busy:  # every part has run its cycle
+            self._reply = self._split_reply(self._split)
+            self._split = None
+            if self._notify is not None:
+                self._notify(self._reply)
         return self._reply or Reply("rejected", "Request not handled.")
 
     def on_zone_changed(self, event: ZoneChangedEvent) -> None:
@@ -204,6 +243,13 @@ class OrchestrationEngine:
             self._reset_request()
         if kind == "request":
             self._perceive(*payload)
+            self._run()
+        elif kind == "part":  # the next part of a split message, already interpreted
+            index, text, language, result = payload
+            if self._split is not None:
+                self._split.current = index  # its reply belongs to this part
+            self._perceive(text, language)
+            self._given = (index, result)
             self._run()
 
     # --- the machine ----------------------------------------------------------------------
@@ -267,38 +313,43 @@ class OrchestrationEngine:
         self._text, self._language = text, language
         if self._fire(self._ctx(session_bound=self._session.bound), Trigger.REQUEST_RECEIVED):
             return
-        self._say("rejected", "No environment session is bound.")
+        self._say("rejected", replies.fixed("not_bound", language))
 
     def _interpret(self) -> None:
         zone = self._localization.estimate()  # R5
         self._zone = zone
         intent_confidence, reason = 0.0, None
+        result: GroundingResult | None = None
         if not self._text.strip():
             reason = "request_unintelligible"  # empty text: e.g. an unreliable transcription
         elif zone is None or zone.confidence < self.config.theta:
             reason = "zone_confidence_low"  # do not spend a grounding call on a bad zone
+        elif self._given is not None:  # a part of a split message: interpreted already
+            result = self._given[1]
         else:
             try:  # R7 -> R8, once per request, interpreted by the environment
                 result = self._session.interpret(
                     self._text, self._language, zone, self.history[-5:]
                 )
             except OutOfScopeError:  # the environment refused to interpret here
-                result = None
                 reason = "interpretation_refused:out_of_scope"
-            # The environment checks its interpretation against its own catalogue. The
-            # agent has none: an intent naming something absent would end in Plan, with an
-            # empty listDevices answer (T5).
-            if isinstance(result, IntentResult):
-                self._intent = result.intent
-                intent_confidence = result.intent.confidence
-                if intent_confidence < self.config.theta:
-                    reason = "intent_confidence_low"
-            elif result is not None:
-                reason = f"{result.kind}:{result.reason}"
-                if isinstance(result, ClarificationResult):
-                    self._question = result.question
-        if self._text.strip():
-            self.history.append(self._text)
+            if result is not None and not isinstance(result, IntentResult):
+                result, split_reason = self._try_parts(result, zone)
+                reason = reason or split_reason
+        # The environment checks its interpretation against its own catalogue. The agent
+        # has none: an intent naming something absent would end in Plan, with an empty
+        # listDevices answer (T5).
+        if isinstance(result, IntentResult):
+            self._intent = result.intent
+            intent_confidence = result.intent.confidence
+            if intent_confidence < self.config.theta:
+                reason = "intent_confidence_low"
+        elif result is not None:
+            reason = f"{result.kind}:{result.reason}"
+            if isinstance(result, ClarificationResult):
+                self._question = result.question
+        if self._text.strip() and self._given is None:  # a split message counts once
+            self.history.append(self._split.text if self._split else self._text)
         ctx = self._ctx(
             zone_confidence=zone.confidence if zone else 0.0,
             intent_confidence=intent_confidence,
@@ -410,32 +461,81 @@ class OrchestrationEngine:
             ctx, Trigger.OUTCOME_RECEIVED, outcome={Guard.T8: result, Guard.T9: "steps_pending"}
         )
         if row is None:
-            self._say("following", "Done. I will keep doing it as you move.")
+            self._say("following", replies.fixed("following", self._language))
             return False
         if row.id == Guard.T8:
-            self._say("done", "Done.")
+            self._say("done", replies.fixed("done", self._language))
             self._reset_request()
         return True
 
     def _recover(self) -> None:
-        reason = self._recover_reason
+        reason, language = self._recover_reason, self._language
         if self._question:
             message, fallback = self._question, "clarification_asked"
         elif reason == "request_unintelligible":
-            message, fallback = (
-                "Sorry, I did not catch that. Could you say it again?",
-                ("clarification_asked"),
-            )
+            message, fallback = replies.fixed("unintelligible", language), "clarification_asked"
         elif reason == "zone_confidence_low":
-            message, fallback = (
-                "I am not sure where you are. Which room are you in?",
-                ("clarification_asked"),
-            )
+            message, fallback = replies.fixed("zone_unknown", language), "clarification_asked"
         else:
-            message, fallback = f"I could not do that ({reason}).", "user_informed"
+            zone_id = self._zone.zone_id if self._zone else None
+            message = replies.explain(reason, language, self._intent, zone_id)
+            fallback = "user_informed"
         self._say("recovered", message)
         self._fire(self._ctx(), Trigger.FALLBACK_APPLIED, outcome=fallback)
         self._reset_request()
+
+    # --- several actions in one message ---------------------------------------------------
+
+    def _try_parts(
+        self, whole: GroundingResult, zone: ZoneEstimate
+    ) -> tuple[GroundingResult | None, str | None]:
+        """The environment did not understand the whole message: ask it about each part.
+        Returns the result this cycle goes on with and, when the parts cannot be carried
+        out together, the reason recorded instead. Queues the other parts with an intent."""
+        unchanged = (whole, None)
+        if _refusal(whole) == "unsupported:out_of_scope":
+            return unchanged  # e.g. an attempt to override the rules: never split
+        texts = split_message(self._text, self._language)
+        if len(texts) < 2:
+            return unchanged
+        history = self.history[-5:]
+        parts = [(t, self._session.interpret(t, self._language, zone, history)) for t in texts]
+        if any(_refusal(r) == "unsupported:out_of_scope" for _, r in parts):
+            return unchanged  # one part is not allowed: nothing of the message is done
+        intents = [i for i, (_, r) in enumerate(parts) if isinstance(r, IntentResult)]
+        if not intents:
+            return unchanged  # no part understood: the answer for the whole message stands
+        following = [
+            t
+            for t, r in parts
+            if isinstance(r, IntentResult) and r.intent.persistence == Persistence.FOLLOWING
+        ]
+        if following:  # cannot be combined: ask for it on its own, nothing is done
+            self._question = replies.fixed("following_alone", self._language, part=following[0])
+            return None, "split:following_not_combined"
+        self._split = _Split(self._text, self._language, parts, {}, current=intents[0])
+        for i in reversed(intents[1:]):  # before any other queued event
+            self._events.appendleft(("part", (i, parts[i][0], self._language, parts[i][1])))
+        return parts[intents[0]][1], None
+
+    @staticmethod
+    def _split_reply(split: _Split) -> Reply:
+        """One reply for a message carried out in parts: what was done, what was not, why."""
+        lines, all_done = [], True
+        for i, (text, result) in enumerate(split.parts):
+            reply = split.replies.get(i)
+            if reply is not None and reply.status == "done":
+                lines.append(replies.fixed("part_done", split.language, part=text))
+                continue
+            all_done = False
+            if reply is not None:
+                why = reply.message
+            elif isinstance(result, ClarificationResult):
+                why = result.question
+            else:
+                why = replies.explain(_refusal(result) or "", split.language)
+            lines.append(replies.fixed("part_not_done", split.language, part=text, why=why))
+        return Reply("done" if all_done else "recovered", " ".join(lines))
 
     # --- helpers --------------------------------------------------------------------------
 
@@ -461,6 +561,9 @@ class OrchestrationEngine:
 
     def _say(self, status: str, message: str) -> None:
         reply = Reply(status, message)  # type: ignore[arg-type]
+        if self._split is not None and self._split.current is not None:
+            self._split.replies[self._split.current] = reply  # told once, at the end
+            return
         self._reply = reply
         if self._notify is not None:
             self._notify(reply)

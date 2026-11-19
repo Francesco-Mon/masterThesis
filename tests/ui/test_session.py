@@ -58,7 +58,7 @@ def test_following_request_replans_on_walk_without_grounding_again(agent):
 
 def test_empty_text_asks_to_repeat(agent):
     turn = agent.say("", "it")
-    assert turn.reply.status == "recovered" and "say it again" in turn.reply.message
+    assert turn.reply.status == "recovered" and "Puoi ripetere" in turn.reply.message  # it
     assert result_summary(turn) == "no intent: request_unintelligible"
 
 
