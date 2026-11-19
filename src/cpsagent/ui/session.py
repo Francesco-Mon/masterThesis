@@ -42,6 +42,7 @@ class Turn:
     plan: ActionPlan | None = None
     restoration: Restoration | None = None  # kind "restoration": what the environment did
     interpreted: str | None = None  # who interpreted the request (see interpretation_note)
+    parts: list[tuple[str, str]] | None = None  # a message carried out in parts
 
     @property
     def interpretation(self) -> Transition | None:
@@ -117,6 +118,7 @@ class AgentSession:
         if any(t.source == State.PLAN for t in turn.transitions):
             turn.plan = self.engine.last_plan
         turn.interpreted = interpretation_note(turn, type(self.env.interpreter).__name__)
+        turn.parts = self.engine.last_parts
         self.turns.append(turn)
         return turn
 

@@ -373,3 +373,14 @@ def test_interpretation_by_the_environment_is_shown(app):
     assert "Interpreted by the environment (interpreter: KeywordGrounder)" in say(
         app, "I want to walk in the light"
     )
+
+
+def test_a_message_with_two_actions_shows_its_parts(app):
+    # typed text takes the selected speech language (Italian by default)
+    next(s for s in app.sidebar.selectbox if s.label == "Speech language").set_value("English")
+    text = say(app, "turn on the light and open the door")
+    assert 'Message carried out in 2 parts: "turn on the light" done; "open the door" not done' in (
+        text
+    )
+    chat = [m.value for m in app.markdown]
+    assert any(m.startswith('Done: "turn on the light".') for m in chat)

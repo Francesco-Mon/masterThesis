@@ -147,3 +147,14 @@ def test_the_chosen_grounder_is_the_environment_interpreter(agent):
     turn = agent.say("I want to walk in the light", "en")
     assert turn.interpreted == "Interpreted by the environment (interpreter: FakeGrounder)"
     assert agent.say("", "en").interpreted is None  # nothing was sent to the environment
+
+
+def test_a_message_carried_out_in_parts_lists_them(tmp_path):
+    from cpsagent.grounding.keyword import KeywordGrounder
+
+    a = AgentSession(KeywordGrounder(), start_zone="hallway", log_dir=tmp_path)
+    turn = a.say("turn on the light and open the door", "en")
+    a.close()
+    assert turn.parts == [("turn on the light", "done"), ("open the door", "not done")]
+    assert [c.action.args.device_id for c in turn.commands] == ["lamp_hallway"]
+    assert "no device in this building offers it" in turn.reply.message

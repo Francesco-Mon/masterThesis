@@ -206,6 +206,9 @@ def show_turn(turn: Turn) -> None:
         st.caption(f"zone {z.zone_id} ({z.confidence:.2f})" if z else "zone unknown")
         if turn.interpreted:
             st.caption(turn.interpreted)
+        if turn.parts:
+            listed = "; ".join(f'"{text}" {status}' for text, status in turn.parts)
+            st.caption(f"Message carried out in {len(turn.parts)} parts: {listed}")
         st.caption(result_summary(turn))
         show_details(turn)
 

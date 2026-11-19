@@ -178,6 +178,9 @@ class OrchestrationEngine:
         self._busy = False
         self._reply: Reply | None = None
         self._split: _Split | None = None  # the message being carried out in parts
+        # Parts of the last message carried out in parts, each with "done" or "not done"
+        # (None when the last message was not split); for the UI.
+        self.last_parts: list[tuple[str, str]] | None = None
         self._reset_request()
         localization.subscribe(self.on_zone_changed)
 
@@ -200,9 +203,15 @@ class OrchestrationEngine:
     def handle_request(self, text: str, language: str = "en") -> Reply:
         """R2 in, R3 out."""
         self._reply = None
+        self.last_parts = None
         self._post("request", (text, language))
         if self._split is not None and not self._busy:  # every part has run its cycle
             self._reply = self._split_reply(self._split)
+            self.last_parts = [
+                (text, "done" if (r := self._split.replies.get(i)) and r.status == "done"
+                 else "not done")
+                for i, (text, _) in enumerate(self._split.parts)
+            ]  # fmt: skip
             self._split = None
             if self._notify is not None:
                 self._notify(self._reply)
