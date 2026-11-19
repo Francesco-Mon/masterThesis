@@ -65,8 +65,13 @@ R8 result - a discriminated union:
 {"operation": "listDevices", "args": {"zoneId": "corridor", "controlledProperty": "light"}}
 ```
 ```json
-{"ok": true, "operation": "listDevices", "state": [{"deviceId": "lamp_corridor", "category": "lamp", "controlledProperty": "light", "supportedCommand": ["on", "off"], "refZone": "corridor"}], "error": null}
+{"ok": true, "operation": "listDevices", "state": [{"deviceId": "lamp_corridor", "category": "lamp", "controlledProperty": "light", "supportedCommand": ["on", "off"], "refZone": "corridor", "defaultState": {"power": "off", "brightness": 0}}], "error": null}
 ```
+- `getDeviceState` returns the current state with the device's `defaultState` (fixed by the manager of the environment, see SPEC section 2):
+```json
+{"ok": true, "operation": "getDeviceState", "state": {"deviceId": "lamp_hallway", "power": "on", "brightness": 100, "defaultState": {"power": "off", "brightness": 0}}, "error": null}
+```
+  `invokeCommand` returns the resulting state only, as before. The `defaultState` is not part of the C2 catalogue (`DeviceDescriptor`).
 - `invokeCommand` is rejected if `command` is not in the device's `supportedCommand` (`error:"command_not_supported"`) or the device is outside the scope granted to the token (`error:"out_of_scope"`). The environment is the authority on scope and refuses such calls itself; the Interface checks first only as defence in depth.
 
 ## C4 - Event record (R16)

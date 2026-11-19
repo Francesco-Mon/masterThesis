@@ -53,6 +53,15 @@ Output: a **bound session** = endpoint, token, granted scope, the person's zone 
 
 **The capability catalogue is not built at binding.** At the start of the `Plan` state, after the request has been interpreted, the engine asks the environment (`listDevices`) for the devices that offer the intent's `controlledProperty` in the zones the intent concerns: the person's zone (or `targetZoneId`) for scope `current_zone`; the person's zone and the adjacent zones ahead for scope `path`; one call without `zoneId` for scope `environment`. The environment decides what to list, within the scope. The answer is used for that plan only; after a zone change (T9) `Plan` asks again for the new zone. An empty answer means capability absent: T5, no command.
 
+**Environmental policy.** The building's `managementPolicy` belongs to the manager of the environment, so the environment applies it; the agent stays a client and never restores anything itself. With `restoreOnExit` true:
+
+- For each token the environment remembers the devices changed by a successful `invokeCommand`, grouped by the device's zone (`refZone`).
+- When the person it follows is placed outside such a zone (its own placement, from the positioning signals), a countdown starts; when the person has been outside continuously for `restoreAfterSeconds` (measured on the time of the positioning signals), the environment sets those devices to their `defaultState`. Coming back into the zone before then cancels the countdown; leaving again starts a new one.
+- When the token's subscription is closed (the person leaves the building or the session ends), every device the token changed and that is not yet restored is restored at once.
+- A device already in its `defaultState` is not touched and not reported; a device that another token has also changed is left to that token.
+- Each restoration is notified to the client through the bound session (`on_restoration`): device, zone, restored state, reason (`person_left_zone` or `subscription_closed`), time. The engine does not change state for it and no event record is written: the record schema (C4) and the record count are unchanged. If the person comes back to a zone whose devices were restored, the plan is recomputed as for any zone change (T9) and the devices are commanded again.
+- The delay absorbs the flicker of the environment's own placement at a doorway (it has no smoothing): see DECISIONS.md, "Environmental policy".
+
 **Remaining deviation (temporary).** The grounders still take the catalogue and adjacency of the whole scope as input (`GroundingRequest.catalogue`, `adjacency`), because the frozen evaluation was built that way. That input is built by one function, `binding.grounding_context.temporary_grounding_context`, right before interpretation, from a non-standard environment query (`describe_scope`) that is not one of the four operations. See DECISIONS.md, "Temporary grounding context".
 
 ## 4. Internal data structures
@@ -66,11 +75,11 @@ Output: a **bound session** = endpoint, token, granted scope, the person's zone 
 | Operation | Parameters | Returns |
 |---|---|---|
 | `listZones` | - | the person's zone and its adjacent zones (the neighbourhood the environment follows), with adjacency |
-| `listDevices` | `zoneId` (optional), `controlledProperty` (optional) | devices with supported commands and zone; no `zoneId` = every zone of the granted scope, no `controlledProperty` = every property |
-| `getDeviceState` | `deviceId` | current state |
+| `listDevices` | `zoneId` (optional), `controlledProperty` (optional) | devices with supported commands, zone and `defaultState`; no `zoneId` = every zone of the granted scope, no `controlledProperty` = every property |
+| `getDeviceState` | `deviceId` | current state and `defaultState` |
 | `invokeCommand` | `deviceId`, `command`, `value` | outcome, resulting state |
 
-Only `invokeCommand` changes the environment; the other three are observations. The zone estimate is NOT an environment action (it comes from Localization through R5/R6). The Environment Interface rejects any call outside this set (allow-list in code). The environment is the authority on scope: it refuses any call outside the granted scope whatever the agent has checked; the Scope Guard and the allow-list in the agent are defence in depth only.
+Only `invokeCommand` changes the environment; the other three are observations. (The environment itself also changes devices when it applies the management policy, section 3; that is not an operation of the agent.) The `defaultState` returned by `listDevices` is not given to the grounders: the temporary grounding context carries only `deviceId`, `category`, `controlledProperty` and `supportedCommand`, so the GroundingRequest is unchanged. The zone estimate is NOT an environment action (it comes from Localization through R5/R6). The Environment Interface rejects any call outside this set (allow-list in code). The environment is the authority on scope: it refuses any call outside the granted scope whatever the agent has checked; the Scope Guard and the allow-list in the agent are defence in depth only.
 
 ## 6. State machine transitions (Table 5.3)
 
@@ -130,3 +139,4 @@ R2 request -> R5 zone query -> `{hallway, 0.87}` -> R7 (request, zone) -> R8 `{a
 Plan: R12 `listDevices(hallway, light)`, `listDevices(corridor, light)`, `listDevices(kitchen, light)` -> hallway lamp now, corridor lamp on arrival -> R12 `invokeCommand(lamp_hallway, on)` -> result ->
 environment trigger on `corridor` (new neighbourhood pushed) -> position signal -> R13 -> R6 zone changed -> `corridor` -> `validFor` stale => Observe -> Plan (asks again around `corridor`); next step fires.
 Intent is **reused**, only the plan is revised. The catalogue queries do not add event records: the reference run still has eleven.
+Policy: 12 s after the environment has placed the user outside the hallway, it switches `lamp_hallway` back to its default (off) and tells the agent; no record is added. The corridor lamp follows 12 s after the user has left the corridor.

@@ -11,19 +11,26 @@ capability catalogue.
 
 The environment keeps control and the agent is a mere client: the environment fixes the scope
 of the agent's token, refuses calls outside it, follows the person with triggers on the adjacent
-zones, and lists the devices the agent asks for when it plans.
+zones, and lists the devices the agent asks for when it plans. The environment also applies the
+building manager's policy: every device has a default state, and once the person has left a
+zone the environment brings the devices changed for them there back to it.
 
 Reference scenario, "follow the user with light": the user says something implicit such as
 *"I want to walk in the light"*; the agent knows the user's zone from localization, grounds the
 request to a `StructuredIntent`, plans guarded steps (hallway lamp now, corridor lamp on arrival),
 executes them through the Environment Interface, re-plans when the user moves and logs every
-transition in a verifiable event log.
+transition in a verifiable event log. Under the building's policy the environment switches each
+lamp left behind back off, 12 s after the user has left its zone.
 
 ## What is implemented
 
 - **Emulated environment** (`Building`, `Zone`, `Device`, `PositioningSignal`, as in thesis Ch. 5)
   behind a small `EnvironmentBackend` Protocol, and a mobility simulator along scripted paths;
   zone-level localization with hysteresis.
+- **Environmental policy** of the building manager: each `Device` has a `defaultState` and the
+  `Building` a `managementPolicy` (`restoreOnExit`, `restoreAfterSeconds`). The environment, not
+  the agent, restores what a guest's agent changed in a zone once the guest has been out of it
+  for the delay, and everything when the subscription is closed; it tells the agent each time.
 - **Environment Binding** in four steps (Locate, Authenticate, Enumerate, Subscribe): the
   environment follows the person and pushes the neighbourhood when a trigger fires. No catalogue
   is built at binding: the engine asks the environment (`listDevices`) at the start of Plan.
@@ -120,12 +127,18 @@ offline using the fake grounder and stub transports.
 
 - **Sidebar, Agent**: grounder (keyword, embedding, or LLM with an OpenRouter model id),
   speech language, start zone, "New session".
-- **Sidebar, Movement**: walk to a zone along the adjacency, or play a scripted path tick by tick.
-  The true position is shown; the agent only sees the localization estimate.
+- **Sidebar, Environment**: the granted scope, the person's zone and armed neighbours as the
+  environment follows them, the management policy and the restorations it has pending.
+- **Sidebar, Movement**: walk to a zone along the adjacency, stay where you are for some seconds,
+  or play a scripted path tick by tick. The true position is shown; the agent only sees the
+  localization estimate. Time only passes with movement, so use "Stay" to let a restoration
+  countdown run out.
 - **Chat**: type a request, record it with the microphone, or upload an audio file. Each turn
   shows the transcript (with STT latency), the zone estimate, the intent or the reason there is
-  none, the plan, the commands sent and the reply; moving shows the re-planning.
-- **Panels**: device states, the event chain and its verification. UI logs go to `logs/`
+  none, the plan, the commands sent and the reply; moving shows the re-planning. Each restoration
+  made by the environment appears as a turn of its own ("Environment restored lamp_hallway to
+  default (person left hallway)").
+- **Panels**: device states with their default state, the event chain and its verification. UI logs go to `logs/`
   (git-ignored).
 
 ## Data and results
