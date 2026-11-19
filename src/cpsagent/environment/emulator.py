@@ -17,6 +17,12 @@ again. No smoothing here: smoothing and hysteresis stay in the agent's Localizat
 readings of the person's zone and of the armed zones are forwarded to a subscriber that
 follows the person.
 
+Interpretation service. The environment also interprets requests for its clients
+(`interpret`): it builds the GroundingRequest from its own catalogue and adjacency for the
+token's scope (see `interpreter.py`), calls the grounder it was configured with and checks
+the answer against that catalogue. It refuses, without grounding, a zone estimate outside
+the scope. This is a service of the environment, not one of the four device operations.
+
 Management policy (restoration). The building's `managementPolicy` belongs to the manager
 of the environment, so the environment applies it, never the agent. For each token the
 environment remembers the devices changed by `invokeCommand`, grouped by the device's zone.
@@ -33,6 +39,8 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any
 
+from cpsagent.contracts import GroundingRequest, GroundingResult, ZoneEstimate
+
 from . import commands
 from .backend import (
     AuthenticationError,
@@ -48,6 +56,7 @@ from .backend import (
     SignalCallback,
     UnknownEntityError,
 )
+from .interpreter import GroundingContext, checked, grounding_context
 from .model import Building, Device, PositioningSignal, Scenario, Zone, load_scenario
 
 # A reading older than this (one scan of the simulated phone) no longer competes in a
@@ -69,8 +78,11 @@ class _Follow:
 
 
 class EmulatedEnvironment:
-    def __init__(self, scenario: Scenario | None = None) -> None:
+    def __init__(self, scenario: Scenario | None = None, interpreter=None) -> None:
+        """`interpreter`: the grounder of the environment's interpretation service (any
+        `cpsagent.grounding.Grounder`); the keyword grounder when not given."""
         self.scenario = scenario or load_scenario()
+        self._interpreter = interpreter
         self.endpoint = self.scenario.broker.endpoint
         self.building: Building = self.scenario.building
         self._zones = {z.zone_id: z for z in self.scenario.zones}
@@ -188,8 +200,8 @@ class EmulatedEnvironment:
         """Test hook: the next `times` commands to this device fail (drives T10/T11)."""
         self._faults[device_id] = times
 
-    def describe_scope(self, token: str) -> ScopeDescription:
-        """TEMPORARY, not one of the four operations (see EnvironmentBackend)."""
+    def _describe_scope(self, token: str) -> ScopeDescription:
+        """Every zone and device of the token's scope (internal: input of the interpreter)."""
         scope = self.scope(token)
         return ScopeDescription(
             zones=[z for z in self._zones.values() if z.zone_id in scope],
@@ -318,3 +330,58 @@ class EmulatedEnvironment:
             device.state = dict(device.default_state)
             if follow is not None and follow.restore is not None:
                 follow.restore(Restoration(device_id, zone, dict(device.state), reason, self._now))
+
+    # --- interpretation service ---------------------------------------------------------
+
+    @property
+    def interpreter(self):
+        if self._interpreter is None:  # imported here: grounding depends on the engine
+            from cpsagent.grounding.keyword import KeywordGrounder
+
+            self._interpreter = KeywordGrounder()
+        return self._interpreter
+
+    def interpreter_context(self, token: str) -> GroundingContext:
+        """Catalogue and adjacency the interpreter is given for the token's scope. Not part
+        of EnvironmentBackend: read by the interpretation service below and, through the
+        evaluation-only properties of BoundSession, by the frozen evaluation code."""
+        return grounding_context(self._describe_scope(token))
+
+    def grounding_request(
+        self,
+        token: str,
+        text: str,
+        language: str,
+        zone_estimate: ZoneEstimate,
+        history: list[str],
+    ) -> GroundingRequest:
+        """The GroundingRequest the interpreter receives (also used by the regression
+        tests to compare it with the one the agent used to build)."""
+        return self._request(
+            self.interpreter_context(token), text, language, zone_estimate, history
+        )
+
+    @staticmethod
+    def _request(context, text, language, zone_estimate, history) -> GroundingRequest:
+        return GroundingRequest(
+            text=text,
+            language=language,
+            zone=zone_estimate,
+            catalogue=context.catalogue,
+            adjacency=context.adjacency,
+            history=list(history),
+        )
+
+    def interpret(
+        self,
+        token: str,
+        text: str,
+        language: str,
+        zone_estimate: ZoneEstimate,
+        history: list[str],
+    ) -> GroundingResult:
+        if zone_estimate.zone_id not in self.scope(token):  # also checks the token
+            raise OutOfScopeError(zone_estimate.zone_id)  # refused before any grounding
+        context = self.interpreter_context(token)
+        request = self._request(context, text, language, zone_estimate, history)
+        return checked(self.interpreter.ground(request), context)

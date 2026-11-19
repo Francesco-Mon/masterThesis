@@ -79,7 +79,7 @@ class Walk:
     """One bound session driven tick by tick, wired like the demo and the UI."""
 
     def __init__(self, scenario: Scenario | None = None, seed: int = 0):
-        self.env = EmulatedEnvironment(scenario)
+        self.env = EmulatedEnvironment(scenario, interpreter=FakeGrounder(SCRIPT))
         self.session = EnvironmentBinding({self.env.endpoint: self.env}).bind(
             self.env.endpoint, "person-agent", "user-1"
         )
@@ -92,7 +92,7 @@ class Walk:
         self.now = DEFAULT_START
         self.seed = seed
         self.engine = OrchestrationEngine(
-            self.session, self.loc, FakeGrounder(SCRIPT), self.interface, clock=lambda: self.now
+            self.session, self.loc, self.interface, clock=lambda: self.now
         )
         self.env_zone = []  # (time, zone where the environment places the person), per tick
         self.engine_state_at_restoration = []

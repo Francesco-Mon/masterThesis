@@ -86,7 +86,6 @@ def test_walk_with_real_localization_is_logged_and_verifies(tmp_path):
     engine = OrchestrationEngine(
         rig.session,
         estimator,
-        rig.grounder,
         EnvironmentInterface(rig.session),
         recorder=lambda t: log.submit(t.record_fields()),
     )

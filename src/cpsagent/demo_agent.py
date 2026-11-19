@@ -88,7 +88,8 @@ def main() -> None:
     parser.add_argument("--model", default=None, help="OpenRouter model id (--grounder llm)")
     args = parser.parse_args()
 
-    env = EmulatedEnvironment()
+    # the grounder is the environment's interpreter: interpretation is its service
+    env = EmulatedEnvironment(interpreter=make_grounder(args.grounder, args.model))
     path = env.scenario.paths["walk_in_the_light"]
     session = EnvironmentBinding({env.endpoint: env}).bind(
         env.endpoint, "person-agent", path.subject
@@ -112,13 +113,13 @@ def main() -> None:
     engine = OrchestrationEngine(
         session,
         localization,
-        make_grounder(args.grounder, args.model),
         EnvironmentInterface(session),
         recorder=record,
         notify=lambda r: print(f"  agent says ({r.status}): {r.message}"),
         clock=lambda: now[0],
     )
     print(f"Session {session.session_id}; scope {sorted(session.scope_zones)}")
+    print(f"Interpretation: service of the environment ({type(env.interpreter).__name__})")
     session.on_neighbourhood(
         lambda n: print(f"{'':14}environment: person in {n.zone_id}, armed {n.armed}")
     )

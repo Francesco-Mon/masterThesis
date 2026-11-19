@@ -17,7 +17,6 @@ from cpsagent.binding import (
     BindingError,
     BoundSession,
     EnvironmentBinding,
-    temporary_grounding_context,
 )
 from cpsagent.contracts import GroundingRequest, ZoneEstimate
 from cpsagent.environment import EmulatedEnvironment, PositioningSignal
@@ -129,12 +128,12 @@ def test_close_stops_signal_delivery(session, env):
     assert not session.bound and received == []
 
 
-# --- temporary grounding context ----------------------------------------------------------
+# --- the catalogue stays in the environment ----------------------------------------------
 
 
-def test_grounding_context_matches_the_input_the_grounders_were_tuned_with(env):
+def test_interpreter_context_matches_the_input_the_grounders_were_tuned_with(env):
     token = env.authenticate("person-agent")
-    context = temporary_grounding_context(env, token)
+    context = env.interpreter_context(token)
     building = {z.zone_id: z.adjacency for z in env.scenario.zones}
     assert context.adjacency == building and list(context.adjacency) == list(building)
     assert context.adjacency["server_room"] == ["corridor"]  # rebuilt by symmetry
@@ -158,16 +157,30 @@ def test_session_compatibility_properties_ask_the_environment_each_time(env):
     session = EnvironmentBinding({env.endpoint: spy}).bind(ENDPOINT, "person-agent", "user-1")
     spy.calls.clear()
     token = env.authenticate("person-agent")
-    assert session.catalogue == temporary_grounding_context(env, token).catalogue
+    assert session.catalogue == env.interpreter_context(token).catalogue
     assert session.spatial_model.adjacency["hallway"] == ["lobby", "corridor", "kitchen"]
     assert session.catalogue_properties() == {"light", "shading", "temperature"}
-    assert spy.calls == ["describe_scope"] * 3
+    assert spy.calls == ["interpreter_context"] * 3
 
 
 def _uses(path: Path, names: set[str]) -> list[str]:
-    """Attribute names in `names` read anywhere in the module at `path`."""
+    """Attribute and imported names in `names` used anywhere in the module at `path`."""
     tree = ast.parse(path.read_text(encoding="utf-8"))
-    return [n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute) and n.attr in names]
+    attrs = [n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute) and n.attr in names]
+    imported = [
+        a.name
+        for n in ast.walk(tree)
+        if isinstance(n, ast.ImportFrom)
+        for a in n.names
+        if a.name in names
+    ]
+    return attrs + imported
+
+
+def _modules_using(names: set[str]) -> list[str]:
+    return sorted(
+        path.relative_to(SRC).as_posix() for path in SRC.rglob("*.py") if _uses(path, names)
+    )
 
 
 # Frozen code that binds a session and reads its catalogue: the evaluation package and the
@@ -186,16 +199,31 @@ def test_only_frozen_eval_reads_the_session_compatibility_properties():
     assert offenders == []
 
 
-def test_only_the_grounding_context_function_calls_describe_scope():
-    callers = []
-    for path in SRC.rglob("*.py"):
-        if "describe_scope" in _uses(path, {"describe_scope"}):
-            callers.append(path.relative_to(SRC).as_posix())
-    assert callers == ["binding/grounding_context.py"]
+def test_describe_scope_is_internal_to_the_emulator():
+    assert _modules_using({"describe_scope", "_describe_scope"}) == ["environment/emulator.py"]
 
 
-def test_session_compatibility_properties_are_not_used_at_runtime(env, monkeypatch):
-    """Binding, engine, planner and Interface run a full request without touching them."""
+def test_only_the_environment_and_the_eval_properties_build_the_grounding_context():
+    names = {"interpreter_context", "grounding_request", "grounding_context", "GroundingContext"}
+    assert _modules_using(names) == [
+        "binding/binding.py",  # the evaluation-only properties of BoundSession
+        "environment/emulator.py",  # the interpretation service (defined in interpreter.py)
+    ]
+
+
+def test_agent_components_do_not_import_a_grounder():
+    agent = ["binding/binding.py", "engine/engine.py", "engine/planner.py",
+             "interface/interface.py", "localization/estimator.py"]  # fmt: skip
+    for module in agent:
+        tree = ast.parse((SRC / module).read_text(encoding="utf-8"))
+        imports = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+        assert not any(m.startswith("cpsagent.grounding") for m in imports), module
+
+
+def test_the_agent_never_holds_the_catalogue_at_runtime(env, monkeypatch):
+    """Binding, engine, planner and Interface run full requests without touching the
+    catalogue: the compatibility properties are forbidden and the only call that reaches
+    the interpreter is the environment's `interpret`."""
     import sys
 
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
@@ -208,17 +236,20 @@ def test_session_compatibility_properties_are_not_used_at_runtime(env, monkeypat
         monkeypatch.setattr(BoundSession, name, property(forbidden))
     monkeypatch.setattr(BoundSession, "catalogue_properties", forbidden)
     rig = Rig()
+    spy = Spy(rig.env)
+    rig.session.broker = spy  # every call the agent makes to the environment
+    rig.engine._interface._broker = spy
     rig.engine.handle_request(WALK)
     rig.loc.move_to("corridor")
     rig.engine.handle_request("turn on all the lights")
     rig.engine.handle_request("make it humid")
     assert rig.power("lamp_corridor") == "on"
+    assert set(spy.calls) <= {"interpret", "devices", "device", "execute", "scope"}
+    assert spy.calls.count("interpret") == len(rig.grounder.calls) == 3
 
 
-def test_grounding_context_does_not_carry_the_default_state():
-    env = EmulatedEnvironment()
-    session = EnvironmentBinding({env.endpoint: env}).bind(env.endpoint, "person-agent", "user-1")
-    context = temporary_grounding_context(env, session.token)
+def test_interpreter_context_does_not_carry_the_default_state(env):
+    context = env.interpreter_context(env.authenticate("person-agent"))
     for zone in context.catalogue:
         for device in zone.model_dump(by_alias=True)["devices"]:
             assert set(device) == {"deviceId", "category", "controlledProperty", "supportedCommand"}

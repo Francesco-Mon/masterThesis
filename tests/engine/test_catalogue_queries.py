@@ -103,29 +103,29 @@ def test_answer_is_used_for_that_plan_only_and_asked_again_after_a_zone_change()
 def test_capability_the_environment_lacks_in_the_zone_ends_in_t5():
     script = {"cool the hallway": intent(action="decrease", prop="temperature")}
     rig = Rig()
-    rig.engine._grounder = FakeGrounder(script)
+    rig.env._interpreter = FakeGrounder(script)
     rig.engine.handle_request("cool the hallway")  # no thermostat in the hallway
     assert rig.guards == ["T1", "T2", "T5", "T12"]
     assert rig.engine.trace[2].outcome == "capability_absent"
     assert rig.queries == [("hallway", "temperature")]
 
 
-def test_planner_and_engine_never_call_describe_scope_directly(monkeypatch):
-    """Only the temporary grounding-context function asks for the whole scope, once per
-    grounded request, before interpretation."""
+def test_only_the_interpretation_service_reads_the_whole_scope(monkeypatch):
+    """The whole scope is read inside the environment, once per interpreted request; the
+    re-planning asks listDevices only."""
     rig = Rig()
     callers = []
-    original = rig.env.describe_scope
+    original = rig.env._describe_scope
 
     def spy(token):
         callers.append(inspect.stack()[1].function)
         return original(token)
 
-    monkeypatch.setattr(rig.env, "describe_scope", spy)
+    monkeypatch.setattr(rig.env, "_describe_scope", spy)
     rig.engine.handle_request(WALK)
-    rig.loc.move_to("corridor")  # re-plan: no new grounding, no describe_scope
+    rig.loc.move_to("corridor")  # re-plan: no new interpretation, no scope read
     rig.engine.handle_request("turn on all the lights")
-    assert callers == ["temporary_grounding_context"] * 2
+    assert callers == ["interpreter_context"] * 2
     assert len(rig.grounder.calls) == 2
 
 

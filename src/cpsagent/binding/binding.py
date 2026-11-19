@@ -23,6 +23,7 @@ import itertools
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
+from cpsagent.contracts import GroundingResult, ZoneEstimate
 from cpsagent.environment import (
     AuthenticationError,
     EnvironmentBackend,
@@ -30,8 +31,6 @@ from cpsagent.environment import (
     PositioningSignal,
     Restoration,
 )
-
-from .grounding_context import GroundingContext, temporary_grounding_context
 
 SignalListener = Callable[[PositioningSignal], None]
 NeighbourhoodListener = Callable[[Neighbourhood], None]
@@ -102,30 +101,38 @@ class BoundSession:
         for listener in list(self._restoration_listeners):
             listener(restoration)
 
+    def interpret(
+        self, text: str, language: str, zone: ZoneEstimate, history: list[str]
+    ) -> GroundingResult:
+        """Ask the environment to interpret a request (its interpretation service): the
+        request crosses the agent-environment boundary; the catalogue stays there."""
+        return self.broker.interpret(self.token, text, language, zone, history)
+
     def close(self) -> None:
         self.broker.unsubscribe(self.subscription.subscription_id)
         self.subscription.active = False
 
     # --- for the frozen evaluation code only ---------------------------------------------
-    # The evaluation (cpsagent.eval) reads these names from the session it binds and is
-    # frozen. They hold nothing: each read asks the environment through the temporary
-    # grounding-context function. The engine, the planner, the Interface and Binding call
-    # `temporary_grounding_context` directly and never use them (tested).
+    # The evaluation (cpsagent.eval, and grounding/try.py) runs the grounders itself, outside
+    # the engine, and reads these names from the session it binds; it is frozen. They hold
+    # nothing: each read asks the emulated environment for the catalogue and adjacency its
+    # interpreter is given. The engine, the planner, the Interface and Binding never use
+    # them (tested): the agent never holds the catalogue.
 
-    def _grounding_context(self) -> GroundingContext:
-        return temporary_grounding_context(self.broker, self.token)
+    def _interpreter_context(self):
+        return self.broker.interpreter_context(self.token)  # type: ignore[attr-defined]
 
     @property
     def catalogue(self):
-        return self._grounding_context().catalogue
+        return self._interpreter_context().catalogue
 
     @property
-    def spatial_model(self) -> GroundingContext:
+    def spatial_model(self):
         """Has `.adjacency`, the attribute the evaluation reads."""
-        return self._grounding_context()
+        return self._interpreter_context()
 
     def catalogue_properties(self) -> set[str]:
-        return self._grounding_context().catalogue_properties()
+        return self._interpreter_context().catalogue_properties()
 
 
 class EnvironmentBinding:

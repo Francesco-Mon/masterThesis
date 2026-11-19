@@ -4,7 +4,10 @@ The engine owns the per-request data (zone in force, intent, plan, counters) and
 the activity of each state; *which* transition fires is always decided by the table in
 `transitions.py`. It talks to the other components only through their contracts:
   R5/R6  Localization: `estimate()` and zone_changed events (C1)
-  R7/R8  Grounder:     `ground(GroundingRequest) -> GroundingResult` (C2), once per request
+  R7/R8  Interpretation: a service of the environment, reached through the BoundSession
+                       (`interpret`): the engine sends the text, the language, its zone
+                       estimate and its recent history and gets a GroundingResult (C2),
+                       once per request. The catalogue stays in the environment.
   R10    Binding:      the BoundSession (bound flag, scope, adjacency known from the
                        neighbourhoods the environment pushed)
   R12    Interface:    `execute(ToolCall) -> ToolResult` (C3); in the Plan state the engine
@@ -21,12 +24,11 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, Literal, Protocol
 
-from cpsagent.binding import BoundSession, temporary_grounding_context
+from cpsagent.binding import BoundSession
 from cpsagent.contracts import (
     ActionPlan,
     ClarificationResult,
     DeviceDescriptor,
-    GroundingRequest,
     Guard,
     IntentResult,
     Persistence,
@@ -45,7 +47,7 @@ from cpsagent.contracts.tool import (
     ListDevicesArgs,
     ListDevicesCall,
 )
-from cpsagent.grounding import Grounder
+from cpsagent.environment import OutOfScopeError
 
 from .config import EngineConfig
 from .planner import catalogue_queries, explain_no_step, make_plan
@@ -120,7 +122,6 @@ class OrchestrationEngine:
         self,
         session: BoundSession,
         localization: Localization,
-        grounder: Grounder,
         interface: Interface,
         *,
         config: EngineConfig | None = None,
@@ -131,7 +132,6 @@ class OrchestrationEngine:
         self.config = config or EngineConfig()
         self._session = session
         self._localization = localization
-        self._grounder = grounder
         self._interface = interface
         self._recorder = recorder
         self._notify = notify
@@ -278,31 +278,22 @@ class OrchestrationEngine:
         elif zone is None or zone.confidence < self.config.theta:
             reason = "zone_confidence_low"  # do not spend a grounding call on a bad zone
         else:
-            # Temporary: the frozen grounders take the catalogue as input (see
-            # binding/grounding_context.py). Built here, before interpretation.
-            context = temporary_grounding_context(self._session.broker, self._session.token)
-            result = self._grounder.ground(  # R7 -> R8, once per request
-                GroundingRequest(
-                    text=self._text,
-                    language=self._language,
-                    zone=zone,
-                    catalogue=context.catalogue,
-                    adjacency=context.adjacency,
-                    history=self.history[-5:],
+            try:  # R7 -> R8, once per request, interpreted by the environment
+                result = self._session.interpret(
+                    self._text, self._language, zone, self.history[-5:]
                 )
-            )
+            except OutOfScopeError:  # the environment refused to interpret here
+                result = None
+                reason = "interpretation_refused:out_of_scope"
+            # The environment checks its interpretation against its own catalogue. The
+            # agent has none: an intent naming something absent would end in Plan, with an
+            # empty listDevices answer (T5).
             if isinstance(result, IntentResult):
-                intent = result.intent
-                if intent.controlled_property not in context.catalogue_properties():
-                    reason = "unsupported:capability_absent"  # never trust the grounder
-                elif intent.target_zone_id not in context.catalogue_zones() | {None}:
-                    reason = "unsupported:out_of_scope"
-                else:
-                    self._intent = intent
-                    intent_confidence = intent.confidence
-                    if intent_confidence < self.config.theta:
-                        reason = "intent_confidence_low"
-            else:
+                self._intent = result.intent
+                intent_confidence = result.intent.confidence
+                if intent_confidence < self.config.theta:
+                    reason = "intent_confidence_low"
+            elif result is not None:
                 reason = f"{result.kind}:{result.reason}"
                 if isinstance(result, ClarificationResult):
                     self._question = result.question

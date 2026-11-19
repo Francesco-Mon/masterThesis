@@ -1,5 +1,5 @@
-"""The environment side of the boundary: what Environment Binding and Environment Interface
-use from an Intelligent Environment.
+"""The environment side of the boundary: what Environment Binding, Environment Interface
+and the engine's Interpret state use from an Intelligent Environment.
 
 `EmulatedEnvironment` implements it in process; an NGSI-LD adapter (Orion-LD) can implement
 the same Protocol later. The environment is the authority: it fixes the scope of a token,
@@ -11,6 +11,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Literal, Protocol
+
+from cpsagent.contracts import GroundingResult, ZoneEstimate
 
 from .model import Device, PositioningSignal, Zone
 
@@ -51,7 +53,8 @@ class Neighbourhood:
 
 @dataclass(frozen=True)
 class ScopeDescription:
-    """Answer of `describe_scope`: every zone and device inside the granted scope."""
+    """Every zone and device inside a granted scope: what the environment's interpreter
+    builds its catalogue and adjacency from (internal to the environment)."""
 
     zones: list[Zone]
     devices: list[Device]
@@ -129,8 +132,17 @@ class EnvironmentBackend(Protocol):
         every device its token changed is restored."""
         ...
 
-    def describe_scope(self, token: str) -> ScopeDescription:
-        """TEMPORARY, not one of the four operations: every zone and device of the scope.
-        Used only by `binding.grounding_context.temporary_grounding_context` (see
-        DECISIONS.md, "Temporary grounding context")."""
+    def interpret(
+        self,
+        token: str,
+        text: str,
+        language: str,
+        zone_estimate: ZoneEstimate,
+        history: list[str],
+    ) -> GroundingResult:
+        """Interpretation service, not one of the four device operations: the environment
+        grounds `text` with its own interpreter, catalogue and adjacency for the token's
+        scope, and returns the result checked against that catalogue. Raises
+        OutOfScopeError, without interpreting, when the zone estimate is outside the scope;
+        AuthenticationError for an invalid token."""
         ...

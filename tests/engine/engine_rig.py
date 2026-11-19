@@ -104,17 +104,16 @@ class Rig:
     def __init__(
         self, zone="hallway", confidence=0.9, previous="lobby", config=None, recorder=None
     ):
-        self.env = EmulatedEnvironment()
+        self.grounder = FakeGrounder(SCRIPT)  # the environment's interpreter
+        self.env = EmulatedEnvironment(interpreter=self.grounder)
         self.session = EnvironmentBinding({self.env.endpoint: self.env}).bind(
             self.env.endpoint, "person-agent", "user-1"
         )
         self.loc = ScriptedLocalization(zone, confidence, previous, env=self.env)
-        self.grounder = FakeGrounder(SCRIPT)
         self.replies = []
         self.engine = OrchestrationEngine(
             self.session,
             self.loc,
-            self.grounder,
             EnvironmentInterface(self.session),
             config=config or EngineConfig(),
             recorder=recorder,
