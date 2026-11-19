@@ -13,11 +13,13 @@ The environment keeps control and the agent is a mere client: the environment fi
 of the agent's token, refuses calls outside it, follows the person with triggers on the adjacent
 zones, and lists the devices the agent asks for when it plans. The environment also applies the
 building manager's policy: every device has a default state, and once the person has left a
-zone the environment brings the devices changed for them there back to it.
+zone the environment brings the devices changed for them there back to it. Interpretation, too,
+is a service of the environment: the agent sends the request and its zone estimate, and the
+environment grounds it with its own interpreter against its own catalogue, which never leaves it.
 
 Reference scenario, "follow the user with light": the user says something implicit such as
-*"I want to walk in the light"*; the agent knows the user's zone from localization, grounds the
-request to a `StructuredIntent`, plans guarded steps (hallway lamp now, corridor lamp on arrival),
+*"I want to walk in the light"*; the agent knows the user's zone from localization, asks the
+environment to interpret the request (a `StructuredIntent`), plans guarded steps (hallway lamp now, corridor lamp on arrival),
 executes them through the Environment Interface, re-plans when the user moves and logs every
 transition in a verifiable event log. Under the building's policy the environment switches each
 lamp left behind back off, 12 s after the user has left its zone.
@@ -34,11 +36,18 @@ lamp left behind back off, 12 s after the user has left its zone.
 - **Environment Binding** in four steps (Locate, Authenticate, Enumerate, Subscribe): the
   environment follows the person and pushes the neighbourhood when a trigger fires. No catalogue
   is built at binding: the engine asks the environment (`listDevices`) at the start of Plan.
-  One temporary deviation remains: the grounders still take the whole-scope catalogue as input
-  (see `docs/SPEC.md`, section 3, and `docs/DECISIONS.md`).
+- **Interpretation as a service of the environment**: the backend's `interpret` builds the
+  GroundingRequest from the environment's catalogue and adjacency, calls the grounder the
+  environment was configured with and checks the answer. The agent never holds the catalogue.
+  It is not a device operation: the Environment Interface keeps its four operations.
+- **Several actions in one message** ("turn off the light and lower the blinds"): when the
+  environment does not understand the whole message, the engine cuts it on conjunctions (at most
+  three parts), has each part interpreted and carries out the understood ones one after the
+  other; the reply says what was done and what was not, in English or Italian.
 - **Orchestration Engine**: an explicit state machine
   Perceive -> Interpret -> Plan -> Act -> Observe -> [Recover], with bounded steps and retries.
-- **Intent Grounding** behind one interface, with interchangeable candidates:
+- **Intent Grounding** behind one interface, with interchangeable candidates (each can be the
+  environment's interpreter):
   - `llm`: LLM through OpenRouter with structured output, Pydantic validation and bounded retry;
   - `embedding`: sentence-embedding matching against the capability descriptions (no training);
   - `keyword`: a rule-based baseline;
@@ -125,9 +134,10 @@ offline using the fake grounder and stub transports.
 
 `streamlit run src/cpsagent/ui/app.py` opens the page at http://localhost:8501.
 
-- **Sidebar, Agent**: grounder (keyword, embedding, or LLM with an OpenRouter model id),
-  speech language, start zone, "New session".
-- **Sidebar, Environment**: the granted scope, the person's zone and armed neighbours as the
+- **Sidebar, Agent**: grounder of the environment's interpretation service (keyword, embedding,
+  or LLM with an OpenRouter model id), speech language (typed text is sent in this language
+  too), start zone, "New session".
+- **Sidebar, Environment**: the interpreter it uses, the granted scope, the person's zone and armed neighbours as the
   environment follows them, the management policy and the restorations it has pending.
 - **Sidebar, Movement**: walk to a zone along the adjacency, stay where you are for some seconds,
   or play a scripted path tick by tick. The true position is shown; the agent only sees the
@@ -135,7 +145,8 @@ offline using the fake grounder and stub transports.
   countdown run out.
 - **Chat**: type a request, record it with the microphone, or upload an audio file. Each turn
   shows the transcript (with STT latency), the zone estimate, the intent or the reason there is
-  none, the plan, the commands sent and the reply; moving shows the re-planning. Each restoration
+  none (with "Interpreted by the environment"), the parts of a message with several actions, the
+  plan, the commands sent and the reply; moving shows the re-planning. Each restoration
   made by the environment appears as a turn of its own ("Environment restored lamp_hallway to
   default (person left hallway)").
 - **Panels**: device states with their default state, the event chain and its verification. UI logs go to `logs/`

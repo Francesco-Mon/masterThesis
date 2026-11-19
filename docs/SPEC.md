@@ -13,8 +13,8 @@ Components: User Interface (F1), Localization (F2), Intent Grounding (F3), Orche
 | R3 | Engine -> UI | status, message, optional clarification question | return value / callback |
 | R5 | Engine -> Localization | ZoneEstimate query | function call |
 | R6 | Localization -> Engine | zone-change event carrying new ZoneEstimate | asyncio queue / callback |
-| R7 | Engine -> Intent Grounding | request, ZoneEstimate, short history (and, temporarily, the catalogue and adjacency of the scope: see section 3) | function call |
-| R8 | Intent Grounding -> Engine | StructuredIntent or clarification-needed | return value, Pydantic-validated |
+| R7 | Engine -> Intent Grounding | request text, language, ZoneEstimate, short history; Intent Grounding is a service of the environment, reached through the bound session (section 3) | `EnvironmentBackend.interpret`, across the agent-environment boundary |
+| R8 | Intent Grounding -> Engine | StructuredIntent or clarification-needed | return value, Pydantic-validated and checked by the environment against its catalogue |
 | R9/R10 | Engine <-> Binding | binding request / session descriptor: scope, person's zone and followed neighbourhood | function call |
 | R11 | Binding -> Env. Interface | configuration | object injection |
 | R12 | Engine <-> Env. Interface | tool call and result (the 4 operations) | function call |
@@ -62,7 +62,9 @@ Output: a **bound session** = endpoint, token, granted scope, the person's zone 
 - Each restoration is notified to the client through the bound session (`on_restoration`): device, zone, restored state, reason (`person_left_zone` or `subscription_closed`), time. The engine does not change state for it and no event record is written: the record schema (C4) and the record count are unchanged. If the person comes back to a zone whose devices were restored, the plan is recomputed as for any zone change (T9) and the devices are commanded again.
 - The delay absorbs the flicker of the environment's own placement at a doorway (it has no smoothing): see DECISIONS.md, "Environmental policy".
 
-**Remaining deviation (temporary).** The grounders still take the catalogue and adjacency of the whole scope as input (`GroundingRequest.catalogue`, `adjacency`), because the frozen evaluation was built that way. That input is built by one function, `binding.grounding_context.temporary_grounding_context`, right before interpretation, from a non-standard environment query (`describe_scope`) that is not one of the four operations. See DECISIONS.md, "Temporary grounding context".
+**Interpretation is a service of the environment.** In the Interpret state the engine sends the request text, its language, the agent's ZoneEstimate and the recent history to the environment (`BoundSession.interpret`, i.e. `EnvironmentBackend.interpret(token, ...)`). The environment builds the GroundingRequest from its own catalogue and adjacency for the token's scope (every zone of the scope with its devices, and the adjacency of those zones plus the entry of each outside zone bordering them), calls the grounder it was configured with (keyword, embedding or LLM), checks the answer against that catalogue (a property no device of the scope offers, or a named zone outside the scope, becomes `unsupported`) and returns the GroundingResult. A ZoneEstimate outside the scope is refused (`out_of_scope`) without interpreting. The agent never receives the catalogue: it learns devices only from `listDevices` in Plan. This is not a device operation: the four operations of section 5 and their allow-list are unchanged. The frozen evaluation runs the grounders itself, on the same GroundingRequest, and reads the catalogue through evaluation-only properties of the bound session. See DECISIONS.md, "Interpretation as a service of the environment".
+
+**Several actions in one message.** If the environment refuses a whole message or asks a clarification about it, the engine cuts the text on the conjunctions and separators of its language (English "and", "then", ","; Italian "e", "poi", ","; at most three parts) and asks the environment to interpret each part. The parts that give an intent are carried out one after the other, each as its own request cycle (Perceive -> Interpret -> Plan -> Act -> Observe -> Perceive, with its records); the user gets one reply saying which parts were done and which were not, and why. A message understood as a whole is never split. Not split or not carried out: a whole message refused as `out_of_scope`, a message with any part refused as `out_of_scope` (the original answer stands), and a message with a part that asks to be followed (`following`): the user is asked to send that part on its own (recorded as Interpret -> Recover, `split:following_not_combined`). If no part gives an intent, the answer for the whole message stands.
 
 ## 4. Internal data structures
 
@@ -79,7 +81,7 @@ Output: a **bound session** = endpoint, token, granted scope, the person's zone 
 | `getDeviceState` | `deviceId` | current state and `defaultState` |
 | `invokeCommand` | `deviceId`, `command`, `value` | outcome, resulting state |
 
-Only `invokeCommand` changes the environment; the other three are observations. (The environment itself also changes devices when it applies the management policy, section 3; that is not an operation of the agent.) The `defaultState` returned by `listDevices` is not given to the grounders: the temporary grounding context carries only `deviceId`, `category`, `controlledProperty` and `supportedCommand`, so the GroundingRequest is unchanged. The zone estimate is NOT an environment action (it comes from Localization through R5/R6). The Environment Interface rejects any call outside this set (allow-list in code). The environment is the authority on scope: it refuses any call outside the granted scope whatever the agent has checked; the Scope Guard and the allow-list in the agent are defence in depth only.
+Only `invokeCommand` changes the environment; the other three are observations. (The environment itself also changes devices when it applies the management policy, section 3; that is not an operation of the agent.) The `defaultState` returned by `listDevices` is not given to the grounders: the environment's interpreter receives only `deviceId`, `category`, `controlledProperty` and `supportedCommand`, so the GroundingRequest is unchanged. Interpretation is a separate service of the environment (section 3), not a fifth operation. The zone estimate is NOT an environment action (it comes from Localization through R5/R6). The Environment Interface rejects any call outside this set (allow-list in code). The environment is the authority on scope: it refuses any call outside the granted scope whatever the agent has checked; the Scope Guard and the allow-list in the agent are defence in depth only.
 
 ## 6. State machine transitions (Table 5.3)
 
@@ -101,7 +103,8 @@ States: Perceive, Interpret, Plan, Act, Observe, Recover. Parameters: confidence
 | Recover | Fallback applied | - | Perceive |
 
 Notes:
-- Intent Grounding (R7/R8) happens inside **Interpret** (the intent is computed once per request and reused when re-planning).
+- Intent Grounding (R7/R8) happens inside **Interpret**, as a call to the environment's interpretation service (the intent is computed once per request and reused when re-planning). A message with several actions runs one cycle per understood part.
+- The replies to the user are fixed sentences in the language of the request (English or Italian); a refusal is explained in words ("I can't do that: there is no device for the temperature in hallway."), never as a reason code.
 - The LLM is used in two places only: Intent Grounding and the *Plan* state (in this prototype the Plan state is rule-based, because the grounded intent + catalogue + adjacency make planning deterministic; see DECISIONS.md).
 - Re-planning is triggered by an inspectable condition (`validFor` stale), not by the model's choice.
 - Each row has an id (T1..T12 in table order); the event record stores which row fired in `guard`.
@@ -135,7 +138,7 @@ Commitment and chaining (SHA-256, `||` = concatenation):
 ## 8. Reference scenario (Fig. "sequence")
 
 User: "I want to walk in the light" ->
-R2 request -> R5 zone query -> `{hallway, 0.87}` -> R7 (request, zone) -> R8 `{activate, light, path, following}` ->
+R2 request -> R5 zone query -> `{hallway, 0.87}` -> R7 (request, zone) to the environment's interpretation service -> R8 `{activate, light, path, following}` ->
 Plan: R12 `listDevices(hallway, light)`, `listDevices(corridor, light)`, `listDevices(kitchen, light)` -> hallway lamp now, corridor lamp on arrival -> R12 `invokeCommand(lamp_hallway, on)` -> result ->
 environment trigger on `corridor` (new neighbourhood pushed) -> position signal -> R13 -> R6 zone changed -> `corridor` -> `validFor` stale => Observe -> Plan (asks again around `corridor`); next step fires.
 Intent is **reused**, only the plan is revised. The catalogue queries do not add event records: the reference run still has eleven.

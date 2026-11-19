@@ -12,6 +12,8 @@ Each contract = one Pydantic model in `src/cpsagent/contracts/`, one exported JS
 
 ## C2 - Grounding request and result (R7 / R8)
 
+Interpretation is a service of the environment: the agent sends only the text, the language, its ZoneEstimate and the history (`EnvironmentBackend.interpret`), and the environment builds this request from its own catalogue and adjacency, then returns the result. The shapes are unchanged.
+
 R7 request:
 ```json
 {
