@@ -1,0 +1,1797 @@
+{
+ "about": "Behaviour of the reference scenario runs (keyword grounder) recorded before the environment was split into control logic and entity store. Regenerating it from the current code would defeat its purpose.",
+ "runs": {
+  "doorway_linger/0": {
+   "closedStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_hallway": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "finalStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_hallway": {
+     "brightness": 100,
+     "power": "on"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "forwardedSignals": 102,
+   "neighbourhoods": [
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 0,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 0,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 5,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 5,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 8,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 8,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 12,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 17,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 18,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 19,
+     "zone": "hallway"
+    }
+   ],
+   "path": "doorway_linger",
+   "records": [
+    {
+     "action": null,
+     "from": "Perceive",
+     "guard": "T1",
+     "intent": null,
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Interpret",
+     "zone": null
+    },
+    {
+     "action": null,
+     "from": "Interpret",
+     "guard": "T2",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.973,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.973,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_hallway",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.973,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T8",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "session_closed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:23Z",
+     "to": "Perceive",
+     "zone": {
+      "confidence": 0.973,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    }
+   ],
+   "replies": [
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 0
+    }
+   ],
+   "request": {
+    "text": "I want to walk in the light",
+    "tick": 0
+   },
+   "restorations": [
+    {
+     "deviceId": "lamp_hallway",
+     "reason": "subscription_closed",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 23,
+     "time": "2026-11-10T09:30:23+00:00",
+     "zoneId": "hallway"
+    }
+   ],
+   "seed": 0,
+   "zoneEvents": [
+    {
+     "previous": null,
+     "tick": 0,
+     "zone": "hallway"
+    }
+   ]
+  },
+  "doorway_linger/3": {
+   "closedStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_hallway": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "finalStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_hallway": {
+     "brightness": 100,
+     "power": "on"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "forwardedSignals": 99,
+   "neighbourhoods": [
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 0,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 0,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 5,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 5,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 9,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 10,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 12,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 13,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 15,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 16,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 19,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 19,
+     "zone": "hallway"
+    }
+   ],
+   "path": "doorway_linger",
+   "records": [
+    {
+     "action": null,
+     "from": "Perceive",
+     "guard": "T1",
+     "intent": null,
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Interpret",
+     "zone": null
+    },
+    {
+     "action": null,
+     "from": "Interpret",
+     "guard": "T2",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.994,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.994,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_hallway",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:00Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.994,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T8",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "session_closed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:23Z",
+     "to": "Perceive",
+     "zone": {
+      "confidence": 0.994,
+      "observedAt": "2026-11-10T09:30:00Z",
+      "previousZoneId": null,
+      "zoneId": "hallway"
+     }
+    }
+   ],
+   "replies": [
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 0
+    }
+   ],
+   "request": {
+    "text": "I want to walk in the light",
+    "tick": 0
+   },
+   "restorations": [
+    {
+     "deviceId": "lamp_hallway",
+     "reason": "subscription_closed",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 23,
+     "time": "2026-11-10T09:30:23+00:00",
+     "zoneId": "hallway"
+    }
+   ],
+   "seed": 3,
+   "zoneEvents": [
+    {
+     "previous": null,
+     "tick": 0,
+     "zone": "hallway"
+    }
+   ]
+  },
+  "walk_in_the_light/0": {
+   "closedStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_hallway": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "finalStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 100,
+     "power": "on"
+    },
+    "lamp_hallway": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 100,
+     "power": "on"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "forwardedSignals": 114,
+   "neighbourhoods": [
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 0,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway"
+     ],
+     "tick": 0,
+     "zone": "lobby"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 7,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 17,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "corridor"
+     ],
+     "tick": 25,
+     "zone": "office"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 26,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "corridor"
+     ],
+     "tick": 27,
+     "zone": "office"
+    }
+   ],
+   "path": "walk_in_the_light",
+   "records": [
+    {
+     "action": null,
+     "from": "Perceive",
+     "guard": "T1",
+     "intent": null,
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:07Z",
+     "to": "Interpret",
+     "zone": null
+    },
+    {
+     "action": null,
+     "from": "Interpret",
+     "guard": "T2",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:07Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.893,
+      "observedAt": "2026-11-10T09:30:07Z",
+      "previousZoneId": "lobby",
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:07Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.893,
+      "observedAt": "2026-11-10T09:30:07Z",
+      "previousZoneId": "lobby",
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_hallway",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:07Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.893,
+      "observedAt": "2026-11-10T09:30:07Z",
+      "previousZoneId": "lobby",
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T9",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "zone_changed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:18Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.981,
+      "observedAt": "2026-11-10T09:30:18Z",
+      "previousZoneId": "hallway",
+      "zoneId": "corridor"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_corridor",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:18Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.981,
+      "observedAt": "2026-11-10T09:30:18Z",
+      "previousZoneId": "hallway",
+      "zoneId": "corridor"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_corridor",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_corridor",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:18Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.981,
+      "observedAt": "2026-11-10T09:30:18Z",
+      "previousZoneId": "hallway",
+      "zoneId": "corridor"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T9",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "zone_changed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:28Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.957,
+      "observedAt": "2026-11-10T09:30:28Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_office",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:28Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.957,
+      "observedAt": "2026-11-10T09:30:28Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_office",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_office",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:28Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.957,
+      "observedAt": "2026-11-10T09:30:28Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T8",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "session_closed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:31Z",
+     "to": "Perceive",
+     "zone": {
+      "confidence": 0.957,
+      "observedAt": "2026-11-10T09:30:28Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    }
+   ],
+   "replies": [
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 7
+    },
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 18
+    },
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 28
+    }
+   ],
+   "request": {
+    "text": "I want to walk in the light",
+    "tick": 7
+   },
+   "restorations": [
+    {
+     "deviceId": "lamp_hallway",
+     "reason": "person_left_zone",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 29,
+     "time": "2026-11-10T09:30:29+00:00",
+     "zoneId": "hallway"
+    },
+    {
+     "deviceId": "lamp_corridor",
+     "reason": "subscription_closed",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 31,
+     "time": "2026-11-10T09:30:31+00:00",
+     "zoneId": "corridor"
+    },
+    {
+     "deviceId": "lamp_office",
+     "reason": "subscription_closed",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 31,
+     "time": "2026-11-10T09:30:31+00:00",
+     "zoneId": "office"
+    }
+   ],
+   "seed": 0,
+   "zoneEvents": [
+    {
+     "previous": null,
+     "tick": 0,
+     "zone": "lobby"
+    },
+    {
+     "previous": "lobby",
+     "tick": 7,
+     "zone": "hallway"
+    },
+    {
+     "previous": "hallway",
+     "tick": 18,
+     "zone": "corridor"
+    },
+    {
+     "previous": "corridor",
+     "tick": 28,
+     "zone": "office"
+    }
+   ]
+  },
+  "walk_in_the_light/3": {
+   "closedStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_hallway": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "finalStates": {
+    "blind_meeting_room": {
+     "position": 0
+    },
+    "blind_office": {
+     "position": 0
+    },
+    "lamp_corridor": {
+     "brightness": 100,
+     "power": "on"
+    },
+    "lamp_hallway": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_kitchen": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_lobby": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_meeting_room": {
+     "brightness": 0,
+     "power": "off"
+    },
+    "lamp_office": {
+     "brightness": 100,
+     "power": "on"
+    },
+    "thermostat_meeting_room": {
+     "setpoint": 21.0
+    },
+    "thermostat_office": {
+     "setpoint": 21.0
+    },
+    "thermostat_server_room": {
+     "setpoint": 21.0
+    }
+   },
+   "forwardedSignals": 113,
+   "neighbourhoods": [
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 0,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway"
+     ],
+     "tick": 0,
+     "zone": "lobby"
+    },
+    {
+     "armed": [
+      "lobby",
+      "corridor",
+      "kitchen"
+     ],
+     "tick": 7,
+     "zone": "hallway"
+    },
+    {
+     "armed": [
+      "hallway",
+      "office",
+      "meeting_room",
+      "storage"
+     ],
+     "tick": 16,
+     "zone": "corridor"
+    },
+    {
+     "armed": [
+      "corridor"
+     ],
+     "tick": 26,
+     "zone": "office"
+    }
+   ],
+   "path": "walk_in_the_light",
+   "records": [
+    {
+     "action": null,
+     "from": "Perceive",
+     "guard": "T1",
+     "intent": null,
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:08Z",
+     "to": "Interpret",
+     "zone": null
+    },
+    {
+     "action": null,
+     "from": "Interpret",
+     "guard": "T2",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:08Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.969,
+      "observedAt": "2026-11-10T09:30:08Z",
+      "previousZoneId": "lobby",
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:08Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.969,
+      "observedAt": "2026-11-10T09:30:08Z",
+      "previousZoneId": "lobby",
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_hallway",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_hallway",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:08Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.969,
+      "observedAt": "2026-11-10T09:30:08Z",
+      "previousZoneId": "lobby",
+      "zoneId": "hallway"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T9",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "zone_changed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:18Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.982,
+      "observedAt": "2026-11-10T09:30:18Z",
+      "previousZoneId": "hallway",
+      "zoneId": "corridor"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_corridor",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:18Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.982,
+      "observedAt": "2026-11-10T09:30:18Z",
+      "previousZoneId": "hallway",
+      "zoneId": "corridor"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_corridor",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_corridor",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:18Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.982,
+      "observedAt": "2026-11-10T09:30:18Z",
+      "previousZoneId": "hallway",
+      "zoneId": "corridor"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T9",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "zone_changed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:27Z",
+     "to": "Plan",
+     "zone": {
+      "confidence": 0.854,
+      "observedAt": "2026-11-10T09:30:27Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_office",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Plan",
+     "guard": "T4",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": null,
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:27Z",
+     "to": "Act",
+     "zone": {
+      "confidence": 0.854,
+      "observedAt": "2026-11-10T09:30:27Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    },
+    {
+     "action": {
+      "args": {
+       "command": "on",
+       "deviceId": "lamp_office",
+       "value": null
+      },
+      "operation": "invokeCommand"
+     },
+     "from": "Act",
+     "guard": "T6",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": {
+      "error": null,
+      "ok": true,
+      "operation": "invokeCommand",
+      "state": {
+       "brightness": 100,
+       "deviceId": "lamp_office",
+       "power": "on"
+      }
+     },
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:27Z",
+     "to": "Observe",
+     "zone": {
+      "confidence": 0.854,
+      "observedAt": "2026-11-10T09:30:27Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    },
+    {
+     "action": null,
+     "from": "Observe",
+     "guard": "T8",
+     "intent": {
+      "action": "activate",
+      "confidence": 0.7,
+      "controlledProperty": "light",
+      "persistence": "following",
+      "scope": "path",
+      "targetZoneId": null,
+      "value": null
+     },
+     "outcome": "session_closed",
+     "session": "sess-001",
+     "time": "2026-11-10T09:30:31Z",
+     "to": "Perceive",
+     "zone": {
+      "confidence": 0.854,
+      "observedAt": "2026-11-10T09:30:27Z",
+      "previousZoneId": "corridor",
+      "zoneId": "office"
+     }
+    }
+   ],
+   "replies": [
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 8
+    },
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 18
+    },
+    {
+     "message": "Done. I will keep doing it as you move.",
+     "status": "following",
+     "tick": 27
+    }
+   ],
+   "request": {
+    "text": "I want to walk in the light",
+    "tick": 8
+   },
+   "restorations": [
+    {
+     "deviceId": "lamp_hallway",
+     "reason": "person_left_zone",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 28,
+     "time": "2026-11-10T09:30:28+00:00",
+     "zoneId": "hallway"
+    },
+    {
+     "deviceId": "lamp_corridor",
+     "reason": "subscription_closed",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 31,
+     "time": "2026-11-10T09:30:31+00:00",
+     "zoneId": "corridor"
+    },
+    {
+     "deviceId": "lamp_office",
+     "reason": "subscription_closed",
+     "state": {
+      "brightness": 0,
+      "power": "off"
+     },
+     "tick": 31,
+     "time": "2026-11-10T09:30:31+00:00",
+     "zoneId": "office"
+    }
+   ],
+   "seed": 3,
+   "zoneEvents": [
+    {
+     "previous": null,
+     "tick": 0,
+     "zone": "lobby"
+    },
+    {
+     "previous": "lobby",
+     "tick": 8,
+     "zone": "hallway"
+    },
+    {
+     "previous": "hallway",
+     "tick": 18,
+     "zone": "corridor"
+    },
+    {
+     "previous": "corridor",
+     "tick": 27,
+     "zone": "office"
+    }
+   ]
+  }
+ }
+}
