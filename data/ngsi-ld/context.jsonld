@@ -1,0 +1,22 @@
+{
+  "@context": {
+    "cps": "https://example.org/cps-agent/ns#",
+    "Building": "cps:Building",
+    "Zone": "cps:Zone",
+    "Device": "cps:Device",
+    "PositioningSignal": "cps:PositioningSignal",
+    "Person": "cps:Person",
+    "category": "cps:category",
+    "managementPolicy": "cps:managementPolicy",
+    "adjacency": "cps:adjacency",
+    "refBuilding": "cps:refBuilding",
+    "controlledProperty": "cps:controlledProperty",
+    "supportedCommand": "cps:supportedCommand",
+    "state": "cps:state",
+    "defaultState": "cps:defaultState",
+    "refZone": "cps:refZone",
+    "signalType": "cps:signalType",
+    "rssi": "cps:rssi",
+    "refSubject": "cps:refSubject"
+  }
+}
