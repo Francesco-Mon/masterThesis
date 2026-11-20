@@ -5,6 +5,10 @@ of `cpsagent.demo_agent`; what is added here is a walk the user drives by hand (
 zone along the adjacency, play a scripted path tick by tick, or stay while time passes)
 and one `Turn` per request or movement, holding what the page shows. Each restoration
 the environment applies under the building's management policy is a turn of its own.
+
+The environment runs on the in-memory store or on Orion-LD (`store="ngsild"`, at `url`). On
+Orion-LD each session starts by seeding the broker, so that, as in memory, it starts from
+the scenario's state; the broker must be running (BrokerUnreachable otherwise).
 """
 
 from collections import deque
@@ -59,10 +63,39 @@ class Turn:
         ]  # fmt: skip
 
 
+STORES = {"memory": "in memory", "ngsild": "Orion-LD"}
+
+
+def make_environment(grounder, store: str = "memory", url: str | None = None):
+    """The environment with `grounder` as its interpreter, on the chosen entity store."""
+    if store == "memory":
+        return EmulatedEnvironment(interpreter=grounder)
+    if store != "ngsild":
+        raise ValueError(f"unknown store {store!r}")
+    from cpsagent.environment.ngsild import DEFAULT_URL, ngsild_environment
+    from cpsagent.environment.ngsild.seed import seed
+
+    url = url or DEFAULT_URL
+    seed(url)  # the session starts from the scenario's state, as in memory
+    return ngsild_environment(url, grounder)
+
+
 class AgentSession:
-    def __init__(self, grounder, *, start_zone: str = "hallway", seed: int = 0, log_dir="logs"):
+    def __init__(
+        self,
+        grounder,
+        *,
+        start_zone: str = "hallway",
+        seed: int = 0,
+        log_dir="logs",
+        store: str = "memory",
+        url: str | None = None,
+    ):
         # the chosen grounder is the environment's interpreter, not the agent's
-        self.env = EmulatedEnvironment(interpreter=grounder)
+        self.env = make_environment(grounder, store, url)
+        self.store_label = (
+            STORES[store] if store == "memory" else f"Orion-LD at {self.env.endpoint}"
+        )
         self.scenario = self.env.scenario
         self.session = EnvironmentBinding({self.env.endpoint: self.env}).bind(
             self.env.endpoint, AGENT, SUBJECT
@@ -174,6 +207,7 @@ class AgentSession:
             left = None if due is None else max(0, int((due - self.now).total_seconds()))
             pending.append({"device": p["deviceId"], "zone": p["zoneId"], "inSeconds": left})
         return {
+            "store": self.store_label,
             "interpreter": type(self.env.interpreter).__name__,
             "scope": sorted(self.session.scope_zones),
             "zone": n.zone_id,
@@ -198,6 +232,7 @@ class AgentSession:
         if self.session.bound:
             self.session.close()
             self._restoration_turns()
+            self.env.close()  # on Orion-LD: its subscription and notification receiver
         self.log.close()
 
     # --- internals --------------------------------------------------------------------------

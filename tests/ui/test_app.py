@@ -384,3 +384,19 @@ def test_a_message_with_two_actions_shows_its_parts(app):
     )
     chat = [m.value for m in app.markdown]
     assert any(m.startswith('Done: "turn on the light".') for m in chat)
+
+
+def test_orion_ld_store_that_does_not_answer_gives_a_clear_error(app):
+    """Nothing listens on port 9 of this machine: the page says so and stops."""
+    app.sidebar.radio[0].set_value("Orion-LD (NGSI-LD broker)").run()
+    url = next(t for t in app.sidebar.text_input if t.label == "Orion-LD URL")
+    url.set_value("http://127.0.0.1:9").run()
+    assert not app.exception
+    errors = " ".join(e.value for e in app.error)
+    assert "Orion-LD not available at http://127.0.0.1:9" in errors
+    assert "docker compose up -d" in errors
+
+
+def test_in_memory_store_is_the_default(app):
+    assert app.sidebar.radio[0].value == "In memory"
+    assert "Entity store: in memory" in [c.value for c in app.sidebar.caption]

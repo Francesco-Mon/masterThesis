@@ -3,7 +3,8 @@
 Run: streamlit run src/cpsagent/ui/app.py
 
 Sidebar: grounder of the environment's interpretation service (keyword, embedding, LLM
-with a model id), speech language, start zone, the environment's view (interpreter,
+with a model id), speech language, start zone, entity store of the environment (in memory,
+or Orion-LD at a URL: a clear error if no broker answers), the environment's view (interpreter,
 scope, person's zone, management policy and the
 restorations it has pending), movement (go to a zone, stay, or play a scripted path).
 Main: chat with text, microphone or audio-file input; each turn shows transcript, zone,
@@ -21,6 +22,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from cpsagent.contracts import ToolResult
+from cpsagent.environment.ngsild import BrokerError
 from cpsagent.ui.session import (
     AgentSession,
     Turn,
@@ -34,6 +36,7 @@ from cpsagent.ui.session import (
 # git-ignored log instead of results/llm_calls.jsonl (which the evaluation runner writes).
 UI_CALLS_LOG = Path("logs/ui_llm_calls.jsonl")
 LANGUAGES = {"Italiano": "it", "English": "en", "Automatic (not recommended)": None}
+STORE_CHOICES = {"In memory": "memory", "Orion-LD (NGSI-LD broker)": "ngsild"}
 
 
 @st.cache_resource
@@ -90,7 +93,13 @@ def sidebar() -> tuple[tuple, str | None]:
         st.sidebar.caption("Detection is unreliable on short commands (see the STT measurements).")
     zones = zone_ids()
     start = st.sidebar.selectbox("Start zone", zones, index=zones.index("hallway"))
-    config = (kind, model, start)
+    store = STORE_CHOICES[st.sidebar.radio("Entity store", list(STORE_CHOICES))]
+    url = ""
+    if store == "ngsild":
+        url = st.sidebar.text_input("Orion-LD URL", "http://localhost:1026")
+        st.sidebar.caption("A new session seeds the broker with the scenario "
+                           "(docker compose up -d first).")  # fmt: skip
+    config = (kind, model, start, store, url)
     changed = st.session_state.get("config") != config
     if st.sidebar.button("New session") or changed or "agent" not in st.session_state:
         new_session(config)  # also retried while a failed grounder left no session
@@ -98,7 +107,7 @@ def sidebar() -> tuple[tuple, str | None]:
 
 
 def new_session(config) -> None:
-    kind, model, start = config
+    kind, model, start, store, url = config
     if "agent" in st.session_state:
         st.session_state.agent.close()
     try:
@@ -108,7 +117,13 @@ def new_session(config) -> None:
         st.session_state.config = config
         st.error(f"Grounder not available: {type(e).__name__}: {e}")
         st.stop()
-    st.session_state.agent = AgentSession(grounder, start_zone=start)
+    try:
+        st.session_state.agent = AgentSession(grounder, start_zone=start, store=store, url=url)
+    except BrokerError as e:  # no broker at that URL, or not one that can be seeded
+        st.session_state.pop("agent", None)
+        st.session_state.config = config
+        st.error(f"Orion-LD not available at {url}: {e}")
+        st.stop()
     st.session_state.config = config
 
 
@@ -116,6 +131,7 @@ def environment(agent: AgentSession) -> None:
     """What the binding gave: the scope, and the person's zone as the environment follows it."""
     view = agent.environment_view()
     st.sidebar.header("Environment")
+    st.sidebar.caption(f"Entity store: {view['store']}")
     st.sidebar.caption(f"Interpretation service: {view['interpreter']}")
     st.sidebar.caption(f"Granted scope: {', '.join(view['scope'])}")
     st.sidebar.caption(f"Person's zone (environment): {view['zone'] or 'not heard yet'}")
@@ -275,7 +291,7 @@ def panels(agent: AgentSession) -> None:
 def main() -> None:
     st.set_page_config(page_title="Person Agent", layout="wide")
     st.title("Person Agent")
-    (kind, _, _), language = sidebar()
+    (kind, *_), language = sidebar()
     agent: AgentSession = st.session_state.agent
     environment(agent)  # drawn before movement: a walk reruns the page, so it stays current
     movement(agent)
