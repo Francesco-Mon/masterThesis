@@ -20,7 +20,10 @@ subscriber (the environment's control logic), on the caller's thread. A run on O
 therefore keeps the order of a run in memory: one reading is fully handled before the next
 is published. A notification of a reading published by someone else, arriving meanwhile,
 is handed over too, in arrival order. Orion-LD does not notify an update that changes
-nothing; each reading of the mobility simulator has its own `observedAt`, so none is lost.
+nothing; each reading of the mobility simulator has its own `observedAt`. Now and then
+Orion-LD does not send the notification of an update at all: after `recover_after_s` the
+store reads the entity back and, if the broker holds the reading, hands it over itself and
+counts it in `recovered` (docs/NGSI_LD.md, "Lost notifications").
 
 Order. An NGSI-LD listing has no defined order (Orion-LD lists by id). The store lists
 zones and devices in the order of the scenario file it is given, as the in-memory store
@@ -61,7 +64,8 @@ SUBSCRIPTION_NAME = "cps-agent positioning"
 # Signal updates go on a connection of their own, closed after the answer: when the update
 # came on a kept-alive connection, Orion-LD 1.13.0 now and then did not send its
 # notification (15 of 60 runs lost one). With this and `-subCacheFlushIval 0`
-# (docker-compose.yml) no notification was lost in 100 runs, 15,400 readings (docs/NGSI_LD.md).
+# (docker-compose.yml) no notification was lost in 100 runs of the simulator alone (15,400
+# readings); full scenario runs still lost one in about 2 runs out of 100 (docs/NGSI_LD.md).
 CLOSE = {"Connection": "close"}
 
 
@@ -117,6 +121,7 @@ class NgsiLdStore:
         listen_port: int = 0,
         notify_host: str = "host.docker.internal",
         timeout_s: float = 5.0,
+        recover_after_s: float = 0.5,
         context_file=CONTEXT_FILE,
     ) -> None:
         """`url`: the broker. `listen_host`/`listen_port`: where the notification receiver
@@ -125,6 +130,7 @@ class NgsiLdStore:
         self.url = url.rstrip("/")
         self.endpoint = self.url
         self._timeout = timeout_s
+        self._recover_after = recover_after_s
         self._rank = {}
         if scenario is not None:
             names = [urn("Zone", z.zone_id) for z in scenario.zones]
@@ -152,10 +158,15 @@ class NgsiLdStore:
         self._receiver: NotificationReceiver | None = None
         self._subscription: str | None = None
         self._created: set[str] = set()  # signal entities this store has created
+        # Readings handed over without their notification (see "Lost notifications"), and
+        # the keys of those whose late notification must be dropped.
+        self.recovered = 0
+        self._recovered: set[tuple] = set()
         # Optional probe for the measurement harness: called once per published reading
-        # with (signal, sent, answered, notified), perf_counter_ns instants of the update
-        # request, of the broker's answer and of the notification's arrival.
-        self.on_publish: Callable[[PositioningSignal, int, int, int], None] | None = None
+        # with (signal, sent, answered, notified, recovered): perf_counter_ns instants of
+        # the update request, of the broker's answer and of the notification's arrival (of
+        # the read-back for a recovered reading).
+        self.on_publish: Callable[[PositioningSignal, int, int, int, bool], None] | None = None
 
     # --- REST helpers -------------------------------------------------------------------
 
@@ -232,9 +243,9 @@ class NgsiLdStore:
         answered = time.perf_counter_ns()
         if not self._sinks:
             return  # nobody subscribed: no notification to wait for
-        notified = self._deliver_until(signal)
+        notified, recovered = self._deliver_until(signal)
         if self.on_publish is not None:
-            self.on_publish(signal, sent, answered, notified)
+            self.on_publish(signal, sent, answered, notified, recovered)
 
     def _create_signal(self, entity_id: str, signal: PositioningSignal) -> None:
         """First reading of this subject and beacon for this store. An entity left by an
@@ -248,29 +259,48 @@ class NgsiLdStore:
         self._check(response, 201)
         self._created.add(entity_id)
 
-    def _deliver_until(self, signal: PositioningSignal) -> int:
+    def _deliver_until(self, signal: PositioningSignal) -> tuple[int, bool]:
         """Hand every notified signal to the subscribers until the notification of
-        `signal` arrives; return its arrival instant."""
+        `signal` arrives; return its arrival instant and False. If it has not come within
+        `recover_after_s`, read the entity back: if the broker holds this reading, hand it
+        over now, return that instant and True (recovered), and drop the notification if
+        it comes later."""
         assert self._receiver is not None
-        deadline = time.monotonic() + self._timeout
+        recover_at = time.monotonic() + self._recover_after
         while True:
             try:
                 arrived, entity = self._receiver.entities.get(
-                    timeout=max(0.0, deadline - time.monotonic())
+                    timeout=max(0.0, recover_at - time.monotonic())
                 )
             except Empty:
-                raise BrokerError(
-                    f"no notification for {signal.ref_subject}/{signal.ref_zone} within "
-                    f"{self._timeout:g} s: is the receiver reachable from the broker at "
-                    f"{self._notify_host}?"
-                ) from None
+                return self._recover(signal), True
             if "rssi" not in entity:
                 continue  # a deletion (`deletedAt`): the entity of an earlier run replaced
             notified = signal_from(entity)
+            key = _reading_key(notified)
+            if key in self._recovered:
+                self._recovered.discard(key)  # came late: already handed over
+                continue
             for sink in list(self._sinks):
                 sink(notified)
             if _same_reading(notified, signal):
-                return arrived
+                return arrived, False
+
+    def _recover(self, signal: PositioningSignal) -> int:
+        entity_id = signal_id(signal.ref_subject, signal.ref_zone)
+        response = self._request("GET", f"/entities/{entity_id}")
+        held = signal_from(response.json()) if response.status_code == 200 else None
+        if held is None or not _same_reading(held, signal):
+            raise BrokerError(
+                f"no notification for {signal.ref_subject}/{signal.ref_zone} within "
+                f"{self._recover_after:g} s and the broker does not hold the reading: is the "
+                f"receiver reachable from the broker at {self._notify_host}?"
+            )
+        self.recovered += 1
+        self._recovered.add(_reading_key(held))
+        for sink in list(self._sinks):
+            sink(held)
+        return time.perf_counter_ns()
 
     def close(self) -> None:
         if self._subscription is not None:
@@ -284,6 +314,10 @@ class NgsiLdStore:
             self._receiver = None
         self._sinks.clear()
         self._http.close()
+
+
+def _reading_key(s: PositioningSignal) -> tuple:
+    return (s.ref_subject, s.ref_zone, s.rssi, s.observed_at)
 
 
 def _same_reading(a: PositioningSignal, b: PositioningSignal) -> bool:

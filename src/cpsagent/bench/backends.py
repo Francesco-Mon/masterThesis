@@ -306,9 +306,10 @@ def scenario_rows(env, run: ScenarioRun, publishes: dict[tuple, tuple]) -> list[
         seen.add(s["zone"])
         broker = publishes.get(s["key"])
         if broker is not None:  # Orion-LD: update answered, notification arrived
-            sent, answered, notified = broker
+            sent, answered, notified, recovered = broker
             row["update_ns"] = answered - sent
             row["notification_ns"] = notified - answered
+            row["recovered"] = recovered  # no notification: read back after a wait
         rows.append(row)
 
     # triggers of the environment, from the publication of the signal that fired them
@@ -499,6 +500,8 @@ def summary(rows: list[dict[str, Any]]) -> list[tuple[str, int, float, float]]:
             if r["operation"] == "interpret":
                 add("operation interpret: interpreter", r["interpreter_ns"])
                 add("operation interpret: environment overhead", r["overhead_ns"])
+        elif m == "signal" and r.get("recovered"):
+            add("signal recovered without notification", r["publish_ns"])
         elif m == "signal" and r["forwarded"]:
             add("signal delivery (forwarded)", r["delivery_ns"])
         elif m == "signal":
@@ -565,6 +568,7 @@ def main(argv: list[str] | None = None) -> Path:
                     env.close()
             print(f"repeat {i + 1}/{args.warmup + args.repeats}{' (warm-up)' if warmup else ''}")
     meta["rows"] = len(rows)
+    meta["recoveredSignals"] = sum(1 for r in rows if r.get("recovered"))
     (out / "metadata.json").write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
 
     print(f"\n{out}: {len(rows)} rows. Median and 95th percentile, ms, warm-ups excluded:")

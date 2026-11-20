@@ -144,3 +144,22 @@ def test_policy_restores_in_the_broker_when_the_subscription_closes(orion):
     session.close()
     assert [(r.device_id, r.reason) for r in restored] == [("lamp_hallway", "subscription_closed")]
     assert env.store.device("lamp_hallway").state == {"power": "off", "brightness": 0}
+
+
+def test_a_lost_notification_is_recovered_without_changing_the_run(orion):
+    """Drop the 40th notification on its way to the store: the store reads the reading
+    back from the broker, the run is the same, and the late copy is never handed twice."""
+    env = orion()
+    store = env.store
+    queue, put, seen = store._receiver.entities, store._receiver.entities.put, [0]
+
+    def lossy(item, *args, **kwargs):
+        seen[0] += 1
+        if seen[0] != 40:
+            put(item, *args, **kwargs)
+
+    queue.put = lossy
+    run = run_scenario(env, "walk_in_the_light", seed=0)
+    ref = run_scenario(memory(), "walk_in_the_light", seed=0)
+    assert store.recovered == 1
+    assert plain(run.behaviour()) == plain(ref.behaviour())
