@@ -19,7 +19,7 @@ Components: User Interface (F1), Localization (F2), Intent Grounding (F3), Orche
 | R11 | Binding -> Env. Interface | configuration | object injection |
 | R12 | Engine <-> Env. Interface | tool call and result (the 4 operations) | function call |
 | R13 | Env. Interface -> Localization | raw positioning signal | callback |
-| R14/R15 | Binding / Env. Interface <-> Environment | NGSI-LD in the thesis | `EnvironmentBackend` Protocol, implemented by the **emulator in-process** (same entity names) |
+| R14/R15 | Binding / Env. Interface <-> Environment | NGSI-LD in the thesis | `EnvironmentBackend` Protocol, implemented by the environment's control logic in process over an entity store: in memory, or Orion-LD over NGSI-LD (`docs/NGSI_LD.md`) |
 | R16 | Engine -> Event Log | event record, asynchronous, never blocks the loop | in-process queue |
 | R17 | Event Log <-> Ledger | anchoring | **not implemented** (optional) |
 

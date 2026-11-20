@@ -29,6 +29,12 @@ lamp left behind back off, 12 s after the user has left its zone.
 - **Emulated environment** (`Building`, `Zone`, `Device`, `PositioningSignal`, as in thesis Ch. 5)
   behind a small `EnvironmentBackend` Protocol, and a mobility simulator along scripted paths;
   zone-level localization with hysteresis.
+- **Two entity stores, one control logic**: the environment's control logic (scope, triggers,
+  interpretation service, policy, command semantics) reads and writes the entities through an
+  `EntityStore`: in memory, or a real NGSI-LD Context Broker (Orion-LD 1.13.0 with MongoDB, in
+  Docker) over its REST API, with positioning signals delivered as NGSI-LD notifications. Runs on
+  the two stores are tested to behave identically, and a harness measures both
+  (`docs/NGSI_LD.md`).
 - **Environmental policy** of the building manager: each `Device` has a `defaultState` and the
   `Building` a `managementPolicy` (`restoreOnExit`, `restoreAfterSeconds`). The environment, not
   the agent, restores what a guest's agent changed in a zone once the guest has been out of it
@@ -66,10 +72,12 @@ docs/
   CONTRACTS.md            the four contracts between components, with JSON examples
   EVAL_POLICY.md          how the evaluation set is labelled and scored
   DECISIONS.md            design decisions: what, why, alternatives dropped
+  NGSI_LD.md              the environment on Orion-LD: differences, running, measurement harness
   schemas/                JSON Schemas exported from the contracts
 src/cpsagent/
   contracts/              Pydantic models of the contracts (single source of truth)
-  environment/            emulated building, devices, commands, mobility simulator
+  environment/            building, devices, commands, mobility simulator; control logic
+                          over an entity store (in memory, or Orion-LD in ngsild/)
   localization/           zone estimator
   binding/                Environment Binding: locate, authenticate, follow, subscribe
   interface/              Environment Interface: the allowed operations and allow-list
@@ -78,9 +86,10 @@ src/cpsagent/
   eventlog/               record builder, commitments, hash chain, store, verifier
   ui/                     Streamlit app, speech-to-text wrapper, clip recorder
   eval/                   dataset loader, runner, metrics, reports, STT measurement
+  bench/                  scenario runs and the harness comparing the two entity stores
   demo.py, demo_agent.py  command-line demos
 tests/                    offline test suite (mirrors src/)
-data/                     scenario.yaml, evaluation set, STT sentence sets
+data/                     scenario.yaml, NGSI-LD @context, evaluation set, STT sentence sets
 results/                  raw outputs of the runs (JSONL) and the tables derived from them
 ```
 
@@ -97,7 +106,8 @@ cp .env.example .env               # then set OPENROUTER_API_KEY (needed only fo
 
 The core (`pip install -e .`) includes the OpenRouter client and runs the demos and the
 evaluation runner. The extras are: `dev` (pytest, ruff), `embeddings` (sentence-transformers),
-`ui` (Streamlit, faster-whisper, audio I/O). `pip install -e ".[dev]"` is enough for the offline
+`ui` (Streamlit, faster-whisper, audio I/O), `ngsild` (the pinned HTTP client of the Orion-LD
+store; the broker itself runs in Docker, `docker compose up -d`). `pip install -e ".[dev]"` is enough for the offline
 test suite: the tests that need an extra are skipped without it. Installing the extras downloads
 packages only, not models.
 
@@ -115,6 +125,9 @@ Run all commands from the repository root with the virtual environment active.
 | Tests with the real LLM (key + network) | `pytest -m live` |
 | Tests with the real embedding model | `pytest -m embeddings` |
 | Tests with the real speech-to-text model | `pytest -m stt` |
+| Start Orion-LD and MongoDB (Docker), then load the scenario | `docker compose up -d` then `python -m cpsagent.environment.ngsild.seed` |
+| Tests on Orion-LD (broker running) | `pytest -m ngsild` |
+| Measurement harness, in memory or on Orion-LD | `python -m cpsagent.bench.backends --store memory\|ngsild --repeats 30` |
 | Lint | `ruff check .` |
 | Demo: binding, triggers, localization, interface | `python -m cpsagent.demo` (or `--path doorway_linger --seed 3`) |
 | Demo: engine + event log ("I want to walk in the light") | `python -m cpsagent.demo_agent` (log in `logs/demo_agent.jsonl`) |
@@ -127,8 +140,8 @@ Run all commands from the repository root with the virtual environment active.
 | Re-export the JSON Schemas | `python -m cpsagent.contracts.export_schemas` |
 | **Streamlit UI** | `streamlit run src/cpsagent/ui/app.py` |
 
-By default `pytest` excludes the `live`, `embeddings` and `stt` markers, so the suite runs
-offline using the fake grounder and stub transports.
+By default `pytest` excludes the `live`, `embeddings`, `stt` and `ngsild` markers, so the suite
+runs offline, without Docker, using the fake grounder and stub transports.
 
 ### Streamlit UI
 
@@ -136,8 +149,9 @@ offline using the fake grounder and stub transports.
 
 - **Sidebar, Agent**: grounder of the environment's interpretation service (keyword, embedding,
   or LLM with an OpenRouter model id), speech language (typed text is sent in this language
-  too), start zone, "New session".
-- **Sidebar, Environment**: the interpreter it uses, the granted scope, the person's zone and armed neighbours as the
+  too), start zone, entity store (in memory, or Orion-LD at a URL: each new session seeds the
+  broker; if no broker answers the page says so and starts no session), "New session".
+- **Sidebar, Environment**: the entity store, the interpreter it uses, the granted scope, the person's zone and armed neighbours as the
   environment follows them, the management policy and the restorations it has pending.
 - **Sidebar, Movement**: walk to a zone along the adjacency, stay where you are for some seconds,
   or play a scripted path tick by tick. The true position is shown; the agent only sees the
