@@ -135,10 +135,14 @@ def run_scenario(
     session.on_neighbourhood(on_neighbourhood)
     session.on_restoration(on_restoration)
     localization.subscribe(
-        lambda e: run.zone_events.append({
-            "tick": tick_index[0], "zone": e.estimate.zone_id,
-            "previous": e.estimate.previous_zone_id, "wall_ns": now_ns(),
-        })  # fmt: skip
+        lambda e: run.zone_events.append(
+            {
+                "tick": tick_index[0],
+                "zone": e.estimate.zone_id,
+                "previous": e.estimate.previous_zone_id,
+                "wall_ns": now_ns(),
+            }
+        )  # fmt: skip
     )
 
     clock = [None]

@@ -1,4 +1,5 @@
-"""Emulated Intelligent Environment: entities of thesis Ch.5, scenario loader, emulator."""
+"""Intelligent Environment: entities of thesis Ch.5, scenario loader, control logic and
+entity stores (in memory, or Orion-LD in `ngsild`)."""
 
 from .backend import (
     AuthenticationError,
@@ -12,6 +13,7 @@ from .backend import (
     UnknownEntityError,
 )
 from .commands import CATEGORY_COMMANDS, InvalidValue
+from .control import EnvironmentControl
 from .emulator import EmulatedEnvironment
 from .model import (
     DEFAULT_SCENARIO,
@@ -26,6 +28,7 @@ from .model import (
     Zone,
     load_scenario,
 )
+from .store import EntityStore, InMemoryStore
 
 __all__ = [
     "CATEGORY_COMMANDS",
@@ -38,8 +41,11 @@ __all__ = [
     "DoorwaySegment",
     "DwellSegment",
     "EmulatedEnvironment",
+    "EntityStore",
+    "EnvironmentControl",
     "EnvironmentBackend",
     "InvalidValue",
+    "InMemoryStore",
     "ManagementPolicy",
     "Neighbourhood",
     "OutOfScopeError",

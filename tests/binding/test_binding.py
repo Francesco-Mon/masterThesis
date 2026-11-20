@@ -199,15 +199,15 @@ def test_only_frozen_eval_reads_the_session_compatibility_properties():
     assert offenders == []
 
 
-def test_describe_scope_is_internal_to_the_emulator():
-    assert _modules_using({"describe_scope", "_describe_scope"}) == ["environment/emulator.py"]
+def test_describe_scope_is_internal_to_the_environment_control():
+    assert _modules_using({"describe_scope", "_describe_scope"}) == ["environment/control.py"]
 
 
 def test_only_the_environment_and_the_eval_properties_build_the_grounding_context():
     names = {"interpreter_context", "grounding_request", "grounding_context", "GroundingContext"}
     assert _modules_using(names) == [
         "binding/binding.py",  # the evaluation-only properties of BoundSession
-        "environment/emulator.py",  # the interpretation service (defined in interpreter.py)
+        "environment/control.py",  # the interpretation service (defined in interpreter.py)
     ]
 
 

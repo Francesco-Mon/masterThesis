@@ -1,8 +1,9 @@
 """The environment side of the boundary: what Environment Binding, Environment Interface
 and the engine's Interpret state use from an Intelligent Environment.
 
-`EmulatedEnvironment` implements it in process; an NGSI-LD adapter (Orion-LD) can implement
-the same Protocol later. The environment is the authority: it fixes the scope of a token,
+`EnvironmentControl` implements it over an entity store: `EmulatedEnvironment` is that
+control logic over the in-memory store, and the same logic runs on Orion-LD with
+`NgsiLdStore`. The environment is the authority: it fixes the scope of a token,
 refuses any call outside it, and decides what it lists. The agent's own checks (allow-list,
 Scope Guard) are defence in depth only.
 """
