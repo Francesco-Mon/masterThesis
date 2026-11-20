@@ -1,0 +1,33 @@
+# NGSI-LD Context Broker for the environment's NgsiLdStore (docs/NGSI_LD.md).
+# Versions pinned: Orion-LD 1.13.0 is the release the Orion-LD README pins
+# (quay.io/fiware/orion-ld:1.13.0); MongoDB 4.4 is the version of the official Orion-LD
+# compose examples (docker/docker-compose.yml, doc/manuals-ld/installation-guide-docker.md),
+# pinned here to its last patch release. Orion-LD requires MongoDB 4.2 or higher.
+#
+#   docker compose up -d        start (Orion-LD on http://localhost:1026)
+#   docker compose down -v      stop and delete the data
+services:
+  mongo:
+    image: mongo:4.4.29
+    command: --nojournal
+    volumes:
+      - mongo-data:/data/db
+
+  orion:
+    image: quay.io/fiware/orion-ld:1.13.0
+    hostname: orion  # names the URL of the @context the broker hosts (docs/NGSI_LD.md)
+    depends_on:
+      - mongo
+    ports:
+      - "1026:1026"
+    # -subCacheFlushIval 0: no periodic flush of the subscription counters. With the
+    # default (10 s) a notification was now and then not sent (docs/NGSI_LD.md).
+    command: -dbhost mongo -logLevel WARN -subCacheFlushIval 0
+    # The broker sends notifications to a receiver on the host (NgsiLdStore).
+    # Docker Desktop (macOS, Windows) defines host.docker.internal itself; this line
+    # defines it on Linux too.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  mongo-data:
