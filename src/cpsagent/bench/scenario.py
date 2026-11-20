@@ -53,6 +53,7 @@ class ScenarioRun:
     final_states: dict[str, dict[str, Any]] = field(default_factory=dict)
     closed_states: dict[str, dict[str, Any]] = field(default_factory=dict)
     started_ns: int = 0
+    closing_ns: int = 0  # engine and subscription about to be closed
     ended_ns: int = 0
 
     @property
@@ -172,8 +173,8 @@ def run_scenario(
         row = {"tick": tick.index, "time": tick.time.isoformat(), "trueZone": tick.true_zone,
                "start_ns": now_ns()}  # fmt: skip
         for signal in tick.signals:
-            entry = {"tick": tick.index, "zone": signal.ref_zone, "published_ns": now_ns(),
-                     "returned_ns": None, "arrived_ns": None}  # fmt: skip
+            entry = {"tick": tick.index, "zone": signal.ref_zone, "key": _signal_key(signal),
+                     "published_ns": now_ns(), "returned_ns": None, "arrived_ns": None}  # fmt: skip
             published[_signal_key(signal)] = entry
             run.signals.append(entry)
             env.publish(signal)  # -> environment -> subscription -> Localization -> engine
@@ -188,6 +189,7 @@ def run_scenario(
             asked = True
 
     run.final_states = states()
+    run.closing_ns = now_ns()
     engine.close()
     session.close()
     run.closed_states = states()
