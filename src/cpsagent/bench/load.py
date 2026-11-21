@@ -1020,6 +1020,10 @@ def calibrate(pairs: int = 200_000) -> float:
 def make_interpreter(args):
     from cpsagent.eval.run import make_grounder
 
+    if args.interpreter == "llm":
+        from cpsagent.grounding.prompts import PROMPT_VERSION
+
+        args.prompt = args.prompt or PROMPT_VERSION
     ns = argparse.Namespace(
         grounder=args.interpreter, model=args.model, provider=args.provider,
         temperature=0.0, prompt=args.prompt, no_cache=args.no_cache, max_cost=args.max_cost,
