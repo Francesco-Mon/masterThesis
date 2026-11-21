@@ -1,0 +1,39 @@
+{
+ "runId": "ngsild-20261121T150631Z",
+ "date": "2026-11-21T15:06:31+00:00",
+ "store": "ngsild",
+ "repeats": 30,
+ "warmup": 2,
+ "seed": 0,
+ "calls": 10,
+ "paths": [
+  "walk_in_the_light",
+  "doorway_linger"
+ ],
+ "interpreter": "keyword",
+ "python": "3.12.16",
+ "httpx": "0.28.1",
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "memoryBytes": "8589934592"
+ },
+ "commit": "1af12fcc1007edf8f6a3291819a8cbe32277c2f8",
+ "dirty": true,
+ "clock": "time.perf_counter_ns",
+ "ticksPaced": false,
+ "broker": {
+  "url": "http://localhost:1026",
+  "orionLd": "1.13.0",
+  "mongodbServer": "4.4.29",
+  "mongoc": "2.2.2",
+  "coreContext": "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld"
+ },
+ "rows": 16672,
+ "recoveredSignals": 0
+}

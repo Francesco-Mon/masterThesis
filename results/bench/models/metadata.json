@@ -1,0 +1,649 @@
+{
+ "command": "python -m cpsagent.bench.models --repeats 3",
+ "date": "2026-11-21T15:08:30+00:00",
+ "git": {
+  "commit": "93013ba753fc825f7c32e4c0edb675d8d7f62326",
+  "branch": "evaluation",
+  "dirty": true
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {
+  "HF_HUB_OFFLINE": "1"
+ },
+ "repeats": 3,
+ "embedding": {
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "torchThreads": 4,
+  "rssAfterImportsBytes": 44597248,
+  "rssAfterLoadBytes": 844988416,
+  "rssAddedByModelBytes": 800391168,
+  "peakRssBytes": 935165952,
+  "load": {
+   "wallS": 5.795756208986859,
+   "cpuS": 4.316907
+  },
+  "encodeTexts": 82,
+  "encodeCpuMs": {
+   "n": 246,
+   "mean": 10.768414634146358,
+   "p50": 10.34899999999972,
+   "p95": 13.486999999999583,
+   "max": 18.809999999999327
+  },
+  "encodeWallMs": {
+   "n": 246,
+   "mean": 10.229361422605551,
+   "p50": 9.739749992149882,
+   "p95": 12.30920800298918,
+   "max": 18.72824999736622
+  }
+ },
+ "stt": {
+  "model": "Systran/faster-whisper-small",
+  "revision": "536b0662742c02347bc0e980a01041f333bce120",
+  "computeType": "int8",
+  "decoding": {
+   "beam_size": 5,
+   "temperature": 0.0,
+   "vad_filter": false
+  },
+  "clips": 20,
+  "rssAfterImportsBytes": 32571392,
+  "rssAfterLoadBytes": 851181568,
+  "rssAddedByModelBytes": 818610176,
+  "peakRssBytes": 937246720,
+  "load": {
+   "wallS": 1.8984842909994768,
+   "cpuS": 1.037967
+  },
+  "cpuMsPerClip": {
+   "n": 60,
+   "mean": 3736.256450000001,
+   "p50": 3694.0810000000006,
+   "p95": 4072.4089999999933,
+   "max": 4184.105000000017
+  },
+  "wallMsPerClip": {
+   "n": 60,
+   "mean": 1035.9234637993115,
+   "p50": 1029.7673329914687,
+   "p95": 1122.7602499857312,
+   "max": 1183.1163340102648
+  },
+  "cpuPerAudioSecond": {
+   "n": 60,
+   "mean": 1.3997208366955145,
+   "p50": 1.4273353678203737,
+   "p95": 1.6771779121321972,
+   "max": 1.7162796116504815
+  },
+  "rows": [
+   {
+    "repeat": 0,
+    "id": "rec-01",
+    "language": "en",
+    "cpuMs": 3575.011000000001,
+    "wallMs": 867.7612079918617,
+    "audioMs": 2247.1875,
+    "transcribeMs": 867.6906250038883
+   },
+   {
+    "repeat": 0,
+    "id": "rec-02",
+    "language": "en",
+    "cpuMs": 3654.1420000000003,
+    "wallMs": 1005.5786670127418,
+    "audioMs": 4138.125,
+    "transcribeMs": 1005.5132090055849
+   },
+   {
+    "repeat": 0,
+    "id": "rec-03",
+    "language": "en",
+    "cpuMs": 3694.0810000000006,
+    "wallMs": 1060.5643750022864,
+    "audioMs": 2942.8125,
+    "transcribeMs": 1060.4646660067374
+   },
+   {
+    "repeat": 0,
+    "id": "rec-04",
+    "language": "en",
+    "cpuMs": 3876.2160000000013,
+    "wallMs": 1070.9519580123015,
+    "audioMs": 3508.125,
+    "transcribeMs": 1070.8496250008466
+   },
+   {
+    "repeat": 0,
+    "id": "rec-05",
+    "language": "en",
+    "cpuMs": 3740.6429999999987,
+    "wallMs": 1046.2973329995293,
+    "audioMs": 2355.0,
+    "transcribeMs": 1046.2365000130376
+   },
+   {
+    "repeat": 0,
+    "id": "rec-06",
+    "language": "en",
+    "cpuMs": 3657.927999999998,
+    "wallMs": 1041.8554579955526,
+    "audioMs": 2827.5,
+    "transcribeMs": 1041.7830000078538
+   },
+   {
+    "repeat": 0,
+    "id": "rec-07",
+    "language": "en",
+    "cpuMs": 3593.423999999999,
+    "wallMs": 993.1187909969594,
+    "audioMs": 2772.1875,
+    "transcribeMs": 993.0591250013094
+   },
+   {
+    "repeat": 0,
+    "id": "rec-08",
+    "language": "en",
+    "cpuMs": 3616.210999999996,
+    "wallMs": 995.8057920011925,
+    "audioMs": 2840.625,
+    "transcribeMs": 995.7437079865485
+   },
+   {
+    "repeat": 0,
+    "id": "rec-09",
+    "language": "en",
+    "cpuMs": 3251.3070000000043,
+    "wallMs": 1022.5581249978859,
+    "audioMs": 2700.9375,
+    "transcribeMs": 1022.4953750002896
+   },
+   {
+    "repeat": 0,
+    "id": "rec-10",
+    "language": "en",
+    "cpuMs": 3462.1220000000008,
+    "wallMs": 1012.2353329934413,
+    "audioMs": 2519.0625,
+    "transcribeMs": 1012.1688340004766
+   },
+   {
+    "repeat": 0,
+    "id": "rec-11",
+    "language": "it",
+    "cpuMs": 3672.266999999998,
+    "wallMs": 1072.2204579942627,
+    "audioMs": 2325.9375,
+    "transcribeMs": 1072.1597079973435
+   },
+   {
+    "repeat": 0,
+    "id": "rec-12",
+    "language": "it",
+    "cpuMs": 3957.263999999995,
+    "wallMs": 1101.110832998529,
+    "audioMs": 2610.9375,
+    "transcribeMs": 1101.0237919981591
+   },
+   {
+    "repeat": 0,
+    "id": "rec-13",
+    "language": "it",
+    "cpuMs": 3852.288999999999,
+    "wallMs": 1128.9929579943419,
+    "audioMs": 2409.375,
+    "transcribeMs": 1128.9106660115067
+   },
+   {
+    "repeat": 0,
+    "id": "rec-14",
+    "language": "it",
+    "cpuMs": 3606.7470000000058,
+    "wallMs": 1014.676207996672,
+    "audioMs": 3404.0625,
+    "transcribeMs": 1014.6033750061179
+   },
+   {
+    "repeat": 0,
+    "id": "rec-15",
+    "language": "it",
+    "cpuMs": 3613.474000000004,
+    "wallMs": 1016.1837079940597,
+    "audioMs": 2310.9375,
+    "transcribeMs": 1016.1147499893559
+   },
+   {
+    "repeat": 0,
+    "id": "rec-16",
+    "language": "it",
+    "cpuMs": 3689.828999999996,
+    "wallMs": 1029.7673329914687,
+    "audioMs": 2699.0625,
+    "transcribeMs": 1029.7029999928782
+   },
+   {
+    "repeat": 0,
+    "id": "rec-17",
+    "language": "it",
+    "cpuMs": 3993.797999999998,
+    "wallMs": 1083.1454169965582,
+    "audioMs": 2754.375,
+    "transcribeMs": 1083.0576250009472
+   },
+   {
+    "repeat": 0,
+    "id": "rec-18",
+    "language": "it",
+    "cpuMs": 3737.4480000000003,
+    "wallMs": 1027.5025000009919,
+    "audioMs": 2277.1875,
+    "transcribeMs": 1027.4424579984043
+   },
+   {
+    "repeat": 0,
+    "id": "rec-19",
+    "language": "it",
+    "cpuMs": 4061.6389999999997,
+    "wallMs": 1098.358957999153,
+    "audioMs": 2741.25,
+    "transcribeMs": 1098.290541995084
+   },
+   {
+    "repeat": 0,
+    "id": "rec-20",
+    "language": "it",
+    "cpuMs": 3876.991999999987,
+    "wallMs": 1064.3163330096286,
+    "audioMs": 2317.5,
+    "transcribeMs": 1064.2484999989392
+   },
+   {
+    "repeat": 1,
+    "id": "rec-01",
+    "language": "en",
+    "cpuMs": 3459.8330000000033,
+    "wallMs": 980.9937910031294,
+    "audioMs": 2247.1875,
+    "transcribeMs": 980.9111250069691
+   },
+   {
+    "repeat": 1,
+    "id": "rec-02",
+    "language": "en",
+    "cpuMs": 3744.287,
+    "wallMs": 1044.8266250023153,
+    "audioMs": 4138.125,
+    "transcribeMs": 1044.735417002812
+   },
+   {
+    "repeat": 1,
+    "id": "rec-03",
+    "language": "en",
+    "cpuMs": 3562.883999999997,
+    "wallMs": 993.2506249897415,
+    "audioMs": 2942.8125,
+    "transcribeMs": 993.1855409959098
+   },
+   {
+    "repeat": 1,
+    "id": "rec-04",
+    "language": "en",
+    "cpuMs": 3760.3429999999917,
+    "wallMs": 1036.914833006449,
+    "audioMs": 3508.125,
+    "transcribeMs": 1036.8456249998417
+   },
+   {
+    "repeat": 1,
+    "id": "rec-05",
+    "language": "en",
+    "cpuMs": 3548.182000000011,
+    "wallMs": 981.9253330060747,
+    "audioMs": 2355.0,
+    "transcribeMs": 981.8649590015411
+   },
+   {
+    "repeat": 1,
+    "id": "rec-06",
+    "language": "en",
+    "cpuMs": 3555.4389999999926,
+    "wallMs": 983.3259579900187,
+    "audioMs": 2827.5,
+    "transcribeMs": 983.2437079894589
+   },
+   {
+    "repeat": 1,
+    "id": "rec-07",
+    "language": "en",
+    "cpuMs": 3643.428,
+    "wallMs": 1010.6264579953859,
+    "audioMs": 2772.1875,
+    "transcribeMs": 1010.5668329924811
+   },
+   {
+    "repeat": 1,
+    "id": "rec-08",
+    "language": "en",
+    "cpuMs": 3645.684000000003,
+    "wallMs": 1004.3557499884628,
+    "audioMs": 2840.625,
+    "transcribeMs": 1004.293082994991
+   },
+   {
+    "repeat": 1,
+    "id": "rec-09",
+    "language": "en",
+    "cpuMs": 3527.9120000000007,
+    "wallMs": 977.4814169941237,
+    "audioMs": 2700.9375,
+    "transcribeMs": 977.4138329958078
+   },
+   {
+    "repeat": 1,
+    "id": "rec-10",
+    "language": "en",
+    "cpuMs": 3595.5470000000105,
+    "wallMs": 992.791832992225,
+    "audioMs": 2519.0625,
+    "transcribeMs": 992.7171250019455
+   },
+   {
+    "repeat": 1,
+    "id": "rec-11",
+    "language": "it",
+    "cpuMs": 3923.5630000000015,
+    "wallMs": 1065.226167003857,
+    "audioMs": 2325.9375,
+    "transcribeMs": 1065.1629170024535
+   },
+   {
+    "repeat": 1,
+    "id": "rec-12",
+    "language": "it",
+    "cpuMs": 4135.415999999992,
+    "wallMs": 1122.7602499857312,
+    "audioMs": 2610.9375,
+    "transcribeMs": 1122.6852090039756
+   },
+   {
+    "repeat": 1,
+    "id": "rec-13",
+    "language": "it",
+    "cpuMs": 3984.884999999991,
+    "wallMs": 1069.5019580016378,
+    "audioMs": 2409.375,
+    "transcribeMs": 1069.4377080071718
+   },
+   {
+    "repeat": 1,
+    "id": "rec-14",
+    "language": "it",
+    "cpuMs": 3751.025000000013,
+    "wallMs": 1041.2209170026472,
+    "audioMs": 3404.0625,
+    "transcribeMs": 1041.150832999847
+   },
+   {
+    "repeat": 1,
+    "id": "rec-15",
+    "language": "it",
+    "cpuMs": 3575.9570000000167,
+    "wallMs": 998.2604170072591,
+    "audioMs": 2310.9375,
+    "transcribeMs": 998.1813339982182
+   },
+   {
+    "repeat": 1,
+    "id": "rec-16",
+    "language": "it",
+    "cpuMs": 3712.661999999995,
+    "wallMs": 1018.7883339967811,
+    "audioMs": 2699.0625,
+    "transcribeMs": 1018.7278329976834
+   },
+   {
+    "repeat": 1,
+    "id": "rec-17",
+    "language": "it",
+    "cpuMs": 4007.1889999999826,
+    "wallMs": 1084.4381250062725,
+    "audioMs": 2754.375,
+    "transcribeMs": 1084.3699580000248
+   },
+   {
+    "repeat": 1,
+    "id": "rec-18",
+    "language": "it",
+    "cpuMs": 3785.6490000000067,
+    "wallMs": 1038.260250003077,
+    "audioMs": 2277.1875,
+    "transcribeMs": 1038.1895419996
+   },
+   {
+    "repeat": 1,
+    "id": "rec-19",
+    "language": "it",
+    "cpuMs": 4184.105000000017,
+    "wallMs": 1125.8162910089595,
+    "audioMs": 2741.25,
+    "transcribeMs": 1125.7432909915224
+   },
+   {
+    "repeat": 1,
+    "id": "rec-20",
+    "language": "it",
+    "cpuMs": 3943.2119999999886,
+    "wallMs": 1073.5997500014491,
+    "audioMs": 2317.5,
+    "transcribeMs": 1073.533041999326
+   },
+   {
+    "repeat": 2,
+    "id": "rec-01",
+    "language": "en",
+    "cpuMs": 3459.698000000003,
+    "wallMs": 961.0367080022115,
+    "audioMs": 2247.1875,
+    "transcribeMs": 960.9722500026692
+   },
+   {
+    "repeat": 2,
+    "id": "rec-02",
+    "language": "en",
+    "cpuMs": 3659.7069999999976,
+    "wallMs": 1031.3406249915715,
+    "audioMs": 4138.125,
+    "transcribeMs": 1031.2672500003828
+   },
+   {
+    "repeat": 2,
+    "id": "rec-03",
+    "language": "en",
+    "cpuMs": 3541.789999999992,
+    "wallMs": 980.5674579984043,
+    "audioMs": 2942.8125,
+    "transcribeMs": 980.5029999988619
+   },
+   {
+    "repeat": 2,
+    "id": "rec-04",
+    "language": "en",
+    "cpuMs": 3852.1200000000135,
+    "wallMs": 1055.4564999911236,
+    "audioMs": 3508.125,
+    "transcribeMs": 1055.3915839991532
+   },
+   {
+    "repeat": 2,
+    "id": "rec-05",
+    "language": "en",
+    "cpuMs": 3534.8350000000155,
+    "wallMs": 977.7867499942658,
+    "audioMs": 2355.0,
+    "transcribeMs": 977.7229999890551
+   },
+   {
+    "repeat": 2,
+    "id": "rec-06",
+    "language": "en",
+    "cpuMs": 3583.939000000015,
+    "wallMs": 988.2894159964053,
+    "audioMs": 2827.5,
+    "transcribeMs": 988.2007080013864
+   },
+   {
+    "repeat": 2,
+    "id": "rec-07",
+    "language": "en",
+    "cpuMs": 3780.8250000000216,
+    "wallMs": 1183.1163340102648,
+    "audioMs": 2772.1875,
+    "transcribeMs": 1183.0515829933574
+   },
+   {
+    "repeat": 2,
+    "id": "rec-08",
+    "language": "en",
+    "cpuMs": 3618.0569999999934,
+    "wallMs": 1003.7699169915868,
+    "audioMs": 2840.625,
+    "transcribeMs": 1003.6939999990864
+   },
+   {
+    "repeat": 2,
+    "id": "rec-09",
+    "language": "en",
+    "cpuMs": 3561.472000000009,
+    "wallMs": 990.3430840058718,
+    "audioMs": 2700.9375,
+    "transcribeMs": 990.2667499991367
+   },
+   {
+    "repeat": 2,
+    "id": "rec-10",
+    "language": "en",
+    "cpuMs": 3572.140999999988,
+    "wallMs": 989.1266250051558,
+    "audioMs": 2519.0625,
+    "transcribeMs": 989.0596250043018
+   },
+   {
+    "repeat": 2,
+    "id": "rec-11",
+    "language": "it",
+    "cpuMs": 3901.0109999999827,
+    "wallMs": 1064.226417001919,
+    "audioMs": 2325.9375,
+    "transcribeMs": 1064.1662080015521
+   },
+   {
+    "repeat": 2,
+    "id": "rec-12",
+    "language": "it",
+    "cpuMs": 4072.4089999999933,
+    "wallMs": 1105.9584169997834,
+    "audioMs": 2610.9375,
+    "transcribeMs": 1105.894583000918
+   },
+   {
+    "repeat": 2,
+    "id": "rec-13",
+    "language": "it",
+    "cpuMs": 3979.7320000000127,
+    "wallMs": 1083.1724159943406,
+    "audioMs": 2409.375,
+    "transcribeMs": 1083.1036670133471
+   },
+   {
+    "repeat": 2,
+    "id": "rec-14",
+    "language": "it",
+    "cpuMs": 3770.688000000007,
+    "wallMs": 1045.2678340079729,
+    "audioMs": 3404.0625,
+    "transcribeMs": 1045.2065419958672
+   },
+   {
+    "repeat": 2,
+    "id": "rec-15",
+    "language": "it",
+    "cpuMs": 3535.1689999999962,
+    "wallMs": 980.6071250059176,
+    "audioMs": 2310.9375,
+    "transcribeMs": 980.5422909994377
+   },
+   {
+    "repeat": 2,
+    "id": "rec-16",
+    "language": "it",
+    "cpuMs": 3748.396000000014,
+    "wallMs": 1027.646292001009,
+    "audioMs": 2699.0625,
+    "transcribeMs": 1027.5817920046393
+   },
+   {
+    "repeat": 2,
+    "id": "rec-17",
+    "language": "it",
+    "cpuMs": 3957.6079999999934,
+    "wallMs": 1073.1240830064053,
+    "audioMs": 2754.375,
+    "transcribeMs": 1073.0598340014694
+   },
+   {
+    "repeat": 2,
+    "id": "rec-18",
+    "language": "it",
+    "cpuMs": 3732.3650000000157,
+    "wallMs": 1024.9119159998372,
+    "audioMs": 2277.1875,
+    "transcribeMs": 1024.847332999343
+   },
+   {
+    "repeat": 2,
+    "id": "rec-19",
+    "language": "it",
+    "cpuMs": 4105.913000000015,
+    "wallMs": 1109.045541001251,
+    "audioMs": 2741.25,
+    "transcribeMs": 1108.9099579985486
+   },
+   {
+    "repeat": 2,
+    "id": "rec-20",
+    "language": "it",
+    "cpuMs": 3977.477999999991,
+    "wallMs": 1083.247541988385,
+    "audioMs": 2317.5,
+    "transcribeMs": 1083.1875419971766
+   }
+  ]
+ }
+}

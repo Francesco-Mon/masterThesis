@@ -1,0 +1,74 @@
+{
+ "command": "python -m cpsagent.bench.record --out results/bench/final_ngsild --broker http://localhost:1026 -- python -m cpsagent.bench.backends --store ngsild --repeats 30 --out results/bench/final_ngsild",
+ "date": "2026-11-21T15:06:30+00:00",
+ "git": {
+  "commit": "1af12fcc1007edf8f6a3291819a8cbe32277c2f8",
+  "branch": "evaluation",
+  "dirty": true
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {
+  "HF_HUB_OFFLINE": "1"
+ },
+ "recordedCommand": "python -m cpsagent.bench.backends --store ngsild --repeats 30 --out results/bench/final_ngsild",
+ "broker": {
+  "url": "http://localhost:1026",
+  "orionLd": "1.13.0",
+  "mongodbServer": "4.4.29",
+  "mongoc": "2.2.2",
+  "coreContext": "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld",
+  "docker": {
+   "engine": {
+    "serverVersion": "28.2.2",
+    "operatingSystem": "Docker Desktop",
+    "architecture": "aarch64",
+    "cpus": 8,
+    "memoryBytes": 4109803520
+   },
+   "images": {
+    "quay.io/fiware/orion-ld:1.13.0": {
+     "architecture": "amd64",
+     "id": "sha256:4545b19d04e819ddeaf21650b4d1941c30d1c70b52839cb91a1d52811a96cae2",
+     "emulated": true
+    },
+    "mongo:4.4.29": {
+     "architecture": "arm64",
+     "id": "sha256:52c42cbab240b3c5b1748582cc13ef46d521ddacae002bbbda645cebed270ec0",
+     "emulated": false
+    }
+   }
+  }
+ },
+ "durationS": 118.945,
+ "exitCode": 0,
+ "gitAfter": {
+  "commit": "93013ba753fc825f7c32e4c0edb675d8d7f62326",
+  "branch": "evaluation",
+  "dirty": true
+ }
+}
