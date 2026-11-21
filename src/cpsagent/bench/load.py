@@ -236,9 +236,6 @@ class SharedEnvironment:
         finally:
             self.collector.op("interpret", 0, now_ns() - t0)
 
-    def interpreter_context(self, token):
-        return self.env.interpreter_context(token)
-
     def device_states(self):
         with self.lock:
             return self.env.device_states()
