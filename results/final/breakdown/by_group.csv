@@ -1,0 +1,69 @@
+run,grounder,key,value,n,strict,strict_lo,strict_hi,outcome,outcome_lo,outcome_hi
+20261121-131024_keyword_keyword_test,keyword,category,adversarial,15,0.8667,0.6212,0.9626,0.9333,0.7018,0.9881
+20261121-131024_keyword_keyword_test,keyword,category,ambiguous,16,0.6875,0.4440,0.8584,0.8125,0.5699,0.9341
+20261121-131024_keyword_keyword_test,keyword,category,environment,15,0.9333,0.7018,0.9881,0.9333,0.7018,0.9881
+20261121-131024_keyword_keyword_test,keyword,category,explicit,18,1.0000,0.8241,1.0000,1.0000,0.8241,1.0000
+20261121-131024_keyword_keyword_test,keyword,category,explicit_other_zone,14,0.9286,0.6853,0.9873,0.9286,0.6853,0.9873
+20261121-131024_keyword_keyword_test,keyword,category,following,15,1.0000,0.7961,1.0000,1.0000,0.7961,1.0000
+20261121-131024_keyword_keyword_test,keyword,category,implicit,19,0.8421,0.6243,0.9448,0.8421,0.6243,0.9448
+20261121-131024_keyword_keyword_test,keyword,category,out_of_scope,14,1.0000,0.7847,1.0000,1.0000,0.7847,1.0000
+20261121-131024_keyword_keyword_test,keyword,category,unsupported,16,1.0000,0.8064,1.0000,1.0000,0.8064,1.0000
+20261121-131024_keyword_keyword_test,keyword,category,zone_dependent,14,0.9286,0.6853,0.9873,0.9286,0.6853,0.9873
+20261121-131024_keyword_keyword_test,keyword,language,en,111,0.9189,0.8531,0.9568,0.9369,0.8755,0.9691
+20261121-131024_keyword_keyword_test,keyword,language,it,45,0.9111,0.7927,0.9649,0.9333,0.8214,0.9771
+20261121-131024_keyword_keyword_test,keyword,source,human,30,0.9667,0.8333,0.9941,1.0000,0.8865,1.0000
+20261121-131024_keyword_keyword_test,keyword,source,llm,126,0.9048,0.8409,0.9447,0.9206,0.8601,0.9563
+20261121-131024_keyword_keyword_test,keyword,category x language,adversarial en,13,0.8462,0.5776,0.9567,0.9231,0.6669,0.9863
+20261121-131024_keyword_keyword_test,keyword,category x language,adversarial it,2,1.0000,0.3424,1.0000,1.0000,0.3424,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,ambiguous en,10,0.7000,0.3968,0.8922,0.8000,0.4902,0.9433
+20261121-131024_keyword_keyword_test,keyword,category x language,ambiguous it,6,0.6667,0.3000,0.9032,0.8333,0.4365,0.9699
+20261121-131024_keyword_keyword_test,keyword,category x language,environment en,12,0.9167,0.6461,0.9851,0.9167,0.6461,0.9851
+20261121-131024_keyword_keyword_test,keyword,category x language,environment it,3,1.0000,0.4385,1.0000,1.0000,0.4385,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,explicit en,11,1.0000,0.7412,1.0000,1.0000,0.7412,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,explicit it,7,1.0000,0.6457,1.0000,1.0000,0.6457,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,explicit_other_zone en,10,1.0000,0.7225,1.0000,1.0000,0.7225,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,explicit_other_zone it,4,0.7500,0.3006,0.9544,0.7500,0.3006,0.9544
+20261121-131024_keyword_keyword_test,keyword,category x language,following en,11,1.0000,0.7412,1.0000,1.0000,0.7412,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,following it,4,1.0000,0.5101,1.0000,1.0000,0.5101,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,implicit en,11,0.7273,0.4343,0.9025,0.7273,0.4343,0.9025
+20261121-131024_keyword_keyword_test,keyword,category x language,implicit it,8,1.0000,0.6756,1.0000,1.0000,0.6756,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,out_of_scope en,10,1.0000,0.7225,1.0000,1.0000,0.7225,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,out_of_scope it,4,1.0000,0.5101,1.0000,1.0000,0.5101,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,unsupported en,12,1.0000,0.7575,1.0000,1.0000,0.7575,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,unsupported it,4,1.0000,0.5101,1.0000,1.0000,0.5101,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,zone_dependent en,11,1.0000,0.7412,1.0000,1.0000,0.7412,1.0000
+20261121-131024_keyword_keyword_test,keyword,category x language,zone_dependent it,3,0.6667,0.2077,0.9385,0.6667,0.2077,0.9385
+20261121-131024_embedding_embedding_test,embedding,category,adversarial,15,0.8667,0.6212,0.9626,0.9333,0.7018,0.9881
+20261121-131024_embedding_embedding_test,embedding,category,ambiguous,16,0.4375,0.2310,0.6682,0.5625,0.3318,0.7690
+20261121-131024_embedding_embedding_test,embedding,category,environment,15,0.8667,0.6212,0.9626,0.8667,0.6212,0.9626
+20261121-131024_embedding_embedding_test,embedding,category,explicit,18,0.9444,0.7424,0.9901,0.9444,0.7424,0.9901
+20261121-131024_embedding_embedding_test,embedding,category,explicit_other_zone,14,0.7857,0.5241,0.9243,0.7857,0.5241,0.9243
+20261121-131024_embedding_embedding_test,embedding,category,following,15,0.8000,0.5481,0.9295,0.8000,0.5481,0.9295
+20261121-131024_embedding_embedding_test,embedding,category,implicit,19,0.6316,0.4104,0.8085,0.6316,0.4104,0.8085
+20261121-131024_embedding_embedding_test,embedding,category,out_of_scope,14,1.0000,0.7847,1.0000,1.0000,0.7847,1.0000
+20261121-131024_embedding_embedding_test,embedding,category,unsupported,16,0.5625,0.3318,0.7690,0.6250,0.3864,0.8152
+20261121-131024_embedding_embedding_test,embedding,category,zone_dependent,14,1.0000,0.7847,1.0000,1.0000,0.7847,1.0000
+20261121-131024_embedding_embedding_test,embedding,language,en,111,0.7928,0.7082,0.8578,0.8108,0.7280,0.8728
+20261121-131024_embedding_embedding_test,embedding,language,it,45,0.7556,0.6133,0.8576,0.8000,0.6618,0.8910
+20261121-131024_embedding_embedding_test,embedding,source,human,30,0.8333,0.6644,0.9266,0.9000,0.7438,0.9654
+20261121-131024_embedding_embedding_test,embedding,source,llm,126,0.7698,0.6890,0.8347,0.7857,0.7062,0.8483
+20261121-131024_embedding_embedding_test,embedding,category x language,adversarial en,13,0.8462,0.5776,0.9567,0.9231,0.6669,0.9863
+20261121-131024_embedding_embedding_test,embedding,category x language,adversarial it,2,1.0000,0.3424,1.0000,1.0000,0.3424,1.0000
+20261121-131024_embedding_embedding_test,embedding,category x language,ambiguous en,10,0.4000,0.1682,0.6873,0.5000,0.2366,0.7634
+20261121-131024_embedding_embedding_test,embedding,category x language,ambiguous it,6,0.5000,0.1876,0.8124,0.6667,0.3000,0.9032
+20261121-131024_embedding_embedding_test,embedding,category x language,environment en,12,0.9167,0.6461,0.9851,0.9167,0.6461,0.9851
+20261121-131024_embedding_embedding_test,embedding,category x language,environment it,3,0.6667,0.2077,0.9385,0.6667,0.2077,0.9385
+20261121-131024_embedding_embedding_test,embedding,category x language,explicit en,11,0.9091,0.6226,0.9838,0.9091,0.6226,0.9838
+20261121-131024_embedding_embedding_test,embedding,category x language,explicit it,7,1.0000,0.6457,1.0000,1.0000,0.6457,1.0000
+20261121-131024_embedding_embedding_test,embedding,category x language,explicit_other_zone en,10,0.8000,0.4902,0.9433,0.8000,0.4902,0.9433
+20261121-131024_embedding_embedding_test,embedding,category x language,explicit_other_zone it,4,0.7500,0.3006,0.9544,0.7500,0.3006,0.9544
+20261121-131024_embedding_embedding_test,embedding,category x language,following en,11,0.8182,0.5230,0.9486,0.8182,0.5230,0.9486
+20261121-131024_embedding_embedding_test,embedding,category x language,following it,4,0.7500,0.3006,0.9544,0.7500,0.3006,0.9544
+20261121-131024_embedding_embedding_test,embedding,category x language,implicit en,11,0.5455,0.2801,0.7873,0.5455,0.2801,0.7873
+20261121-131024_embedding_embedding_test,embedding,category x language,implicit it,8,0.7500,0.4093,0.9285,0.7500,0.4093,0.9285
+20261121-131024_embedding_embedding_test,embedding,category x language,out_of_scope en,10,1.0000,0.7225,1.0000,1.0000,0.7225,1.0000
+20261121-131024_embedding_embedding_test,embedding,category x language,out_of_scope it,4,1.0000,0.5101,1.0000,1.0000,0.5101,1.0000
+20261121-131024_embedding_embedding_test,embedding,category x language,unsupported en,12,0.6667,0.3906,0.8619,0.6667,0.3906,0.8619
+20261121-131024_embedding_embedding_test,embedding,category x language,unsupported it,4,0.2500,0.0456,0.6994,0.5000,0.1500,0.8500
+20261121-131024_embedding_embedding_test,embedding,category x language,zone_dependent en,11,1.0000,0.7412,1.0000,1.0000,0.7412,1.0000
+20261121-131024_embedding_embedding_test,embedding,category x language,zone_dependent it,3,1.0000,0.4385,1.0000,1.0000,0.4385,1.0000

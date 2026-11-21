@@ -1,0 +1,3 @@
+run,grounder,split,repeats,n,strict,strict_lo,strict_hi,outcome,outcome_lo,outcome_hi
+20261121-131024_keyword_keyword_test,keyword,test,1,156,0.9167,0.8627,0.9507,0.9359,0.8860,0.9648
+20261121-131024_embedding_embedding_test,embedding,test,1,156,0.7821,0.7109,0.8396,0.8077,0.7388,0.8618
