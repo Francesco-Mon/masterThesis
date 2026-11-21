@@ -1126,7 +1126,7 @@ def main(argv: list[str] | None = None) -> int:
 
         info |= {"model": args.model, "provider": args.provider,
                  "promptVersion": args.prompt or PROMPT_VERSION, "cache": not args.no_cache,
-                 "rpm": getattr(client, "rpm", None),
+                 "rpm": getattr(getattr(client, "_limiter", None), "rpm", None),
                  "callsLogRunId": getattr(client, "run_id", None)}  # fmt: skip
     info["accountingOverheadNsPerSection"] = calibrate()
     record = runmeta.run_metadata("cpsagent.bench.load", argv, **info)
