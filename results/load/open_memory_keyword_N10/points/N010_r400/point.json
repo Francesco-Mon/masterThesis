@@ -1,0 +1,558 @@
+{
+ "label": "N010_r400",
+ "store": "memory",
+ "interpreter": "keyword",
+ "mode": "open",
+ "persons": 10,
+ "rate": 400.0,
+ "pace": 1.0,
+ "think": null,
+ "seed": 0,
+ "stopReason": "duration",
+ "failed": [],
+ "threadsStillAlive": 0,
+ "setupS": 0.008,
+ "measuredS": 90.226,
+ "closeS": 0.001,
+ "requests": {
+  "all": 37694,
+  "measured": 35691,
+  "ok": 35691,
+  "errors": 0,
+  "errorExamples": [],
+  "status": {
+   "recovered": 14421,
+   "done": 18164,
+   "following": 3106
+  }
+ },
+ "throughputRps": 395.572,
+ "latencyMs": {
+  "n": 35691,
+  "p50": 4.54,
+  "p90": 10.196,
+  "p95": 10.655,
+  "p99": 90.668,
+  "max": 695.153,
+  "mean": 8.638
+ },
+ "serviceMs": {
+  "n": 35691,
+  "p50": 0.416,
+  "p90": 0.712,
+  "p95": 0.887,
+  "p99": 2.638,
+  "max": 687.562,
+  "mean": 0.626
+ },
+ "agentWaitMs": {
+  "n": 35691,
+  "p50": 0.0,
+  "p90": 0.001,
+  "p95": 0.001,
+  "p99": 0.002,
+  "max": 1.191,
+  "mean": 0.001
+ },
+ "queueMs": {
+  "n": 35691,
+  "p50": 4.109,
+  "p90": 9.765,
+  "p95": 10.059,
+  "p99": 86.5,
+  "max": 686.221,
+  "mean": 8.011
+ },
+ "interpretWaitMs": {
+  "n": 41526,
+  "p50": 0.001,
+  "p90": 0.001,
+  "p95": 0.001,
+  "p99": 1.965,
+  "max": 409.068,
+  "mean": 0.125
+ },
+ "interpretServiceMs": {
+  "n": 41526,
+  "p50": 0.079,
+  "p90": 0.115,
+  "p95": 0.136,
+  "p99": 0.26,
+  "max": 686.553,
+  "mean": 0.113
+ },
+ "interpretations": 41526,
+ "operationsMs": {
+  "device": {
+   "wait": {
+    "n": 23681,
+    "p50": 0.0,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.001,
+    "max": 0.369,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 23681,
+    "p50": 0.009,
+    "p90": 0.012,
+    "p95": 0.012,
+    "p99": 0.015,
+    "max": 0.485,
+    "mean": 0.009
+   }
+  },
+  "devices": {
+   "wait": {
+    "n": 23681,
+    "p50": 0.0,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.001,
+    "max": 1.594,
+    "mean": 0.001
+   },
+   "service": {
+    "n": 23681,
+    "p50": 0.017,
+    "p90": 0.022,
+    "p95": 0.023,
+    "p99": 0.027,
+    "max": 5.666,
+    "mean": 0.018
+   }
+  },
+  "execute": {
+   "wait": {
+    "n": 23681,
+    "p50": 0.0,
+    "p90": 0.0,
+    "p95": 0.0,
+    "p99": 0.001,
+    "max": 0.52,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 23681,
+    "p50": 0.015,
+    "p90": 0.02,
+    "p95": 0.024,
+    "p99": 0.037,
+    "max": 1.067,
+    "mean": 0.016
+   }
+  },
+  "interpret": {
+   "wait": {
+    "n": 34202,
+    "p50": 0.0,
+    "p90": 0.0,
+    "p95": 0.0,
+    "p99": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 34202,
+    "p50": 0.172,
+    "p90": 0.247,
+    "p95": 0.316,
+    "p99": 2.294,
+    "max": 686.77,
+    "mean": 0.36
+   }
+  },
+  "publish": {
+   "wait": {
+    "n": 903,
+    "p50": 0.0,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.001,
+    "max": 0.002,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 903,
+    "p50": 0.056,
+    "p90": 0.076,
+    "p95": 0.085,
+    "p99": 0.127,
+    "max": 0.386,
+    "mean": 0.059
+   }
+  }
+ },
+ "ticks": {
+  "measured": 903,
+  "signals": 4058,
+  "signalsPerS": 44.98,
+  "lagMs": {
+   "n": 903,
+   "p50": 6.461,
+   "p90": 10.212,
+   "p95": 10.993,
+   "p99": 36.202,
+   "max": 515.611,
+   "mean": 8.21
+  },
+  "agentWaitMs": {
+   "n": 903,
+   "p50": 0.001,
+   "p90": 0.005,
+   "p95": 0.006,
+   "p99": 1.777,
+   "max": 15.964,
+   "mean": 0.089
+  },
+  "publishPerSignalMs": {
+   "n": 903,
+   "p50": 0.071,
+   "p90": 0.104,
+   "p95": 0.118,
+   "p99": 0.173,
+   "max": 0.449,
+   "mean": 0.076
+  },
+  "errors": 0
+ },
+ "cpu": {
+  "perRequestUs": {
+   "agent": 192.06,
+   "environment": 269.34,
+   "bySection": {
+    "agent.engine": 120.71,
+    "agent.eventlog": 28.09,
+    "agent.interface": 26.24,
+    "agent.localization": 17.01,
+    "env.control": 137.08,
+    "env.interpreter": 122.32,
+    "env.store": 9.93,
+    "harness": 6.84
+   }
+  },
+  "perSignalUs": {
+   "agent": 4.59,
+   "environment": 48.54,
+   "bySection": {
+    "agent.binding": 2.97,
+    "agent.localization": 1.61,
+    "env.control": 45.83,
+    "env.store": 2.71,
+    "harness": 13.75
+   }
+  },
+  "eventLogWriterPerRecordUs": 191.63,
+  "runSecondsBySection": {
+   "agent.binding": 0.0154,
+   "agent.engine": 4.5526,
+   "agent.eventlog": 1.061,
+   "agent.eventlog.writer": 32.0663,
+   "agent.interface": 0.992,
+   "agent.localization": 0.6476,
+   "env.control": 5.3598,
+   "env.interpreter": 4.5457,
+   "env.store": 0.3876,
+   "harness": 2.813
+  },
+  "runAttributedS": 52.441,
+  "runProcessS": 54.4673,
+  "runUnattributedS": 2.0263,
+  "processCores": 0.6037
+ },
+ "memory": {
+  "rssBeforeBytes": 329826304,
+  "rssStartBytes": 302858240,
+  "rssEndBytes": 526270464,
+  "rssMaxBytes": 526270464,
+  "processPeakRssBytes": 580108288,
+  "persons": {
+   "engineBytes": {
+    "mean": 21817426.1,
+    "max": 24834187,
+    "total": 218174261
+   },
+   "traceBytes": {
+    "mean": 21778505.2,
+    "max": 24795393,
+    "total": 217785052
+   },
+   "trace": {
+    "mean": 16733.0,
+    "max": 18306,
+    "total": 167330
+   },
+   "history": {
+    "mean": 3769.4,
+    "max": 3912,
+    "total": 37694
+   },
+   "localizationBytes": {
+    "mean": 4576.7,
+    "max": 5055,
+    "total": 45767
+   },
+   "sessionBytes": {
+    "mean": 4767.7,
+    "max": 5106,
+    "total": 47677
+   },
+   "eventLogMemoryBytes": {
+    "mean": 5239.0,
+    "max": 5239,
+    "total": 52390
+   },
+   "records": {
+    "mean": 16733.0,
+    "max": 18306,
+    "total": 167330
+   }
+  },
+  "environment": {
+   "tokens": 10,
+   "subscriptions": 10,
+   "follows": 10,
+   "armedTriggers": 19,
+   "latestReadings": 68,
+   "changeRecords": 28,
+   "pendingRestorations": 15,
+   "bytes": {
+    "_tokens": 1304,
+    "_subscriptions": 2325,
+    "_follows": 11937,
+    "_latest": 10646,
+    "_changed": 4519,
+    "_out_since": 3642,
+    "store": 28281
+   }
+  },
+  "tracemalloc": null,
+  "eventLogDiskBytes": 106378804,
+  "eventLogRecords": 167331,
+  "eventLogBytesPerRecord": 635.7,
+  "eventLogErrors": 0
+ },
+ "containers": null,
+ "recoveredSignals": null,
+ "conflicts": {
+  "commandPairs": 15242,
+  "contradictoryPairs": 3160,
+  "restorationsDuringRun": 7,
+  "restorationsWithOthersInZone": 0,
+  "examples": [
+   {
+    "deviceId": "lamp_corridor",
+    "gap_ms": 2627.145,
+    "first": {
+     "person": 9,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "meeting_room",
+     "sim": "2026-11-10T09:30:14+00:00"
+    },
+    "second": {
+     "person": 4,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:18+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_corridor",
+     "power": "on",
+     "brightness": 100
+    }
+   },
+   {
+    "deviceId": "lamp_corridor",
+    "gap_ms": 13.488,
+    "first": {
+     "person": 4,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:19+00:00"
+    },
+    "second": {
+     "person": 1,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:20+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_corridor",
+     "power": "on",
+     "brightness": 100
+    }
+   },
+   {
+    "deviceId": "lamp_corridor",
+    "gap_ms": 4.274,
+    "first": {
+     "person": 1,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:20+00:00"
+    },
+    "second": {
+     "person": 4,
+     "command": "off",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "off",
+      "brightness": 0
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:19+00:00"
+    },
+    "contradictory": true,
+    "stateLeft": {
+     "deviceId": "lamp_corridor",
+     "power": "off",
+     "brightness": 0
+    }
+   },
+   {
+    "deviceId": "lamp_corridor",
+    "gap_ms": 3.963,
+    "first": {
+     "person": 4,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:19+00:00"
+    },
+    "second": {
+     "person": 1,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:20+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_corridor",
+     "power": "on",
+     "brightness": 100
+    }
+   },
+   {
+    "deviceId": "lamp_corridor",
+    "gap_ms": 13.015,
+    "first": {
+     "person": 1,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:20+00:00"
+    },
+    "second": {
+     "person": 4,
+     "command": "off",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_corridor",
+      "power": "off",
+      "brightness": 0
+     },
+     "trueZone": "corridor",
+     "sim": "2026-11-10T09:30:19+00:00"
+    },
+    "contradictory": true,
+    "stateLeft": {
+     "deviceId": "lamp_corridor",
+     "power": "off",
+     "brightness": 0
+    }
+   }
+  ],
+  "restorationExamples": []
+ },
+ "finalStates": {
+  "lamp_lobby": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_hallway": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_corridor": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_office": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_meeting_room": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_kitchen": {
+   "power": "on",
+   "brightness": 100
+  },
+  "blind_office": {
+   "position": 0
+  },
+  "blind_meeting_room": {
+   "position": 0
+  },
+  "thermostat_office": {
+   "setpoint": 23.0
+  },
+  "thermostat_meeting_room": {
+   "setpoint": 23.0
+  },
+  "thermostat_server_room": {
+   "setpoint": 21.0
+  }
+ }
+}

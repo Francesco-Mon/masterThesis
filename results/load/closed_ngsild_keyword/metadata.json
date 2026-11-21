@@ -1,0 +1,141 @@
+{
+ "command": "python -m cpsagent.bench.load --store ngsild --interpreter keyword --mode closed --persons 1,2,5,10,20,50 --stop-on-fail --label closed_ngsild_keyword",
+ "date": "2026-11-21T14:32:37+00:00",
+ "git": {
+  "commit": "1af12fcc1007edf8f6a3291819a8cbe32277c2f8",
+  "branch": "evaluation",
+  "dirty": true
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {
+  "HF_HUB_OFFLINE": "1"
+ },
+ "runId": "closed_ngsild_keyword",
+ "store": "ngsild",
+ "interpreter": "keyword",
+ "interpreterLoadS": 0.002,
+ "mode": "closed",
+ "persons": [
+  1,
+  2,
+  5,
+  10,
+  20,
+  50
+ ],
+ "rates": null,
+ "parameters": {
+  "store": "ngsild",
+  "interpreter": "keyword",
+  "model": null,
+  "provider": null,
+  "prompt": null,
+  "no_cache": false,
+  "max_cost": null,
+  "mode": "closed",
+  "persons": "1,2,5,10,20,50",
+  "rates": null,
+  "pace": 1.0,
+  "think": 1.0,
+  "requests_per_client": null,
+  "min_duration": 60.0,
+  "min_requests": 400,
+  "max_duration": 450.0,
+  "duration": 60.0,
+  "warmup": 10.0,
+  "client_start": 5.0,
+  "conflict_window": 5.0,
+  "seed": 0,
+  "tracemalloc": false,
+  "stop_on_fail": true,
+  "url": "http://localhost:1026",
+  "label": "closed_ngsild_keyword"
+ },
+ "tickPace": "1.0 simulated ticks (1 simulated second each) per wall-clock second",
+ "mix": {
+  "file": "data/load/requests.jsonl",
+  "sha256": "4c90ef93eb41575224e0e54ad492a2942985e09dde507ddcf4960fc7b541046a"
+ },
+ "routes": {
+  "transitTicks": 4,
+  "dwellTicks": [
+   8,
+   30
+  ],
+  "zones": "the scope of person-agent"
+ },
+ "failure": {
+  "errorShare": 0.01,
+  "tickLagP95S": 10.0
+ },
+ "clock": "time.perf_counter_ns; CPU time.thread_time_ns per thread",
+ "serialized": {
+  "environment": "one RLock: authenticate, scope, follow, subscribe, unsubscribe, zones, devices, device, execute, publish (signal handling with what it triggers)",
+  "interpreter": "one Lock: every call of the interpreter's ground()",
+  "person": "one Lock per person: a request, or a tick of signals"
+ },
+ "accountingOverheadNsPerSection": 793.3,
+ "broker": {
+  "url": "http://localhost:1026",
+  "orionLd": "1.13.0",
+  "mongodbServer": "4.4.29",
+  "mongoc": "2.2.2",
+  "coreContext": "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld",
+  "docker": {
+   "engine": {
+    "serverVersion": "28.2.2",
+    "operatingSystem": "Docker Desktop",
+    "architecture": "aarch64",
+    "cpus": 8,
+    "memoryBytes": 4109803520
+   },
+   "images": {
+    "quay.io/fiware/orion-ld:1.13.0": {
+     "architecture": "amd64",
+     "id": "sha256:4545b19d04e819ddeaf21650b4d1941c30d1c70b52839cb91a1d52811a96cae2",
+     "emulated": true
+    },
+    "mongo:4.4.29": {
+     "architecture": "arm64",
+     "id": "sha256:52c42cbab240b3c5b1748582cc13ef46d521ddacae002bbbda645cebed270ec0",
+     "emulated": false
+    }
+   }
+  }
+ },
+ "stoppedAfter": "N050",
+ "durationS": 927.7,
+ "points": [
+  "N001",
+  "N002",
+  "N005",
+  "N010",
+  "N020",
+  "N050"
+ ]
+}

@@ -1,0 +1,398 @@
+{
+ "label": "N001",
+ "store": "ngsild",
+ "interpreter": "keyword",
+ "mode": "closed",
+ "persons": 1,
+ "rate": null,
+ "pace": 1.0,
+ "think": 1.0,
+ "seed": 0,
+ "stopReason": "min_requests",
+ "failed": [],
+ "threadsStillAlive": 0,
+ "setupS": 0.054,
+ "measuredS": 388.724,
+ "closeS": 0.016,
+ "requests": {
+  "all": 404,
+  "measured": 400,
+  "ok": 400,
+  "errors": 0,
+  "errorExamples": [],
+  "status": {
+   "recovered": 216,
+   "done": 165,
+   "following": 19
+  }
+ },
+ "throughputRps": 1.029,
+ "latencyMs": {
+  "n": 400,
+  "p50": 25.97,
+  "p90": 45.514,
+  "p95": 50.921,
+  "p99": 69.553,
+  "max": 466.134,
+  "mean": 27.45
+ },
+ "serviceMs": {
+  "n": 400,
+  "p50": 24.119,
+  "p90": 38.923,
+  "p95": 50.258,
+  "p99": 59.062,
+  "max": 99.846,
+  "mean": 24.792
+ },
+ "agentWaitMs": {
+  "n": 400,
+  "p50": 0.004,
+  "p90": 0.01,
+  "p95": 0.013,
+  "p99": 31.707,
+  "max": 454.728,
+  "mean": 2.658
+ },
+ "queueMs": null,
+ "interpretWaitMs": {
+  "n": 467,
+  "p50": 0.002,
+  "p90": 0.004,
+  "p95": 0.005,
+  "p99": 0.008,
+  "max": 0.017,
+  "mean": 0.003
+ },
+ "interpretServiceMs": {
+  "n": 467,
+  "p50": 0.296,
+  "p90": 0.472,
+  "p95": 0.506,
+  "p99": 0.659,
+  "max": 1.98,
+  "mean": 0.298
+ },
+ "interpretations": 467,
+ "operationsMs": {
+  "device": {
+   "wait": {
+    "n": 205,
+    "p50": 0.001,
+    "p90": 0.002,
+    "p95": 0.003,
+    "p99": 0.004,
+    "max": 0.005,
+    "mean": 0.001
+   },
+   "service": {
+    "n": 205,
+    "p50": 3.498,
+    "p90": 4.298,
+    "p95": 4.463,
+    "p99": 5.856,
+    "max": 6.418,
+    "mean": 3.457
+   }
+  },
+  "devices": {
+   "wait": {
+    "n": 205,
+    "p50": 0.002,
+    "p90": 0.004,
+    "p95": 0.005,
+    "p99": 0.006,
+    "max": 0.007,
+    "mean": 0.003
+   },
+   "service": {
+    "n": 205,
+    "p50": 7.96,
+    "p90": 9.174,
+    "p95": 9.586,
+    "p99": 11.3,
+    "max": 16.751,
+    "mean": 7.799
+   }
+  },
+  "execute": {
+   "wait": {
+    "n": 205,
+    "p50": 0.001,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.002,
+    "max": 0.005,
+    "mean": 0.001
+   },
+   "service": {
+    "n": 205,
+    "p50": 5.772,
+    "p90": 6.706,
+    "p95": 7.011,
+    "p99": 8.59,
+    "max": 9.059,
+    "mean": 5.729
+   }
+  },
+  "interpret": {
+   "wait": {
+    "n": 379,
+    "p50": 0.0,
+    "p90": 0.0,
+    "p95": 0.0,
+    "p99": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 379,
+    "p50": 12.704,
+    "p90": 15.092,
+    "p95": 15.754,
+    "p99": 17.681,
+    "max": 75.805,
+    "mean": 12.432
+   }
+  },
+  "publish": {
+   "wait": {
+    "n": 389,
+    "p50": 0.001,
+    "p90": 0.002,
+    "p95": 0.003,
+    "p99": 0.004,
+    "max": 0.004,
+    "mean": 0.002
+   },
+   "service": {
+    "n": 389,
+    "p50": 6.597,
+    "p90": 9.502,
+    "p95": 10.643,
+    "p99": 13.445,
+    "max": 266.173,
+    "mean": 8.001
+   }
+  }
+ },
+ "ticks": {
+  "measured": 389,
+  "signals": 1786,
+  "signalsPerS": 4.59,
+  "lagMs": {
+   "n": 389,
+   "p50": 5.084,
+   "p90": 5.19,
+   "p95": 5.214,
+   "p99": 5.277,
+   "max": 8.002,
+   "mean": 3.973
+  },
+  "agentWaitMs": {
+   "n": 389,
+   "p50": 0.008,
+   "p90": 0.019,
+   "p95": 0.025,
+   "p99": 15.095,
+   "max": 29.69,
+   "mean": 0.36
+  },
+  "publishPerSignalMs": {
+   "n": 389,
+   "p50": 6.635,
+   "p90": 9.619,
+   "p95": 10.758,
+   "p99": 13.665,
+   "max": 266.245,
+   "mean": 8.061
+  },
+  "errors": 0
+ },
+ "cpu": {
+  "perRequestUs": {
+   "agent": 1036.43,
+   "environment": 9448.1,
+   "bySection": {
+    "agent.engine": 586.55,
+    "agent.eventlog": 131.45,
+    "agent.interface": 86.41,
+    "agent.localization": 232.03,
+    "env.control": 423.43,
+    "env.interpreter": 328.65,
+    "env.store": 8696.02,
+    "harness": 58.39
+   }
+  },
+  "perSignalUs": {
+   "agent": 14.9,
+   "environment": 2038.64,
+   "bySection": {
+    "agent.binding": 6.08,
+    "agent.engine": 0.03,
+    "agent.localization": 8.79,
+    "env.control": 59.57,
+    "env.store": 1979.06,
+    "harness": 39.51
+   }
+  },
+  "eventLogWriterPerRecordUs": 754.77,
+  "runSecondsBySection": {
+   "agent.binding": 0.011,
+   "agent.engine": 0.2363,
+   "agent.eventlog": 0.0529,
+   "agent.eventlog.writer": 1.2431,
+   "agent.interface": 0.0346,
+   "agent.localization": 0.1094,
+   "env.control": 0.2783,
+   "env.interpreter": 0.1352,
+   "env.store": 7.0774,
+   "harness": 0.4046
+  },
+  "runAttributedS": 9.5828,
+  "runProcessS": 14.4336,
+  "runUnattributedS": 4.8509,
+  "processCores": 0.0371
+ },
+ "memory": {
+  "rssBeforeBytes": 51986432,
+  "rssStartBytes": 51036160,
+  "rssEndBytes": 34799616,
+  "rssMaxBytes": 53493760,
+  "processPeakRssBytes": 54083584,
+  "persons": {
+   "engineBytes": {
+    "mean": 2030968.0,
+    "max": 2030968,
+    "total": 2030968
+   },
+   "traceBytes": {
+    "mean": 2020958.0,
+    "max": 2020958,
+    "total": 2020958
+   },
+   "trace": {
+    "mean": 1647.0,
+    "max": 1647,
+    "total": 1647
+   },
+   "history": {
+    "mean": 404.0,
+    "max": 404,
+    "total": 404
+   },
+   "localizationBytes": {
+    "mean": 5600.0,
+    "max": 5600,
+    "total": 5600
+   },
+   "sessionBytes": {
+    "mean": 5735.0,
+    "max": 5735,
+    "total": 5735
+   },
+   "eventLogMemoryBytes": {
+    "mean": 5551.0,
+    "max": 5551,
+    "total": 5551
+   },
+   "records": {
+    "mean": 1647.0,
+    "max": 1647,
+    "total": 1647
+   }
+  },
+  "environment": {
+   "tokens": 1,
+   "subscriptions": 1,
+   "follows": 1,
+   "armedTriggers": 1,
+   "latestReadings": 8,
+   "changeRecords": 4,
+   "pendingRestorations": 1,
+   "bytes": {
+    "_tokens": 287,
+    "_subscriptions": 389,
+    "_follows": 2114,
+    "_latest": 1918,
+    "_changed": 909,
+    "_out_since": 600
+   }
+  },
+  "tracemalloc": null,
+  "eventLogDiskBytes": 1007299,
+  "eventLogRecords": 1647,
+  "eventLogBytesPerRecord": 611.6,
+  "eventLogErrors": 0
+ },
+ "containers": {
+  "mongo": {
+   "samples": 395,
+   "spanS": 397.827,
+   "cpuSeconds": 5.494,
+   "cpuCores": 0.0138,
+   "memMedianBytes": 140820480,
+   "memMaxBytes": 141086720,
+   "pidsMax": 41
+  },
+  "orion": {
+   "samples": 395,
+   "spanS": 397.826,
+   "cpuSeconds": 7.871,
+   "cpuCores": 0.0198,
+   "memMedianBytes": 91373568,
+   "memMaxBytes": 92319744,
+   "pidsMax": 7
+  }
+ },
+ "recoveredSignals": 2,
+ "conflicts": {
+  "commandPairs": 0,
+  "contradictoryPairs": 0,
+  "restorationsDuringRun": 24,
+  "restorationsWithOthersInZone": 0,
+  "examples": [],
+  "restorationExamples": []
+ },
+ "finalStates": {
+  "lamp_lobby": {
+   "power": "off",
+   "brightness": 0
+  },
+  "lamp_hallway": {
+   "power": "off",
+   "brightness": 0
+  },
+  "lamp_corridor": {
+   "power": "off",
+   "brightness": 0
+  },
+  "lamp_office": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_meeting_room": {
+   "power": "off",
+   "brightness": 0
+  },
+  "lamp_kitchen": {
+   "power": "on",
+   "brightness": 100
+  },
+  "blind_office": {
+   "position": 0
+  },
+  "blind_meeting_room": {
+   "position": 0
+  },
+  "thermostat_office": {
+   "setpoint": 23.0
+  },
+  "thermostat_meeting_room": {
+   "setpoint": 21.0
+  },
+  "thermostat_server_room": {
+   "setpoint": 21.0
+  }
+ }
+}

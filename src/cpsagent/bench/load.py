@@ -936,7 +936,8 @@ class Point:
             "conflicts": summary.pop("_conflicts"),
             "restorations": summary.pop("_restorations"),
         }
-        (out / "events.json").write_text(json.dumps(extra, indent=1, default=str) + "\n")
+        with gzip.open(out / "events.json.gz", "wt", encoding="utf-8") as f:
+            f.write(json.dumps(extra, indent=1, default=str) + "\n")
         (out / "point.json").write_text(json.dumps(summary, indent=1, default=str) + "\n")
 
 

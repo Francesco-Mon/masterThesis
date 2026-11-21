@@ -1,0 +1,553 @@
+{
+ "label": "N100",
+ "store": "memory",
+ "interpreter": "keyword",
+ "mode": "closed",
+ "persons": 100,
+ "rate": null,
+ "pace": 1.0,
+ "think": 1.0,
+ "seed": 0,
+ "stopReason": "min_requests",
+ "failed": [],
+ "threadsStillAlive": 0,
+ "setupS": 0.028,
+ "measuredS": 50.03,
+ "closeS": 0.006,
+ "requests": {
+  "all": 5493,
+  "measured": 5016,
+  "ok": 5016,
+  "errors": 0,
+  "errorExamples": [],
+  "status": {
+   "recovered": 2077,
+   "done": 2501,
+   "following": 438
+  }
+ },
+ "throughputRps": 100.26,
+ "latencyMs": {
+  "n": 5016,
+  "p50": 0.72,
+  "p90": 1.335,
+  "p95": 1.618,
+  "p99": 3.056,
+  "max": 129.75,
+  "mean": 0.88
+ },
+ "serviceMs": {
+  "n": 5016,
+  "p50": 0.718,
+  "p90": 1.334,
+  "p95": 1.617,
+  "p99": 3.051,
+  "max": 129.75,
+  "mean": 0.878
+ },
+ "agentWaitMs": {
+  "n": 5016,
+  "p50": 0.001,
+  "p90": 0.002,
+  "p95": 0.003,
+  "p99": 0.007,
+  "max": 0.319,
+  "mean": 0.002
+ },
+ "queueMs": null,
+ "interpretWaitMs": {
+  "n": 5844,
+  "p50": 0.001,
+  "p90": 0.002,
+  "p95": 0.002,
+  "p99": 0.006,
+  "max": 0.057,
+  "mean": 0.001
+ },
+ "interpretServiceMs": {
+  "n": 5844,
+  "p50": 0.129,
+  "p90": 0.23,
+  "p95": 0.287,
+  "p99": 0.626,
+  "max": 8.676,
+  "mean": 0.15
+ },
+ "interpretations": 5844,
+ "operationsMs": {
+  "device": {
+   "wait": {
+    "n": 3284,
+    "p50": 0.001,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.001,
+    "max": 0.018,
+    "mean": 0.001
+   },
+   "service": {
+    "n": 3284,
+    "p50": 0.013,
+    "p90": 0.02,
+    "p95": 0.021,
+    "p99": 0.03,
+    "max": 0.787,
+    "mean": 0.015
+   }
+  },
+  "devices": {
+   "wait": {
+    "n": 3284,
+    "p50": 0.001,
+    "p90": 0.001,
+    "p95": 0.002,
+    "p99": 0.002,
+    "max": 1.538,
+    "mean": 0.001
+   },
+   "service": {
+    "n": 3284,
+    "p50": 0.025,
+    "p90": 0.034,
+    "p95": 0.039,
+    "p99": 0.051,
+    "max": 0.113,
+    "mean": 0.027
+   }
+  },
+  "execute": {
+   "wait": {
+    "n": 3284,
+    "p50": 0.0,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.001,
+    "max": 0.017,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 3284,
+    "p50": 0.026,
+    "p90": 0.038,
+    "p95": 0.043,
+    "p99": 0.061,
+    "max": 0.492,
+    "mean": 0.028
+   }
+  },
+  "interpret": {
+   "wait": {
+    "n": 4784,
+    "p50": 0.0,
+    "p90": 0.0,
+    "p95": 0.0,
+    "p99": 0.0,
+    "max": 0.0,
+    "mean": 0.0
+   },
+   "service": {
+    "n": 4784,
+    "p50": 0.283,
+    "p90": 0.516,
+    "p95": 0.658,
+    "p99": 1.438,
+    "max": 129.567,
+    "mean": 0.41
+   }
+  },
+  "publish": {
+   "wait": {
+    "n": 5002,
+    "p50": 0.001,
+    "p90": 0.001,
+    "p95": 0.001,
+    "p99": 0.002,
+    "max": 0.022,
+    "mean": 0.001
+   },
+   "service": {
+    "n": 5002,
+    "p50": 0.258,
+    "p90": 0.335,
+    "p95": 0.371,
+    "p99": 0.484,
+    "max": 3.284,
+    "mean": 0.271
+   }
+  }
+ },
+ "ticks": {
+  "measured": 5002,
+  "signals": 21360,
+  "signalsPerS": 426.94,
+  "lagMs": {
+   "n": 5002,
+   "p50": 8.02,
+   "p90": 10.157,
+   "p95": 10.984,
+   "p99": 13.21,
+   "max": 75.415,
+   "mean": 7.142
+  },
+  "agentWaitMs": {
+   "n": 5002,
+   "p50": 0.002,
+   "p90": 0.003,
+   "p95": 0.005,
+   "p99": 0.012,
+   "max": 4.586,
+   "mean": 0.003
+  },
+  "publishPerSignalMs": {
+   "n": 5002,
+   "p50": 0.27,
+   "p90": 0.351,
+   "p95": 0.392,
+   "p99": 0.524,
+   "max": 3.365,
+   "mean": 0.283
+  },
+  "errors": 0
+ },
+ "cpu": {
+  "perRequestUs": {
+   "agent": 366.24,
+   "environment": 465.17,
+   "bySection": {
+    "agent.engine": 217.09,
+    "agent.eventlog": 52.96,
+    "agent.interface": 44.66,
+    "agent.localization": 51.53,
+    "env.control": 285.84,
+    "env.interpreter": 163.32,
+    "env.store": 16.0,
+    "harness": 12.59
+   }
+  },
+  "perSignalUs": {
+   "agent": 9.95,
+   "environment": 246.22,
+   "bySection": {
+    "agent.binding": 4.2,
+    "agent.engine": 0.04,
+    "agent.eventlog": 0.0,
+    "agent.interface": 0.01,
+    "agent.localization": 5.69,
+    "env.control": 242.29,
+    "env.store": 3.94,
+    "harness": 14.12
+   }
+  },
+  "eventLogWriterPerRecordUs": 295.85,
+  "runSecondsBySection": {
+   "agent.binding": 0.1114,
+   "agent.engine": 1.207,
+   "agent.eventlog": 0.2945,
+   "agent.eventlog.writer": 7.1981,
+   "agent.interface": 0.2488,
+   "agent.localization": 0.4374,
+   "env.control": 7.0913,
+   "env.interpreter": 0.9083,
+   "env.store": 0.1903,
+   "harness": 2.2789
+  },
+  "runAttributedS": 19.9661,
+  "runProcessS": 21.1665,
+  "runUnattributedS": 1.2003,
+  "processCores": 0.4231
+ },
+ "memory": {
+  "rssBeforeBytes": 76824576,
+  "rssStartBytes": 73564160,
+  "rssEndBytes": 103055360,
+  "rssMaxBytes": 105775104,
+  "processPeakRssBytes": 106315776,
+  "persons": {
+   "engineBytes": {
+    "mean": 328024.7,
+    "max": 614607,
+    "total": 32802468
+   },
+   "traceBytes": {
+    "mean": 321357.0,
+    "max": 606060,
+    "total": 32135699
+   },
+   "trace": {
+    "mean": 243.2,
+    "max": 402,
+    "total": 24320
+   },
+   "history": {
+    "mean": 54.9,
+    "max": 80,
+    "total": 5493
+   },
+   "localizationBytes": {
+    "mean": 5612.8,
+    "max": 7894,
+    "total": 561279
+   },
+   "sessionBytes": {
+    "mean": 4748.5,
+    "max": 5110,
+    "total": 474853
+   },
+   "eventLogMemoryBytes": {
+    "mean": 5239.0,
+    "max": 5239,
+    "total": 523900
+   },
+   "records": {
+    "mean": 243.2,
+    "max": 402,
+    "total": 24320
+   }
+  },
+  "environment": {
+   "tokens": 100,
+   "subscriptions": 100,
+   "follows": 100,
+   "armedTriggers": 230,
+   "latestReadings": 634,
+   "changeRecords": 202,
+   "pendingRestorations": 87,
+   "bytes": {
+    "_tokens": 13812,
+    "_subscriptions": 24104,
+    "_follows": 109653,
+    "_latest": 93645,
+    "_changed": 33210,
+    "_out_since": 28678,
+    "store": 28333
+   }
+  },
+  "tracemalloc": null,
+  "eventLogDiskBytes": 15390564,
+  "eventLogRecords": 24330,
+  "eventLogBytesPerRecord": 632.6,
+  "eventLogErrors": 0
+ },
+ "containers": null,
+ "recoveredSignals": null,
+ "conflicts": {
+  "commandPairs": 3484,
+  "contradictoryPairs": 766,
+  "restorationsDuringRun": 0,
+  "restorationsWithOthersInZone": 0,
+  "examples": [
+   {
+    "deviceId": "lamp_kitchen",
+    "gap_ms": 5.773,
+    "first": {
+     "person": 45,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "second": {
+     "person": 38,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_kitchen",
+     "power": "on",
+     "brightness": 100
+    }
+   },
+   {
+    "deviceId": "lamp_kitchen",
+    "gap_ms": 104.313,
+    "first": {
+     "person": 38,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "second": {
+     "person": 49,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "lobby",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_kitchen",
+     "power": "on",
+     "brightness": 100
+    }
+   },
+   {
+    "deviceId": "lamp_kitchen",
+    "gap_ms": 13.377,
+    "first": {
+     "person": 49,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "lobby",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "second": {
+     "person": 38,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_kitchen",
+     "power": "on",
+     "brightness": 100
+    }
+   },
+   {
+    "deviceId": "lamp_kitchen",
+    "gap_ms": 8.732,
+    "first": {
+     "person": 38,
+     "command": "on",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "on",
+      "brightness": 100
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "second": {
+     "person": 45,
+     "command": "off",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "off",
+      "brightness": 0
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "contradictory": true,
+    "stateLeft": {
+     "deviceId": "lamp_kitchen",
+     "power": "off",
+     "brightness": 0
+    }
+   },
+   {
+    "deviceId": "lamp_kitchen",
+    "gap_ms": 70.445,
+    "first": {
+     "person": 45,
+     "command": "off",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "off",
+      "brightness": 0
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "second": {
+     "person": 38,
+     "command": "off",
+     "value": null,
+     "state": {
+      "deviceId": "lamp_kitchen",
+      "power": "off",
+      "brightness": 0
+     },
+     "trueZone": "kitchen",
+     "sim": "2026-11-10T09:30:04+00:00"
+    },
+    "contradictory": false,
+    "stateLeft": {
+     "deviceId": "lamp_kitchen",
+     "power": "off",
+     "brightness": 0
+    }
+   }
+  ],
+  "restorationExamples": []
+ },
+ "finalStates": {
+  "lamp_lobby": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_hallway": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_corridor": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_office": {
+   "power": "on",
+   "brightness": 100
+  },
+  "lamp_meeting_room": {
+   "power": "off",
+   "brightness": 0
+  },
+  "lamp_kitchen": {
+   "power": "on",
+   "brightness": 100
+  },
+  "blind_office": {
+   "position": 0
+  },
+  "blind_meeting_room": {
+   "position": 0
+  },
+  "thermostat_office": {
+   "setpoint": 23.0
+  },
+  "thermostat_meeting_room": {
+   "setpoint": 23.0
+  },
+  "thermostat_server_room": {
+   "setpoint": 21.0
+  }
+ }
+}
