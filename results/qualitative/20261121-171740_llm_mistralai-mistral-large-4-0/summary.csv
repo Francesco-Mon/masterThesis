@@ -1,0 +1,31 @@
+interpreter,grouping,language,category,k,messages,full_success,full_success_rate,expected_effects,executed,correct,missed,wrong,recall,reply_kind_ok,split,executed_per_message,correct_per_message
+llm,language x category x k,en,articulated,1,12,12,1.0,12,12,12,0,0,1.0,12,0,1.0,1.0
+llm,language x category x k,en,hard,1,6,5,0.8333,6,6,5,1,1,0.8333,6,0,1.0,0.833
+llm,language x category x k,en,hard,2,2,0,0.0,2,2,2,0,0,1.0,0,0,1.0,1.0
+llm,language x category x k,en,multi_action,2,4,0,0.0,8,4,4,4,0,0.5,4,0,1.0,1.0
+llm,language x category x k,en,multi_action,3,4,0,0.0,12,4,4,8,0,0.3333,4,0,1.0,1.0
+llm,language x category x k,en,multi_action,4,4,0,0.0,16,4,4,12,0,0.25,4,0,1.0,1.0
+llm,language x category x k,en,multi_action,5,4,0,0.0,20,4,4,16,0,0.2,4,0,1.0,1.0
+llm,language x category x k,it,articulated,1,12,12,1.0,12,12,12,0,0,1.0,12,0,1.0,1.0
+llm,language x category x k,it,hard,1,6,5,0.8333,6,6,5,1,1,0.8333,6,0,1.0,0.833
+llm,language x category x k,it,hard,2,2,0,0.0,2,2,2,0,0,1.0,0,0,1.0,1.0
+llm,language x category x k,it,multi_action,2,4,0,0.0,8,4,4,4,0,0.5,4,0,1.0,1.0
+llm,language x category x k,it,multi_action,3,4,0,0.0,12,4,4,8,0,0.3333,4,0,1.0,1.0
+llm,language x category x k,it,multi_action,4,4,0,0.0,16,4,4,12,0,0.25,4,0,1.0,1.0
+llm,language x category x k,it,multi_action,5,4,0,0.0,20,4,4,16,0,0.2,4,0,1.0,1.0
+llm,category x k,all,articulated,1,24,24,1.0,24,24,24,0,0,1.0,24,0,1.0,1.0
+llm,category x k,all,hard,1,12,10,0.8333,12,12,10,2,2,0.8333,12,0,1.0,0.833
+llm,category x k,all,hard,2,4,0,0.0,4,4,4,0,0,1.0,0,0,1.0,1.0
+llm,category x k,all,multi_action,2,8,0,0.0,16,8,8,8,0,0.5,8,0,1.0,1.0
+llm,category x k,all,multi_action,3,8,0,0.0,24,8,8,16,0,0.3333,8,0,1.0,1.0
+llm,category x k,all,multi_action,4,8,0,0.0,32,8,8,24,0,0.25,8,0,1.0,1.0
+llm,category x k,all,multi_action,5,8,0,0.0,40,8,8,32,0,0.2,8,0,1.0,1.0
+llm,language x category,en,articulated,all,12,12,1.0,12,12,12,0,0,1.0,12,0,1.0,1.0
+llm,language x category,en,hard,all,8,5,0.625,8,8,7,1,1,0.875,6,0,1.0,0.875
+llm,language x category,en,multi_action,all,16,0,0.0,56,16,16,40,0,0.2857,16,0,1.0,1.0
+llm,language x category,it,articulated,all,12,12,1.0,12,12,12,0,0,1.0,12,0,1.0,1.0
+llm,language x category,it,hard,all,8,5,0.625,8,8,7,1,1,0.875,6,0,1.0,0.875
+llm,language x category,it,multi_action,all,16,0,0.0,56,16,16,40,0,0.2857,16,0,1.0,1.0
+llm,language,en,all,all,36,17,0.4722,76,36,35,41,1,0.4605,34,0,1.0,0.972
+llm,language,it,all,all,36,17,0.4722,76,36,35,41,1,0.4605,34,0,1.0,0.972
+llm,all,all,all,all,72,34,0.4722,152,72,70,82,2,0.4605,68,0,1.0,0.972
