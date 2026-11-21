@@ -1,0 +1,16 @@
+{
+  "runId": "20261121-131024_keyword_keyword_test",
+  "time": "2026-11-21T13:10:24.697696Z",
+  "grounder": "keyword",
+  "model": null,
+  "provider": null,
+  "temperature": 0.0,
+  "split": "test",
+  "repeats": 1,
+  "cases": 156,
+  "cache": true,
+  "dataset": "data/requests.jsonl",
+  "datasetSha256": "32d5ccef09b243c4",
+  "gitCommit": "7bc529e",
+  "callsLogRunId": null
+}

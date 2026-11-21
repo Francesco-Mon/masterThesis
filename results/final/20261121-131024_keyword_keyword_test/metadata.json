@@ -1,0 +1,46 @@
+{
+ "command": "python -m cpsagent.bench.record --out results/final/20261121-131024_keyword_keyword_test -- python -m cpsagent.eval.run --grounder keyword --split test --final --out results/final/20261121-131024_keyword_keyword_test",
+ "date": "2026-11-21T13:10:24+00:00",
+ "git": {
+  "commit": "7bc529ebd068fdb9bbfa2888c0e00fe67f52975f",
+  "branch": "evaluation",
+  "dirty": false
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {
+  "HF_HUB_OFFLINE": "1"
+ },
+ "recordedCommand": "python -m cpsagent.eval.run --grounder keyword --split test --final --out results/final/20261121-131024_keyword_keyword_test",
+ "durationS": 0.303,
+ "exitCode": 0,
+ "gitAfter": {
+  "commit": "7bc529ebd068fdb9bbfa2888c0e00fe67f52975f",
+  "branch": "evaluation",
+  "dirty": false
+ }
+}
