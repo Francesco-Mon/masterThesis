@@ -328,15 +328,18 @@ def print_summary(rows: list[dict[str, Any]], interpreter: str) -> None:
 
 
 def compare(runs: list[Path], out: Path) -> int:
-    """Concatenate the summaries of saved runs into one table per kind."""
+    """Concatenate the summaries of saved runs into one table per kind, each row led by
+    its run and model (the language-model runs share the interpreter name `llm`)."""
     out.mkdir(parents=True, exist_ok=True)
     for name in ("summary.csv", "pairs.csv", "mechanism.csv"):
         rows, header = [], None
         for run in runs:
+            meta = json.loads((run / "metadata.json").read_text(encoding="utf-8"))
+            lead = [run.name, meta.get("model") or ""]
             with (run / name).open(encoding="utf-8") as f:
                 reader = csv.reader(f)
-                header = next(reader)
-                rows += list(reader)
+                header = ["run", "model"] + next(reader)
+                rows += [lead + row for row in reader]
         write_csv(out / name, header, rows)
     print(f"written to {out}")
     return 0

@@ -1,181 +1,181 @@
-interpreter,pair_id,category,k,en_executed,it_executed,same_effects,en_reply,it_reply,same_reply,en_full_success,it_full_success,both_full_success
-keyword,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]",[],0,done,clarification,0,1,0,0
-keyword,a02,articulated,1,[],[],1,clarification,clarification,1,0,0,0
-keyword,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""close"", null]]",1,done,done,1,0,0,0
-keyword,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-keyword,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]",[],0,done,clarification,0,1,0,0
-keyword,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,0,0,0
-keyword,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
-keyword,a08,articulated,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-keyword,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",1,done,done,1,0,0,0
-keyword,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
-keyword,a11,articulated,1,[],"[[""lamp_kitchen"", ""on"", null]]",0,clarification,done,0,0,1,0
-keyword,a12,articulated,1,[],[],1,clarification,refusal,0,0,0,0
-keyword,h01,hard,1,"[[""lamp_lobby"", ""off"", null]]","[[""lamp_lobby"", ""off"", null]]",1,done,done,1,0,0,0
-keyword,h02,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""close"", null]]",0,done,done,1,0,1,0
-keyword,h03,hard,1,"[[""blind_office"", ""open"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
-keyword,h04,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-keyword,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]",[],0,done,clarification,0,1,0,0
-keyword,h06,hard,1,[],"[[""lamp_office"", ""on"", null]]",0,refusal,done,0,0,1,0
-keyword,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,partial,partial,1,1,1,1
-keyword,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,partial,partial,1,1,1,1
-keyword,m2a,multi_action,2,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-keyword,m2b,multi_action,2,"[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]","[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]",1,done,done,1,1,1,1
-keyword,m2c,multi_action,2,"[[""lamp_kitchen"", ""off"", null]]","[[""lamp_kitchen"", ""off"", null]]",1,done,done,1,0,0,0
-keyword,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]","[[""lamp_meeting_room"", ""dim"", 50.0], [""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",0,partial,done,0,0,1,0
-keyword,m3a,multi_action,3,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",1,done,done,1,1,1,1
-keyword,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,0,0
-keyword,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]","[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
-keyword,m3d,multi_action,3,"[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 22.0]]","[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null]]",0,done,partial,0,1,0,0
-keyword,m4a,multi_action,4,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,partial,partial,1,0,0,0
-keyword,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
-keyword,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null]]",1,partial,partial,1,0,0,0
-keyword,m4d,multi_action,4,"[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]",1,partial,partial,1,0,0,0
-keyword,m5a,multi_action,5,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,partial,partial,1,0,0,0
-keyword,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-keyword,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0]]",1,partial,partial,1,0,0,0
-keyword,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""lamp_corridor"", ""on"", null]]",0,partial,partial,1,0,0,0
-embedding,a01,articulated,1,[],[],1,refusal,refusal,1,0,0,0
-embedding,a02,articulated,1,[],"[[""blind_office"", ""open"", null]]",0,clarification,partial,0,0,0,0
-embedding,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""close"", null]]","[[""blind_meeting_room"", ""open"", null], [""blind_office"", ""open"", null]]",0,done,done,1,0,0,0
-embedding,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-embedding,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
-embedding,a06,articulated,1,[],[],1,clarification,clarification,1,0,0,0
-embedding,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
-embedding,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
-embedding,a09,articulated,1,[],"[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",0,clarification,done,0,0,0,0
-embedding,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",0,done,done,1,1,0,0
-embedding,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-embedding,a12,articulated,1,[],"[[""lamp_meeting_room"", ""on"", null]]",0,refusal,done,0,0,0,0
-embedding,h01,hard,1,"[[""lamp_lobby"", ""off"", null]]","[[""lamp_lobby"", ""off"", null]]",1,done,done,1,0,0,0
-embedding,h02,hard,1,"[[""blind_office"", ""close"", null]]","[[""blind_office"", ""close"", null]]",1,done,done,1,1,1,1
-embedding,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""lamp_office"", ""off"", null]]",0,done,done,1,1,0,0
-embedding,h04,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-embedding,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]",[],0,done,clarification,0,1,0,0
-embedding,h06,hard,1,[],"[[""lamp_office"", ""on"", null]]",0,refusal,done,0,0,1,0
-embedding,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
-embedding,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,partial,partial,1,1,1,1
-embedding,m2a,multi_action,2,"[[""blind_office"", ""close"", null]]","[[""lamp_office"", ""off"", null]]",0,done,done,1,0,0,0
-embedding,m2b,multi_action,2,"[[""thermostat_office"", ""setSetpoint"", 20.0]]","[[""thermostat_office"", ""setSetpoint"", 20.0]]",1,done,done,1,0,0,0
-embedding,m2c,multi_action,2,"[[""lamp_kitchen"", ""off"", null]]","[[""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,0,0
-embedding,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]",[],0,done,refusal,0,0,0,0
-embedding,m3a,multi_action,3,"[[""thermostat_office"", ""setSetpoint"", 21.0]]","[[""thermostat_office"", ""setSetpoint"", 21.0]]",1,done,done,1,0,0,0
-embedding,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,0,0
-embedding,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null]]","[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",0,done,done,1,0,0,0
-embedding,m3d,multi_action,3,"[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 22.0]]","[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""setPosition"", 78.0], [""lamp_corridor"", ""on"", null]]",0,done,done,1,1,0,0
-embedding,m4a,multi_action,4,"[[""lamp_meeting_room"", ""dim"", 22.0]]","[[""lamp_meeting_room"", ""dim"", 22.0]]",1,done,done,1,0,0,0
-embedding,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""on"", null]]",0,done,done,1,0,0,0
-embedding,m4c,multi_action,4,"[[""blind_office"", ""setPosition"", 80.0]]","[[""lamp_office"", ""dim"", 20.0]]",0,done,done,1,0,0,0
-embedding,m4d,multi_action,4,"[[""blind_meeting_room"", ""close"", null]]","[[""lamp_meeting_room"", ""off"", null]]",0,done,done,1,0,0,0
-embedding,m5a,multi_action,5,"[[""lamp_office"", ""dim"", 23.0]]","[[""lamp_office"", ""dim"", 23.0]]",1,done,done,1,0,0,0
-embedding,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-embedding,m5c,multi_action,5,"[[""lamp_office"", ""dim"", 40.0]]","[[""lamp_office"", ""dim"", 40.0]]",1,done,done,1,0,0,0
-embedding,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""blind_office"", ""setPosition"", 79.0], [""lamp_corridor"", ""on"", null]]",0,partial,partial,1,0,0,0
-llm,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]","[[""lamp_lobby"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a02,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,1,1,1
-llm,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,1,1,1
-llm,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
-llm,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 40.0]]","[[""lamp_lobby"", ""dim"", 40.0]]",1,done,done,1,1,1,1
-llm,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
-llm,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
-llm,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]",1,done,done,1,1,1,1
-llm,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
-llm,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a12,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
-llm,h01,hard,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,1,1,1
-llm,h02,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""close"", null]]",0,done,done,1,0,1,0
-llm,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,1,1,1
-llm,h04,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,1,1,1
-llm,h06,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-llm,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
-llm,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m2a,multi_action,2,"[[""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",0,done,done,1,0,1,0
-llm,m2b,multi_action,2,"[[""thermostat_office"", ""setSetpoint"", 20.0]]","[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]",0,done,done,1,0,1,0
-llm,m2c,multi_action,2,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null], [""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,1,0
-llm,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]","[[""lamp_meeting_room"", ""dim"", 50.0], [""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",0,done,done,1,0,1,0
-llm,m3a,multi_action,3,"[[""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",0,done,done,1,0,1,0
-llm,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null]]","[[""blind_meeting_room"", ""open"", null]]",1,done,done,1,0,0,0
-llm,m3d,multi_action,3,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,0,0,0
-llm,m4a,multi_action,4,"[[""lamp_office"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",0,done,done,1,0,0,0
-llm,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
-llm,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null], [""thermostat_meeting_room"", ""setSetpoint"", 20.0]]",0,done,done,1,0,0,0
-llm,m4d,multi_action,4,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]",0,done,partial,0,0,0,0
-llm,m5a,multi_action,5,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0], [""thermostat_meeting_room"", ""setSetpoint"", 22.0]]",0,done,done,1,0,0,0
-llm,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null]]","[[""lamp_corridor"", ""on"", null]]",1,done,done,1,0,0,0
-llm,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]","[[""lamp_lobby"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a02,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,1,1,1
-llm,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,1,1,1
-llm,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
-llm,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 40.0]]","[[""lamp_lobby"", ""dim"", 40.0]]",1,done,done,1,1,1,1
-llm,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
-llm,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
-llm,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]",1,done,done,1,1,1,1
-llm,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0], [""thermostat_office"", ""setSetpoint"", 19.0]]",0,done,done,1,1,0,0
-llm,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a12,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
-llm,h01,hard,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,1,1,1
-llm,h02,hard,1,"[[""blind_office"", ""close"", null]]","[[""blind_office"", ""close"", null]]",1,done,done,1,1,1,1
-llm,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,1,1,1
-llm,h04,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",0,done,done,1,0,1,0
-llm,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,1,1,1
-llm,h06,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-llm,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
-llm,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m2a,multi_action,2,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-llm,m2b,multi_action,2,"[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]","[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]",1,done,done,1,1,1,1
-llm,m2c,multi_action,2,"[[""lamp_hallway"", ""off"", null], [""lamp_kitchen"", ""on"", null]]","[[""lamp_hallway"", ""off"", null]]",0,done,done,1,1,0,0
-llm,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0], [""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""lamp_meeting_room"", ""dim"", 50.0]]",0,done,done,1,1,0,0
-llm,m3a,multi_action,3,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",1,done,done,1,1,1,1
-llm,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null], [""lamp_kitchen"", ""on"", null], [""lamp_lobby"", ""on"", null]]","[[""lamp_corridor"", ""on"", null], [""lamp_hallway"", ""on"", null], [""lamp_kitchen"", ""on"", null], [""lamp_lobby"", ""on"", null], [""lamp_meeting_room"", ""on"", null], [""lamp_office"", ""on"", null]]",0,done,done,1,1,0,0
-llm,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]","[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
-llm,m3d,multi_action,3,"[[""lamp_corridor"", ""on"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 22.0]]",0,done,done,1,0,1,0
-llm,m4a,multi_action,4,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""on"", null]]",0,partial,partial,1,0,0,0
-llm,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null], [""lamp_lobby"", ""on"", null]]","[[""lamp_hallway"", ""off"", null], [""lamp_hallway"", ""on"", null]]",0,partial,partial,1,0,0,0
-llm,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null], [""thermostat_meeting_room"", ""setSetpoint"", 20.0]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null], [""thermostat_meeting_room"", ""setSetpoint"", 20.0]]",1,done,done,1,0,0,0
-llm,m4d,multi_action,4,"[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]",1,partial,partial,1,0,0,0
-llm,m5a,multi_action,5,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,partial,partial,1,0,0,0
-llm,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]",[],0,partial,clarification,0,0,0,0
-llm,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0]]","[[""blind_meeting_room"", ""close"", null]]",0,partial,partial,1,0,0,0
-llm,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",1,partial,partial,1,0,0,0
-llm,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]","[[""lamp_lobby"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a02,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,1,1,1
-llm,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,1,1,1
-llm,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
-llm,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 40.0]]","[[""lamp_lobby"", ""dim"", 40.0]]",1,done,done,1,1,1,1
-llm,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
-llm,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
-llm,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]",1,done,done,1,1,1,1
-llm,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
-llm,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
-llm,a12,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
-llm,h01,hard,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,1,1,1
-llm,h02,hard,1,"[[""blind_office"", ""close"", null]]","[[""blind_office"", ""close"", null]]",1,done,done,1,1,1,1
-llm,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,1,1,1
-llm,h04,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,1,1,1
-llm,h06,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
-llm,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
-llm,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m2a,multi_action,2,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m2b,multi_action,2,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,0,0,0
-llm,m2c,multi_action,2,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
-llm,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]","[[""lamp_meeting_room"", ""dim"", 50.0]]",1,done,done,1,0,0,0
-llm,m3a,multi_action,3,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null]]","[[""blind_meeting_room"", ""open"", null]]",1,done,done,1,0,0,0
-llm,m3d,multi_action,3,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,0,0,0
-llm,m4a,multi_action,4,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
-llm,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,0,0,0
-llm,m4d,multi_action,4,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,0,0,0
-llm,m5a,multi_action,5,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
-llm,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,0,0,0
-llm,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null]]","[[""lamp_corridor"", ""on"", null]]",1,done,done,1,0,0,0
+run,model,interpreter,pair_id,category,k,en_executed,it_executed,same_effects,en_reply,it_reply,same_reply,en_full_success,it_full_success,both_full_success
+20261121-131310_keyword_keyword,,keyword,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]",[],0,done,clarification,0,1,0,0
+20261121-131310_keyword_keyword,,keyword,a02,articulated,1,[],[],1,clarification,clarification,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""close"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]",[],0,done,clarification,0,1,0,0
+20261121-131310_keyword_keyword,,keyword,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,a08,articulated,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,a11,articulated,1,[],"[[""lamp_kitchen"", ""on"", null]]",0,clarification,done,0,0,1,0
+20261121-131310_keyword_keyword,,keyword,a12,articulated,1,[],[],1,clarification,refusal,0,0,0,0
+20261121-131310_keyword_keyword,,keyword,h01,hard,1,"[[""lamp_lobby"", ""off"", null]]","[[""lamp_lobby"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,h02,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""close"", null]]",0,done,done,1,0,1,0
+20261121-131310_keyword_keyword,,keyword,h03,hard,1,"[[""blind_office"", ""open"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,h04,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]",[],0,done,clarification,0,1,0,0
+20261121-131310_keyword_keyword,,keyword,h06,hard,1,[],"[[""lamp_office"", ""on"", null]]",0,refusal,done,0,0,1,0
+20261121-131310_keyword_keyword,,keyword,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,partial,partial,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,partial,partial,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,m2a,multi_action,2,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,m2b,multi_action,2,"[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]","[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,m2c,multi_action,2,"[[""lamp_kitchen"", ""off"", null]]","[[""lamp_kitchen"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]","[[""lamp_meeting_room"", ""dim"", 50.0], [""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",0,partial,done,0,0,1,0
+20261121-131310_keyword_keyword,,keyword,m3a,multi_action,3,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]","[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
+20261121-131310_keyword_keyword,,keyword,m3d,multi_action,3,"[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 22.0]]","[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null]]",0,done,partial,0,1,0,0
+20261121-131310_keyword_keyword,,keyword,m4a,multi_action,4,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,partial,partial,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null]]",1,partial,partial,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m4d,multi_action,4,"[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]",1,partial,partial,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m5a,multi_action,5,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,partial,partial,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0]]",1,partial,partial,1,0,0,0
+20261121-131310_keyword_keyword,,keyword,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""lamp_corridor"", ""on"", null]]",0,partial,partial,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,a01,articulated,1,[],[],1,refusal,refusal,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,a02,articulated,1,[],"[[""blind_office"", ""open"", null]]",0,clarification,partial,0,0,0,0
+20261121-131317_embedding_embedding,,embedding,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""close"", null]]","[[""blind_meeting_room"", ""open"", null], [""blind_office"", ""open"", null]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,a06,articulated,1,[],[],1,clarification,clarification,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,a09,articulated,1,[],"[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",0,clarification,done,0,0,0,0
+20261121-131317_embedding_embedding,,embedding,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",0,done,done,1,1,0,0
+20261121-131317_embedding_embedding,,embedding,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,a12,articulated,1,[],"[[""lamp_meeting_room"", ""on"", null]]",0,refusal,done,0,0,0,0
+20261121-131317_embedding_embedding,,embedding,h01,hard,1,"[[""lamp_lobby"", ""off"", null]]","[[""lamp_lobby"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,h02,hard,1,"[[""blind_office"", ""close"", null]]","[[""blind_office"", ""close"", null]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""lamp_office"", ""off"", null]]",0,done,done,1,1,0,0
+20261121-131317_embedding_embedding,,embedding,h04,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]",[],0,done,clarification,0,1,0,0
+20261121-131317_embedding_embedding,,embedding,h06,hard,1,[],"[[""lamp_office"", ""on"", null]]",0,refusal,done,0,0,1,0
+20261121-131317_embedding_embedding,,embedding,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,partial,partial,1,1,1,1
+20261121-131317_embedding_embedding,,embedding,m2a,multi_action,2,"[[""blind_office"", ""close"", null]]","[[""lamp_office"", ""off"", null]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m2b,multi_action,2,"[[""thermostat_office"", ""setSetpoint"", 20.0]]","[[""thermostat_office"", ""setSetpoint"", 20.0]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m2c,multi_action,2,"[[""lamp_kitchen"", ""off"", null]]","[[""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]",[],0,done,refusal,0,0,0,0
+20261121-131317_embedding_embedding,,embedding,m3a,multi_action,3,"[[""thermostat_office"", ""setSetpoint"", 21.0]]","[[""thermostat_office"", ""setSetpoint"", 21.0]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null]]","[[""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m3d,multi_action,3,"[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 22.0]]","[[""blind_meeting_room"", ""close"", null], [""blind_office"", ""setPosition"", 78.0], [""lamp_corridor"", ""on"", null]]",0,done,done,1,1,0,0
+20261121-131317_embedding_embedding,,embedding,m4a,multi_action,4,"[[""lamp_meeting_room"", ""dim"", 22.0]]","[[""lamp_meeting_room"", ""dim"", 22.0]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""on"", null]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m4c,multi_action,4,"[[""blind_office"", ""setPosition"", 80.0]]","[[""lamp_office"", ""dim"", 20.0]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m4d,multi_action,4,"[[""blind_meeting_room"", ""close"", null]]","[[""lamp_meeting_room"", ""off"", null]]",0,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m5a,multi_action,5,"[[""lamp_office"", ""dim"", 23.0]]","[[""lamp_office"", ""dim"", 23.0]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m5c,multi_action,5,"[[""lamp_office"", ""dim"", 40.0]]","[[""lamp_office"", ""dim"", 40.0]]",1,done,done,1,0,0,0
+20261121-131317_embedding_embedding,,embedding,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""blind_office"", ""setPosition"", 79.0], [""lamp_corridor"", ""on"", null]]",0,partial,partial,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]","[[""lamp_lobby"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a02,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 40.0]]","[[""lamp_lobby"", ""dim"", 40.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,a12,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h01,hard,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h02,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""close"", null]]",0,done,done,1,0,1,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h04,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h06,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m2a,multi_action,2,"[[""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",0,done,done,1,0,1,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m2b,multi_action,2,"[[""thermostat_office"", ""setSetpoint"", 20.0]]","[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]",0,done,done,1,0,1,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m2c,multi_action,2,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null], [""lamp_kitchen"", ""on"", null]]",0,done,done,1,0,1,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]","[[""lamp_meeting_room"", ""dim"", 50.0], [""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",0,done,done,1,0,1,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m3a,multi_action,3,"[[""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",0,done,done,1,0,1,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null]]","[[""blind_meeting_room"", ""open"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m3d,multi_action,3,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m4a,multi_action,4,"[[""lamp_office"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",0,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null], [""thermostat_meeting_room"", ""setSetpoint"", 20.0]]",0,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m4d,multi_action,4,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]",0,done,partial,0,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m5a,multi_action,5,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0], [""thermostat_meeting_room"", ""setSetpoint"", 22.0]]",0,done,done,1,0,0,0
+20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free,nvidia/nemotron-3.5-super-vl:free,llm,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null]]","[[""lamp_corridor"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]","[[""lamp_lobby"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a02,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 40.0]]","[[""lamp_lobby"", ""dim"", 40.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0], [""thermostat_office"", ""setSetpoint"", 19.0]]",0,done,done,1,1,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,a12,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h01,hard,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h02,hard,1,"[[""blind_office"", ""close"", null]]","[[""blind_office"", ""close"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h04,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",0,done,done,1,0,1,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h06,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m2a,multi_action,2,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m2b,multi_action,2,"[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]","[[""blind_office"", ""open"", null], [""thermostat_office"", ""setSetpoint"", 20.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m2c,multi_action,2,"[[""lamp_hallway"", ""off"", null], [""lamp_kitchen"", ""on"", null]]","[[""lamp_hallway"", ""off"", null]]",0,done,done,1,1,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0], [""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""lamp_meeting_room"", ""dim"", 50.0]]",0,done,done,1,1,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m3a,multi_action,3,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null], [""lamp_kitchen"", ""on"", null], [""lamp_lobby"", ""on"", null]]","[[""lamp_corridor"", ""on"", null], [""lamp_hallway"", ""on"", null], [""lamp_kitchen"", ""on"", null], [""lamp_lobby"", ""on"", null], [""lamp_meeting_room"", ""on"", null], [""lamp_office"", ""on"", null]]",0,done,done,1,1,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]","[[""blind_meeting_room"", ""open"", null], [""lamp_meeting_room"", ""off"", null], [""thermostat_meeting_room"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m3d,multi_action,3,"[[""lamp_corridor"", ""on"", null]]","[[""blind_meeting_room"", ""close"", null], [""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 22.0]]",0,done,done,1,0,1,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m4a,multi_action,4,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""on"", null]]",0,partial,partial,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null], [""lamp_lobby"", ""on"", null]]","[[""lamp_hallway"", ""off"", null], [""lamp_hallway"", ""on"", null]]",0,partial,partial,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null], [""thermostat_meeting_room"", ""setSetpoint"", 20.0]]","[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""on"", null], [""thermostat_meeting_room"", ""setSetpoint"", 20.0]]",1,done,done,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m4d,multi_action,4,"[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]","[[""blind_office"", ""open"", null], [""lamp_office"", ""off"", null]]",1,partial,partial,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m5a,multi_action,5,"[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]","[[""blind_office"", ""close"", null], [""lamp_office"", ""on"", null]]",1,partial,partial,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]",[],0,partial,clarification,0,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null], [""lamp_meeting_room"", ""dim"", 40.0]]","[[""blind_meeting_room"", ""close"", null]]",0,partial,partial,1,0,0,0
+20261121-171735_llm_openai-gpt-oss-120b,openai/gpt-oss-120b,llm,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]","[[""lamp_corridor"", ""on"", null], [""thermostat_office"", ""setSetpoint"", 21.0]]",1,partial,partial,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a01,articulated,1,"[[""lamp_lobby"", ""on"", null]]","[[""lamp_lobby"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a02,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a03,articulated,1,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a04,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a05,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 23.0]]","[[""thermostat_office"", ""setSetpoint"", 23.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a06,articulated,1,"[[""lamp_lobby"", ""dim"", 40.0]]","[[""lamp_lobby"", ""dim"", 40.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a07,articulated,1,"[[""blind_office"", ""setPosition"", 50.0]]","[[""blind_office"", ""setPosition"", 50.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a08,articulated,1,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a09,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 24.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a10,articulated,1,"[[""thermostat_office"", ""setSetpoint"", 19.0]]","[[""thermostat_office"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a11,articulated,1,"[[""lamp_kitchen"", ""on"", null]]","[[""lamp_kitchen"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,a12,articulated,1,"[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]","[[""thermostat_meeting_room"", ""setSetpoint"", 19.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h01,hard,1,"[[""lamp_lobby"", ""dim"", 30.0]]","[[""lamp_lobby"", ""dim"", 30.0]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h02,hard,1,"[[""blind_office"", ""close"", null]]","[[""blind_office"", ""close"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h03,hard,1,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h04,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h05,hard,1,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h06,hard,1,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,1,1,1
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h07,hard,2,"[[""lamp_meeting_room"", ""on"", null]]","[[""lamp_meeting_room"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,h08,hard,2,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m2a,multi_action,2,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m2b,multi_action,2,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m2c,multi_action,2,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m2d,multi_action,2,"[[""lamp_meeting_room"", ""dim"", 50.0]]","[[""lamp_meeting_room"", ""dim"", 50.0]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m3a,multi_action,3,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m3b,multi_action,3,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m3c,multi_action,3,"[[""blind_meeting_room"", ""open"", null]]","[[""blind_meeting_room"", ""open"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m3d,multi_action,3,"[[""thermostat_office"", ""setSetpoint"", 22.0]]","[[""thermostat_office"", ""setSetpoint"", 22.0]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m4a,multi_action,4,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m4b,multi_action,4,"[[""lamp_hallway"", ""off"", null]]","[[""lamp_hallway"", ""off"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m4c,multi_action,4,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m4d,multi_action,4,"[[""blind_office"", ""open"", null]]","[[""blind_office"", ""open"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m5a,multi_action,5,"[[""lamp_office"", ""on"", null]]","[[""lamp_office"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m5b,multi_action,5,"[[""lamp_hallway"", ""on"", null]]","[[""lamp_hallway"", ""on"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m5c,multi_action,5,"[[""blind_meeting_room"", ""close"", null]]","[[""blind_meeting_room"", ""close"", null]]",1,done,done,1,0,0,0
+20261121-171740_llm_mistralai-mistral-large-4-0,mistralai/mistral-large-4-0,llm,m5d,multi_action,5,"[[""lamp_corridor"", ""on"", null]]","[[""lamp_corridor"", ""on"", null]]",1,done,done,1,0,0,0
