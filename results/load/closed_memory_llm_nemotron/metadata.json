@@ -1,0 +1,113 @@
+{
+ "command": "python -m cpsagent.bench.load --store memory --interpreter llm --model nvidia/nemotron-3.5-super-vl:free --no-cache --persons 1,2,4,8 --requests-per-client 5 --max-duration 900 --max-cost 0.1 --label closed_memory_llm_nemotron",
+ "date": "2026-11-21T17:18:27+00:00",
+ "git": {
+  "commit": "6b08fb7f08281adee1ce8c66c09355bac63ff671",
+  "branch": "evaluation",
+  "dirty": true
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {},
+ "runId": "closed_memory_llm_nemotron",
+ "store": "memory",
+ "interpreter": "llm",
+ "interpreterLoadS": 0.343,
+ "mode": "closed",
+ "persons": [
+  1,
+  2,
+  4,
+  8
+ ],
+ "rates": null,
+ "parameters": {
+  "store": "memory",
+  "interpreter": "llm",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "provider": null,
+  "prompt": "v3",
+  "no_cache": true,
+  "max_cost": 0.1,
+  "mode": "closed",
+  "persons": "1,2,4,8",
+  "rates": null,
+  "pace": 1.0,
+  "think": 1.0,
+  "requests_per_client": 5,
+  "min_duration": 60.0,
+  "min_requests": 400,
+  "max_duration": 900.0,
+  "duration": 60.0,
+  "warmup": 10.0,
+  "client_start": 5.0,
+  "conflict_window": 5.0,
+  "seed": 0,
+  "tracemalloc": false,
+  "stop_on_fail": false,
+  "url": "http://localhost:1026",
+  "label": "closed_memory_llm_nemotron"
+ },
+ "tickPace": "1.0 simulated ticks (1 simulated second each) per wall-clock second",
+ "mix": {
+  "file": "data/load/requests.jsonl",
+  "sha256": "4c90ef93eb41575224e0e54ad492a2942985e09dde507ddcf4960fc7b541046a"
+ },
+ "routes": {
+  "transitTicks": 4,
+  "dwellTicks": [
+   8,
+   30
+  ],
+  "zones": "the scope of person-agent"
+ },
+ "failure": {
+  "errorShare": 0.01,
+  "tickLagP95S": 10.0
+ },
+ "clock": "time.perf_counter_ns; CPU time.thread_time_ns per thread",
+ "serialized": {
+  "environment": "one RLock: authenticate, scope, follow, subscribe, unsubscribe, zones, devices, device, execute, publish (signal handling with what it triggers)",
+  "interpreter": "one Lock: every call of the interpreter's ground()",
+  "person": "one Lock per person: a request, or a tick of signals"
+ },
+ "model": "nvidia/nemotron-3.5-super-vl:free",
+ "provider": null,
+ "promptVersion": "v3",
+ "cache": false,
+ "rpm": null,
+ "callsLogRunId": "430dc6dbd911",
+ "accountingOverheadNsPerSection": 738.7,
+ "durationS": 1079.6,
+ "points": [
+  "N001",
+  "N002",
+  "N004",
+  "N008"
+ ],
+ "spentUsd": 0.0
+}
