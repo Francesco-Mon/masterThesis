@@ -73,6 +73,7 @@ docs/
   EVAL_POLICY.md          how the evaluation set is labelled and scored
   DECISIONS.md            design decisions: what, why, alternatives dropped
   NGSI_LD.md              the environment on Orion-LD: differences, running, measurement harness
+  EVALUATION_RUNS.md      the final evaluation runs: sets, harnesses, scoring, attribution, commands
   schemas/                JSON Schemas exported from the contracts
 src/cpsagent/
   contracts/              Pydantic models of the contracts (single source of truth)
@@ -86,7 +87,8 @@ src/cpsagent/
   eventlog/               record builder, commitments, hash chain, store, verifier
   ui/                     Streamlit app, speech-to-text wrapper, clip recorder
   eval/                   dataset loader, runner, metrics, reports, STT measurement
-  bench/                  scenario runs and the harness comparing the two entity stores
+  bench/                  scenario runs, the harness comparing the two entity stores, and the
+                          evaluation harnesses (qualitative set, load and resources, models)
   demo.py, demo_agent.py  command-line demos
 tests/                    offline test suite (mirrors src/)
 data/                     scenario.yaml, NGSI-LD @context, evaluation set, STT sentence sets
@@ -134,6 +136,12 @@ Run all commands from the repository root with the virtual environment active.
 | Ground a single request with the LLM | `python -m cpsagent.grounding.try "it's too dark here" --zone hallway` |
 | Evaluation run of a grounder | `python -m cpsagent.eval.run --grounder keyword\|embedding\|llm --split dev` |
 | Rebuild the tables of a saved run | `python -m cpsagent.eval.report results/RUN_ID` |
+| Breakdown of saved runs (groups, EN/IT pairs, every error) | `python -m cpsagent.bench.breakdown RUN_DIR... --out DIR` |
+| Qualitative set through the whole agent | `python -m cpsagent.bench.qualitative --interpreter keyword\|embedding\|llm` |
+| Load and resources: N persons on one environment | `python -m cpsagent.bench.load --store memory\|ngsild --interpreter keyword --persons 1,2,5` |
+| Summary tables of saved load runs | `python -m cpsagent.bench.load_tables RUN_DIR... --out DIR` |
+| Resources of the embedding and speech-to-text models | `python -m cpsagent.bench.models` |
+| Run a frozen command and record its metadata | `python -m cpsagent.bench.record --out DIR -- COMMAND...` |
 | STT measurement on synthetic audio (macOS `say`) | `python -m cpsagent.eval.stt` |
 | Record clips for the STT measurement | `python -m cpsagent.ui.record_clips` |
 | STT measurement on recorded clips | `python -m cpsagent.eval.stt --source recorded` |
@@ -173,6 +181,11 @@ runs offline, without Docker, using the fake grounder and stub transports.
   rules in `docs/EVAL_POLICY.md`: a **dev split** (54 cases) used for development and tuning, and a
   **test split** (156 cases, including 30 requests written by the author) that is **frozen**:
   prompts, thresholds and baselines were chosen on dev only, and test is reserved for the final run.
+- `data/qualitative/` (72 messages, English and Italian pairs: articulated, multi-action and hard
+  requests) and `data/load/` (the request mix of the load harness) are the sets of the final
+  evaluation runs; each has a `metadata.json` with its SHA-256. The runs (`results/final/`,
+  `results/qualitative/`, `results/load/`, `results/bench/`), their commands and how every
+  number is computed are described in `docs/EVALUATION_RUNS.md`.
 - `results/` holds the raw outputs of each run (`run.json` with model id, provider, temperature,
   split and commit; per-case predictions; summary and error tables) and `llm_calls.jsonl`, one line
   per LLM call with latency, tokens and cost as reported by OpenRouter. Every table in `results/`
