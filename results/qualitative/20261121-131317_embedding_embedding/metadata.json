@@ -1,0 +1,53 @@
+{
+ "command": "python -m cpsagent.bench.qualitative --interpreter embedding",
+ "date": "2026-11-21T13:13:17+00:00",
+ "git": {
+  "commit": "95c7cbe99b2615fa21993bfdf21ecfdbe6ee1b22",
+  "branch": "evaluation",
+  "dirty": false
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {
+  "HF_HUB_OFFLINE": "1"
+ },
+ "runId": "20261121-131317_embedding_embedding",
+ "dataset": "data/qualitative/requests.jsonl",
+ "datasetSha256": "614a0a0fd4f509ff0be7d8831d21b777ce4b04bbd67a036d6ebff7f8b302d7f3",
+ "messages": 72,
+ "interpreter": "embedding",
+ "interpreterLoadS": 5.942,
+ "store": "memory",
+ "session": "ui.session.AgentSession, seed 0, one fresh session per message",
+ "embeddingModel": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+ "embeddingRevision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+ "threshold": 0.4,
+ "margin": 0.0,
+ "descriptionsSha256": "38a7b06cac9524b9",
+ "durationS": 1.917,
+ "costUsd": 0
+}

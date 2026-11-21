@@ -1,0 +1,73 @@
+interpreter,id,category,k,whole_result,split,parts,parts_done,part_results,executed,correct,missed,wrong,observed_reply
+keyword,q-a01-en,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a01-it,articulated,1,clarification:ambiguous_target,0,0,0,clarification:ambiguous_target; clarification:ambiguous_target,0,0,1,0,clarification
+keyword,q-a02-en,articulated,1,clarification:missing_information,0,0,0,clarification:missing_information; clarification:ambiguous_target,0,0,1,0,clarification
+keyword,q-a02-it,articulated,1,clarification:missing_information,0,0,0,clarification:missing_information; clarification:ambiguous_target,0,0,1,0,clarification
+keyword,q-a03-en,articulated,1,intent,0,0,0,,2,1,0,1,done
+keyword,q-a03-it,articulated,1,intent,0,0,0,,2,1,0,1,done
+keyword,q-a04-en,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a04-it,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a05-en,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a05-it,articulated,1,clarification:missing_information,0,0,0,clarification:ambiguous_target; clarification:missing_information,0,0,1,0,clarification
+keyword,q-a06-en,articulated,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-a06-it,articulated,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-a07-en,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a07-it,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a08-en,articulated,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-a08-it,articulated,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-a09-en,articulated,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-a09-it,articulated,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-a10-en,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a10-it,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a11-en,articulated,1,clarification:ambiguous_target,0,0,0,clarification:ambiguous_target; clarification:ambiguous_target; clarification:ambiguous_target,0,0,1,0,clarification
+keyword,q-a11-it,articulated,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-a12-en,articulated,1,clarification:missing_information,0,0,0,clarification:ambiguous_target; clarification:missing_information,0,0,1,0,clarification
+keyword,q-a12-it,articulated,1,unsupported:capability_absent,0,0,0,clarification:ambiguous_target; unsupported:capability_absent,0,0,1,0,refusal
+keyword,q-m2a-en,multi_action,2,clarification:ambiguous_target,1,2,2,intent; intent,2,2,0,0,done
+keyword,q-m2a-it,multi_action,2,clarification:ambiguous_target,1,2,2,intent; intent,2,2,0,0,done
+keyword,q-m2b-en,multi_action,2,clarification:ambiguous_target,1,2,2,intent; intent,2,2,0,0,done
+keyword,q-m2b-it,multi_action,2,clarification:ambiguous_target,1,2,2,intent; intent,2,2,0,0,done
+keyword,q-m2c-en,multi_action,2,intent,0,0,0,,1,0,2,1,done
+keyword,q-m2c-it,multi_action,2,intent,0,0,0,,1,0,2,1,done
+keyword,q-m2d-en,multi_action,2,clarification:ambiguous_target,1,2,1,intent; clarification:missing_information,1,1,1,0,partial
+keyword,q-m2d-it,multi_action,2,clarification:ambiguous_target,1,2,2,intent; intent,2,2,0,0,done
+keyword,q-m3a-en,multi_action,3,clarification:ambiguous_target,1,3,3,intent; intent; intent,3,3,0,0,done
+keyword,q-m3a-it,multi_action,3,clarification:ambiguous_target,1,3,3,intent; intent; intent,3,3,0,0,done
+keyword,q-m3b-en,multi_action,3,intent,0,0,0,,1,1,2,0,done
+keyword,q-m3b-it,multi_action,3,intent,0,0,0,,1,1,2,0,done
+keyword,q-m3c-en,multi_action,3,clarification:ambiguous_target,1,3,3,intent; intent; intent,3,3,0,0,done
+keyword,q-m3c-it,multi_action,3,clarification:ambiguous_target,1,3,3,intent; intent; intent,3,3,0,0,done
+keyword,q-m3d-en,multi_action,3,clarification:ambiguous_target,1,3,3,intent; intent; intent,3,3,0,0,done
+keyword,q-m3d-it,multi_action,3,unsupported:capability_absent,1,3,2,unsupported:capability_absent; intent; intent,2,2,1,0,partial
+keyword,q-m4a-en,multi_action,4,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,2,0,partial
+keyword,q-m4a-it,multi_action,4,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,2,0,partial
+keyword,q-m4b-en,multi_action,4,intent,0,0,0,,1,1,3,0,done
+keyword,q-m4b-it,multi_action,4,intent,0,0,0,,1,1,3,0,done
+keyword,q-m4c-en,multi_action,4,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,2,0,partial
+keyword,q-m4c-it,multi_action,4,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,2,0,partial
+keyword,q-m4d-en,multi_action,4,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,2,0,partial
+keyword,q-m4d-it,multi_action,4,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,2,0,partial
+keyword,q-m5a-en,multi_action,5,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,3,0,partial
+keyword,q-m5a-it,multi_action,5,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,3,0,partial
+keyword,q-m5b-en,multi_action,5,intent,0,0,0,,1,1,4,0,done
+keyword,q-m5b-it,multi_action,5,intent,0,0,0,,1,1,4,0,done
+keyword,q-m5c-en,multi_action,5,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,3,0,partial
+keyword,q-m5c-it,multi_action,5,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,3,0,partial
+keyword,q-m5d-en,multi_action,5,clarification:ambiguous_target,1,3,2,intent; intent; clarification:ambiguous_target,2,2,3,0,partial
+keyword,q-m5d-it,multi_action,5,unsupported:capability_absent,1,3,1,intent; unsupported:capability_absent; unsupported:capability_absent,1,1,4,0,partial
+keyword,q-h01-en,hard,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-h01-it,hard,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-h02-en,hard,1,intent,0,0,0,,1,0,1,1,done
+keyword,q-h02-it,hard,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-h03-en,hard,1,clarification:ambiguous_target,1,2,2,intent; intent,2,1,0,1,done
+keyword,q-h03-it,hard,1,clarification:ambiguous_target,1,2,2,intent; intent,2,1,0,1,done
+keyword,q-h04-en,hard,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-h04-it,hard,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-h05-en,hard,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-h05-it,hard,1,clarification:ambiguous_target,0,0,0,clarification:ambiguous_target; clarification:ambiguous_target,0,0,1,0,clarification
+keyword,q-h06-en,hard,1,unsupported:out_of_scope,0,0,0,,0,0,1,0,refusal
+keyword,q-h06-it,hard,1,intent,0,0,0,,1,1,0,0,done
+keyword,q-h07-en,hard,2,unsupported:capability_absent,1,2,1,intent; unsupported:capability_absent,1,1,0,0,partial
+keyword,q-h07-it,hard,2,unsupported:capability_absent,1,2,1,intent; unsupported:capability_absent,1,1,0,0,partial
+keyword,q-h08-en,hard,2,unsupported:capability_absent,1,2,1,unsupported:capability_absent; intent,1,1,0,0,partial
+keyword,q-h08-it,hard,2,unsupported:capability_absent,1,2,1,unsupported:capability_absent; intent,1,1,0,0,partial
