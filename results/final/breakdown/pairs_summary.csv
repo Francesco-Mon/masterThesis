@@ -1,3 +1,5 @@
 run,grounder,pairs,prediction_agree,pa_lo,pa_hi,outcome_agree,oa_lo,oa_hi,both_strict_correct,bc_lo,bc_hi
 20261121-131024_keyword_keyword_test,keyword,24,0.9167,0.7415,0.9768,0.9167,0.7415,0.9768,0.8750,0.6900,0.9566
 20261121-131024_embedding_embedding_test,embedding,24,0.7083,0.5083,0.8509,0.7500,0.5510,0.8800,0.6667,0.4671,0.8203
+20261121-152330_llm_nvidia-nemotron-3.5-super-vl-free_test,llm:nvidia/nemotron-3.5-super-vl:free,24,0.8750,0.6900,0.9566,0.9167,0.7415,0.9768,0.8333,0.6415,0.9332
+20261121-154439_llm_openai-gpt-oss-120b_test_deepinfra,llm:openai/gpt-oss-120b,24,0.7917,0.5953,0.9076,0.8750,0.6900,0.9566,0.6667,0.4671,0.8203

@@ -1,0 +1,35 @@
+run,grounder,key,value,n,strict,strict_lo,strict_hi,outcome,outcome_lo,outcome_hi
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,adversarial,45,0.6444,0.4984,0.7678,0.9333,0.8214,0.9771
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,ambiguous,48,0.7083,0.5682,0.8176,0.7917,0.6574,0.8827
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,environment,45,1.0000,0.9213,1.0000,1.0000,0.9213,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,explicit,54,1.0000,0.9336,1.0000,1.0000,0.9336,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,explicit_other_zone,42,1.0000,0.9162,1.0000,1.0000,0.9162,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,following,45,0.8000,0.6618,0.8910,0.8444,0.7122,0.9225
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,implicit,57,1.0000,0.9369,1.0000,1.0000,0.9369,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,out_of_scope,42,1.0000,0.9162,1.0000,1.0000,0.9162,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,unsupported,48,0.8542,0.7283,0.9275,1.0000,0.9259,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category,zone_dependent,42,1.0000,0.9162,1.0000,1.0000,0.9162,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,language,en,333,0.8949,0.8573,0.9235,0.9640,0.9381,0.9793
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,language,it,135,0.9185,0.8600,0.9539,0.9407,0.8874,0.9697
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,source,human,90,0.9222,0.8481,0.9618,0.9556,0.8912,0.9826
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,source,llm,378,0.8968,0.8621,0.9236,0.9577,0.9324,0.9738
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,adversarial en,39,0.6410,0.4842,0.7726,0.9231,0.7968,0.9735
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,adversarial it,6,0.6667,0.3000,0.9032,1.0000,0.6097,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,ambiguous en,30,0.6667,0.4878,0.8077,0.8000,0.6269,0.9050
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,ambiguous it,18,0.7778,0.5478,0.9100,0.7778,0.5478,0.9100
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,environment en,36,1.0000,0.9036,1.0000,1.0000,0.9036,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,environment it,9,1.0000,0.7008,1.0000,1.0000,0.7008,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,explicit en,33,1.0000,0.8957,1.0000,1.0000,0.8957,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,explicit it,21,1.0000,0.8454,1.0000,1.0000,0.8454,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,explicit_other_zone en,30,1.0000,0.8865,1.0000,1.0000,0.8865,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,explicit_other_zone it,12,1.0000,0.7575,1.0000,1.0000,0.7575,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,following en,33,0.8485,0.6908,0.9335,0.9091,0.7643,0.9686
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,following it,12,0.6667,0.3906,0.8619,0.6667,0.3906,0.8619
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,implicit en,33,1.0000,0.8957,1.0000,1.0000,0.8957,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,implicit it,24,1.0000,0.8620,1.0000,1.0000,0.8620,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,out_of_scope en,30,1.0000,0.8865,1.0000,1.0000,0.8865,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,out_of_scope it,12,1.0000,0.7575,1.0000,1.0000,0.7575,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,unsupported en,36,0.8333,0.6811,0.9213,1.0000,0.9036,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,unsupported it,12,0.9167,0.6461,0.9851,1.0000,0.7575,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,zone_dependent en,33,1.0000,0.8957,1.0000,1.0000,0.8957,1.0000
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,category x language,zone_dependent it,9,1.0000,0.7008,1.0000,1.0000,0.7008,1.0000

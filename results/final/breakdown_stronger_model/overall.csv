@@ -1,0 +1,2 @@
+run,grounder,split,repeats,n,strict,strict_lo,strict_hi,outcome,outcome_lo,outcome_hi
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,test,3,468,0.9017,0.8714,0.9255,0.9573,0.9349,0.9722

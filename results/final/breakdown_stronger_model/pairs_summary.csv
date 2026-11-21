@@ -1,0 +1,2 @@
+run,grounder,pairs,prediction_agree,pa_lo,pa_hi,outcome_agree,oa_lo,oa_hi,both_strict_correct,bc_lo,bc_hi
+20261121-155508_llm_mistralai-mistral-large-4-0_test,llm:mistralai/mistral-large-4-0,24,0.9583,0.7976,0.9926,0.9583,0.7976,0.9926,0.8333,0.6415,0.9332
