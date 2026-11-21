@@ -21,3 +21,6 @@ logs/
 # clips stay on the author's machine (voice data); only texts and transcripts are committed
 data/stt_audio/
 data/stt_recorded/
+
+# Figures drawn by scripts/make_figures.py from results/
+figures/
