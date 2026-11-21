@@ -1,0 +1,10 @@
+{"id": "l01", "text": "Switch on the lamp, please", "language": "en", "kind": "explicit", "note": "on for the lamp of the person's zone (storage has none)"}
+{"id": "l02", "text": "Switch off the lamp", "language": "en", "kind": "explicit", "note": "off for the lamp of the person's zone"}
+{"id": "l03", "text": "It's too dark in here", "language": "en", "kind": "implicit", "note": "light on in the person's zone"}
+{"id": "l04", "text": "Lower the brightness a little", "language": "en", "kind": "explicit", "note": "dim 30 where the lamp can dim; command absent in corridor and kitchen"}
+{"id": "l05", "text": "I'm cold", "language": "en", "kind": "implicit", "note": "thermostat up in the office and meeting room; elsewhere no thermostat"}
+{"id": "l06", "text": "Shut the blinds", "language": "en", "kind": "explicit", "note": "close where there is a blind (office, meeting room)"}
+{"id": "l07", "text": "Turn on the light in the kitchen", "language": "en", "kind": "explicit_other_zone", "note": "the kitchen lamp, from anywhere: the request several persons can send to one device"}
+{"id": "l08", "text": "Keep the lights on along my way", "language": "en", "kind": "following", "note": "path + following: lamps along the walk until the next request"}
+{"id": "l09", "text": "Play some music", "language": "en", "kind": "refusal", "note": "no device offers sound: refused"}
+{"id": "l10", "text": "Turn on the lamp and close the blinds", "language": "en", "kind": "multi_action", "note": "two actions, split by the engine when not understood as a whole"}

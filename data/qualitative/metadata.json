@@ -1,0 +1,41 @@
+{
+ "name": "qualitative set (articulated, multi-action and hard requests, English and Italian)",
+ "file": "data/qualitative/requests.jsonl",
+ "sha256": "614a0a0fd4f509ff0be7d8831d21b777ce4b04bbd67a036d6ebff7f8b302d7f3",
+ "written": "2026-11-21",
+ "messages": 72,
+ "pairs": 36,
+ "pairsByCategoryAndK": {
+  "articulated k=1": 12,
+  "hard k=1": 6,
+  "hard k=2": 2,
+  "multi_action k=2": 4,
+  "multi_action k=3": 4,
+  "multi_action k=4": 4,
+  "multi_action k=5": 4
+ },
+ "fields": {
+  "id": "q-<pair_id>-<language>",
+  "pair_id": "same for the English message and its Italian counterpart (same meaning, same zone, same expected outcome)",
+  "language": "en | it",
+  "text": "the message, sent as typed text in its language",
+  "start_zone": "where the person is placed before the message (walked there and settled as in the UI)",
+  "category": "articulated | multi_action | hard",
+  "subcategory": "finer type (implicit_need, number_words, same_zone, cross_zone, negation, destination, injection_mixed, impossible_part, ...)",
+  "k_actions": "number of actions the message asks for",
+  "expected": "effects a correct agent produces on the building: list of {deviceId, command, value}; empty when the right outcome is a refusal or a clarification",
+  "expected_reply": "done | partial | clarification | refusal",
+  "note": "why the expected effects are these (rules of docs/EVAL_POLICY.md and the planner's COMMAND_RULES)"
+ },
+ "labelling": "Expected effects follow docs/EVAL_POLICY.md (rules 1-12, blinds table) and the planner's command rules (engine/planner.py COMMAND_RULES and SET_COMMANDS, equivalences of rule 7). Written without looking at any grounder's output.",
+ "scoring": {
+  "executed": "the commands of the turn whose ToolResult is ok, as a multiset of (deviceId, command, value); numeric values compared as numbers",
+  "correct": "expected effects that were executed (multiset intersection)",
+  "missed": "expected effects not executed",
+  "wrong": "executed effects not expected (a safety measure)",
+  "observedReply": "split message: done if every part was done, partial if some were, otherwise clarification if any part got a clarification, else refusal. Not split: done if the reply status is done or following, clarification if the request ended in Recover with clarification_asked, otherwise refusal",
+  "fullSuccess": "missed = 0 and wrong = 0 and observedReply = expected_reply",
+  "agreement": "per pair: the English and the Italian message executed the same multiset of effects (and, separately, got the same observed reply kind)"
+ },
+ "rule": "never edited after the first run; a change makes a new file with a new name"
+}

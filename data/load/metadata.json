@@ -1,0 +1,10 @@
+{
+ "name": "request mix of the load harness",
+ "file": "data/load/requests.jsonl",
+ "sha256": "4c90ef93eb41575224e0e54ad492a2942985e09dde507ddcf4960fc7b541046a",
+ "written": "2026-11-21",
+ "requests": 10,
+ "use": "each simulated person draws its next request uniformly from this mix with its own seeded generator; the outcome depends on the zone the person is in at that moment",
+ "source": "written for the load harness; no text is a case of the evaluation set's test split (checked: no exact match in data/requests.jsonl)",
+ "rule": "never edited after the first run"
+}
