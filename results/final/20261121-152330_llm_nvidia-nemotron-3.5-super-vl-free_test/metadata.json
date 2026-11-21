@@ -1,0 +1,44 @@
+{
+ "command": "python -m cpsagent.bench.record --out results/final/20261121-152330_llm_nvidia-nemotron-3.5-super-vl-free_test -- python -m cpsagent.eval.run --grounder llm --model nvidia/nemotron-3.5-super-vl:free --split test --final --repeats 3 --no-cache --max-cost 0.1 --out results/final/20261121-152330_llm_nvidia-nemotron-3.5-super-vl-free_test",
+ "date": "2026-11-21T15:23:30+00:00",
+ "git": {
+  "commit": "f0794a0901144eff38b27cff43ac886b2bb3c197",
+  "branch": "evaluation",
+  "dirty": false
+ },
+ "machine": {
+  "system": "Darwin",
+  "release": "27.2.0",
+  "macOS": "27.2.1",
+  "machine": "arm64",
+  "cpu": "Apple M1",
+  "model": "MacBookPro17,1",
+  "logicalCpus": "8",
+  "performanceCores": "4",
+  "efficiencyCores": "4",
+  "memoryBytes": "8589934592"
+ },
+ "versions": {
+  "python": "3.12.16",
+  "pydantic": "2.14.2",
+  "httpx": "0.28.1",
+  "numpy": "2.5.4",
+  "openai": "3.42.1",
+  "PyYAML": "6.0.3",
+  "sentence-transformers": "6.2.0",
+  "transformers": "5.22.1",
+  "tokenizers": "0.23.3",
+  "torch": "2.15.0",
+  "faster-whisper": "1.2.1",
+  "ctranslate2": "4.8.5"
+ },
+ "environment": {},
+ "recordedCommand": "python -m cpsagent.eval.run --grounder llm --model nvidia/nemotron-3.5-super-vl:free --split test --final --repeats 3 --no-cache --max-cost 0.1 --out results/final/20261121-152330_llm_nvidia-nemotron-3.5-super-vl-free_test",
+ "durationS": 3126.204,
+ "exitCode": 0,
+ "gitAfter": {
+  "commit": "084f7ba9d3e08a1a434677059844464b3e6edfba",
+  "branch": "evaluation",
+  "dirty": true
+ }
+}
