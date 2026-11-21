@@ -79,7 +79,7 @@ light in the kitchen", the request several persons can send to one device), one 
 ("Keep the lights on along my way"), one refusal ("Play some music") and one with two actions.
 None is a case of the test split. SHA-256 in `data/load/metadata.json`.
 
-## Final run on the test split (free grounders)
+## Final runs on the test split
 
 Protocol, taken from the evaluation runner (`python -m cpsagent.eval.run`), `docs/EVAL_POLICY.md`,
 `docs/DECISIONS.md` and the `run.json` of the development runs:
@@ -88,7 +88,8 @@ Protocol, taken from the evaluation runner (`python -m cpsagent.eval.run`), `doc
 |---|---|
 | keyword | no parameters; 1 repeat |
 | embedding | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` at revision `e8f8c211226b894fcb81acc59f3b34ba3efd5f42`, threshold 0.40, margin 0.0, descriptions hash `38a7b06cac9524b9`; 1 repeat; model from the local cache (`HF_HUB_OFFLINE=1`) |
-| llm (paid, separate) | prompt v3, temperature 0, `openai/gpt-oss-120b` pinned to DekaLLM without fallbacks, and `nvidia/nemotron-3.5-super-vl:free`; 1 repeat on dev |
+| llm | prompt v3, temperature 0, `openai/gpt-oss-120b` and `nvidia/nemotron-3.5-super-vl:free`; on dev 1 repeat with gpt-oss-120b pinned to DekaLLM; on test **3 repeats, no response cache**, gpt-oss-120b pinned to **DeepInfra** without fallbacks (DekaLLM was down on 21 Nov 2026, see `docs/DECISIONS.md`; the dev split was run again on DeepInfra first and compared case by case) |
+| llm, stronger model (separate experiment) | `mistralai/mistral-large-4-0` pinned to the endpoint `mistral/zdr` without fallbacks, prompt v3, temperature 0, no response cache; dev split (1 repeat) first, then the test split with 3 repeats; chosen before any language-model result on the test split was seen |
 
 Commands (the output folder is given so the runs land in `results/final/`):
 
@@ -99,10 +100,26 @@ HF_HUB_OFFLINE=1 python -m cpsagent.bench.record --out results/final/RUN_ID -- \
   python -m cpsagent.eval.run --grounder embedding --split test --final --out results/final/RUN_ID
 ```
 
+Language-model runs (paid calls through OpenRouter, every one in `results/llm_calls.jsonl` with the run's `callsLogRunId`; per-run cost caps 0.5 USD for gpt-oss-120b, at most 3 USD for the stronger model):
+
+```bash
+python -m cpsagent.bench.record --out results/final/RUN_ID -- \
+  python -m cpsagent.eval.run --grounder llm --model openai/gpt-oss-120b --provider DeepInfra \
+  --split test --final --repeats 3 --no-cache --max-cost 0.5 --out results/final/RUN_ID
+python -m cpsagent.bench.record --out results/final/RUN_ID -- \
+  python -m cpsagent.eval.run --grounder llm --model nvidia/nemotron-3.5-super-vl:free \
+  --split test --final --repeats 3 --no-cache --max-cost 0.1 --out results/final/RUN_ID
+python -m cpsagent.bench.record --out results/final/RUN_ID -- \
+  python -m cpsagent.eval.run --grounder llm --model mistralai/mistral-large-4-0 --provider mistral/zdr \
+  --split test --final --repeats 3 --no-cache --max-cost 1.9 --yes --out results/final/RUN_ID
+```
+
+Latency caveat: the test split and the qualitative set of gpt-oss-120b ran at the same time on DeepInfra (17:18 to 18:26 UTC), and those of mistral-large-4-0 on `mistral/zdr` (17:18 to 18:07 UTC), so the language-model latencies of these four runs may be inflated by the overlap; accuracy is not affected. Time windows of every run are in `docs/DECISIONS.md`. The endpoint that served each Mistral call was checked from its cost (`mistral/zdr` and `mistral/eu` have different prices; the costs match `mistral/zdr` once the provider's own prompt cache is counted). Empty responses count as `service_unavailable` in the runner and are not retried.
+
 Each folder has the runner's own files (`run.json`, `predictions.jsonl`, `summary.md/.csv`,
 `errors.md/.jsonl`) and the wrapper's `metadata.json`.
 
-**Breakdown** (`python -m cpsagent.bench.breakdown RUN_DIR... --out results/final/breakdown`):
+**Breakdown** (`python -m cpsagent.bench.breakdown RUN_DIR... --out results/final/breakdown`; the stronger model apart, in `results/final/breakdown_stronger_model`):
 scores the saved predictions again with the frozen `cpsagent.eval.metrics.score` (the numbers
 equal the runs' own summaries) and writes `overall.csv`, `by_group.csv` (per category,
 language, source and category x language, with 95% Wilson intervals), `pairs.csv` and
@@ -320,13 +337,26 @@ python -m cpsagent.bench.record --out results/bench/final_ngsild --broker http:/
 | load, memory, embedding, open loop | `python -m cpsagent.bench.load --store memory --interpreter embedding --mode open --persons 10 --rates 2,5,10,20,50,100,200,400 --duration 100 --label open_memory_embedding_N10` | `results/load/open_memory_embedding_N10` | points N010_r2, N010_r5, N010_r10, N010_r20, N010_r50, N010_r100, N010_r200, N010_r400: 156, 420, 896, 1826, 4470, 8691, 15946, 30512 measured requests | 14 min |
 | load, memory, keyword, open loop | `python -m cpsagent.bench.load --store memory --interpreter keyword --mode open --persons 10 --rates 2,5,10,20,50,100,200,400 --duration 100 --label open_memory_keyword_N10` | `results/load/open_memory_keyword_N10` | points N010_r2, N010_r5, N010_r10, N010_r20, N010_r50, N010_r100, N010_r200, N010_r400: 156, 420, 896, 1826, 4467, 8906, 17873, 35691 measured requests | 14 min |
 | load, memory, keyword, closed loop | `python -m cpsagent.bench.load --store memory --interpreter keyword --mode closed --persons 1,10,50,100 --min-duration 30 --min-requests 50 --max-duration 120 --tracemalloc --label tracemalloc_memory_keyword` | `results/load/tracemalloc_memory_keyword` | points N001, N010, N050, N100: 50, 172, 968, 948 measured requests | 3 min |
+| test split, nemotron | `python -m cpsagent.eval.run --grounder llm --model nvidia/nemotron-3.5-super-vl:free --split test --final --repeats 3 --no-cache --max-cost 0.1` | `results/final/20261121-152330_llm_nvidia-nemotron-3.5-super-vl-free_test` | 156 cases x 3, 456 calls, 0 USD | 52 min |
+| dev split, gpt-oss-120b on DeepInfra (provider check) | `python -m cpsagent.eval.run --grounder llm --model openai/gpt-oss-120b --provider DeepInfra --split dev --no-cache --max-cost 0.5` | `results/final/20261121-152330_llm_openai-gpt-oss-120b_dev_deepinfra` | 54 cases, 53 calls, 0.006 USD | 21 min |
+| test split, gpt-oss-120b on DeepInfra | `python -m cpsagent.eval.run --grounder llm --model openai/gpt-oss-120b --provider DeepInfra --split test --final --repeats 3 --no-cache --max-cost 0.5` | `results/final/20261121-154439_llm_openai-gpt-oss-120b_test_deepinfra` | 156 cases x 3, 456 calls, 0.050 USD | 177 min |
+| dev split, mistral-large-4-0 (stronger model) | `python -m cpsagent.eval.run --grounder llm --model mistralai/mistral-large-4-0 --provider mistral/zdr --split dev --no-cache --max-cost 0.3` | `results/final/20261121-154056_llm_mistralai-mistral-large-4-0_dev` | 54 cases, 53 calls, 0.148 USD | 14 min |
+| test split, mistral-large-4-0 (stronger model) | `python -m cpsagent.eval.run --grounder llm --model mistralai/mistral-large-4-0 --provider mistral/zdr --split test --final --repeats 3 --no-cache --max-cost 1.9 --yes` | `results/final/20261121-155508_llm_mistralai-mistral-large-4-0_test` | 156 cases x 3, 456 calls, 1.330 USD | 137 min |
+| qualitative set, nemotron | `python -m cpsagent.bench.qualitative --interpreter llm --model nvidia/nemotron-3.5-super-vl:free --no-cache --max-cost 0.1` | `results/qualitative/20261121-161556_llm_nvidia-nemotron-3.5-super-vl-free` | 72 messages, 92 calls, 0 USD | 61 min |
+| qualitative set, gpt-oss-120b on DeepInfra | `python -m cpsagent.bench.qualitative --interpreter llm --model openai/gpt-oss-120b --provider DeepInfra --no-cache --max-cost 0.5` | `results/qualitative/20261121-171735_llm_openai-gpt-oss-120b` | 72 messages, 153 calls, 0.021 USD | 69 min |
+| qualitative set, mistral-large-4-0 (stronger model) | `python -m cpsagent.bench.qualitative --interpreter llm --model mistralai/mistral-large-4-0 --provider mistral/zdr --no-cache --max-cost 0.75` | `results/qualitative/20261121-171740_llm_mistralai-mistral-large-4-0` | 72 messages, 72 calls, 0.434 USD | 50 min |
+| load, memory, nemotron, closed loop | `python -m cpsagent.bench.load --store memory --interpreter llm --model nvidia/nemotron-3.5-super-vl:free --no-cache --persons 1,2,4,8 --requests-per-client 5 --max-duration 900 --max-cost 0.1 --label closed_memory_llm_nemotron` | `results/load/closed_memory_llm_nemotron` | points N001, N002, N004, N008: 4, 7, 15, 31 measured requests; 80 calls, 0 USD; every point failed on tick lag | 18 min |
+| load, memory, gpt-oss-120b on DeepInfra, closed loop | `python -m cpsagent.bench.load --store memory --interpreter llm --model openai/gpt-oss-120b --provider DeepInfra --no-cache --persons 1,2,4,8 --requests-per-client 5 --max-duration 900 --max-cost 0.5 --label closed_memory_llm_gptoss` | `results/load/closed_memory_llm_gptoss` | points N001, N002, N004, N008: 4, 8, 16, 32 measured requests; 78 calls, 0.009 USD; every point failed on tick lag | 28 min |
 | backends harness | `python -m cpsagent.bench.backends --store memory --repeats 30 --out results/bench/final_memory` | `results/bench/final_memory/memory-20261121T150629Z` | 30 repeats + 2 warm-ups | 1 s |
 | backends harness | `python -m cpsagent.bench.backends --store ngsild --repeats 30 --out results/bench/final_ngsild` | `results/bench/final_ngsild/ngsild-20261121T150631Z` | 30 repeats + 2 warm-ups | 119 s |
 | models | `python -m cpsagent.bench.models --repeats 3` | `results/bench/models` | 246 encodings; 20 clips x 3 | about 1 min |
-| breakdown of the test-split runs | `python -m cpsagent.bench.breakdown results/final/<keyword run> results/final/<embedding run> --out results/final/breakdown` | `results/final/breakdown` |  |  |
-| combined qualitative tables | `python -m cpsagent.bench.qualitative --compare <both runs> --out results/qualitative/combined` | `results/qualitative/combined` |  |  |
-| load tables | `python -m cpsagent.bench.load_tables results/load/<the seven runs> --out results/load/tables` | `results/load/tables` | 45 points |  |
+| breakdown of the test-split runs | `python -m cpsagent.bench.breakdown results/final/<keyword, embedding, nemotron and gpt-oss-120b test runs> --out results/final/breakdown` | `results/final/breakdown` |  |  |
+| breakdown of the stronger model | `python -m cpsagent.bench.breakdown results/final/<mistral-large-4-0 test run> --out results/final/breakdown_stronger_model` | `results/final/breakdown_stronger_model` |  |  |
+| combined qualitative tables | `python -m cpsagent.bench.qualitative --compare <the five runs> --out results/qualitative/combined` (rows led by run and model) | `results/qualitative/combined` |  |  |
+| load tables | `python -m cpsagent.bench.load_tables results/load/<the nine runs> --out results/load/tables` | `results/load/tables` | 53 points |  |
 
 Common parameters of the load runs (in each `metadata.json`): pace 1 tick/s, think time 1 s, warm-up 10 s, clients from 5 s, conflict window 5 s, seed 0. `events.json` of the load points was written uncompressed by the runs and gzipped afterwards (lossless), as the harness now writes it. Event Log files of the persons were deleted after their sizes were recorded. The broker was stopped at the end with `docker compose down -v`.
 
-Paid runs (language-model grounder): not made yet; they need the author's confirmation.
+Language-model load runs: in memory, the client's rate limit 20 calls per minute (`LLM_RPM` not set; the nemotron run's metadata says `rpm: null`, see `docs/DECISIONS.md`), each run made with no other run on its provider. Since the harness calls the interpreter one request at a time and each person handles one event at a time, a slow call holds up that person's positioning signals: the tick delay, not the environment, is what fails at every N.
+
+Total spent on paid calls in the final runs: 0.006 + 0.050 + 0.148 + 1.330 + 0.021 + 0.434 + 0.009 = 1.998 USD (nemotron free).
