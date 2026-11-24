@@ -42,44 +42,71 @@ NAMES = {"keyword": "keyword", "embedding": "embedding",
          "llm:mistralai/mistral-large-4-0": "mistral-large-4"}
 ORDER = ["keyword", "embedding", "nemotron", "gpt-oss-120b", "mistral-large-4"]
 
+# ---------- majority answers on the test split ----------
+# Each language model was run three times; a request counts once, with the answer given
+# in at least two of the three repeats, so that every technique is measured on 156 requests.
+from cpsagent.contracts import GroundingResultAdapter
+from cpsagent.eval.dataset import bind_scenario, from_repo, load_cases
+from cpsagent.eval.metrics import score
+from cpsagent.eval.report import wilson
+TEST_RUNS = {"keyword": "20261121-131024_keyword_keyword_test",
+             "embedding": "20261121-131024_embedding_embedding_test",
+             "nemotron": "20261121-152330_llm_nvidia-nemotron-3.5-super-vl-free_test",
+             "gpt-oss-120b": "20261121-154439_llm_openai-gpt-oss-120b_test_deepinfra",
+             "mistral-large-4": "20261121-155508_llm_mistralai-mistral-large-4-0_test"}
+_session = bind_scenario()
+MAJ = {}
+for g, d in TEST_RUNS.items():
+    meta = json.loads((R/"results/final"/d/"run.json").read_text())
+    cases = {c.id: c for c in load_cases(from_repo(meta["dataset"]))[0]}
+    per = collections.defaultdict(list)
+    for line in (R/"results/final"/d/"predictions.jsonl").read_text().splitlines():
+        rec = json.loads(line)
+        per[rec["id"]].append(score(cases[rec["id"]], rec["repeat"],
+                                    GroundingResultAdapter.validate_python(rec["prediction"]), _session))
+    MAJ[g] = {i: {"strict": sum(s.strict for s in v) * 2 > len(v), "outcome": sum(s.outcome_ok for s in v) * 2 > len(v),
+                  "category": v[0].case.category} for i, v in per.items()}
+
 # ---------- F1: test split accuracy with Wilson intervals ----------
-ov = rows(R/"results/final/breakdown/overall.csv") + rows(R/"results/final/breakdown_stronger_model/overall.csv")
-acc = {NAMES[r["grounder"]]: r for r in ov}
 fig, axes = plt.subplots(1, 2, figsize=(W, 2.1), sharey=True)
-for ax, (key, title) in zip(axes, [("strict", "Strict accuracy"), ("outcome", "Outcome accuracy")]):
+for ax, (key, title) in zip(axes, [("strict", "(a) Strict accuracy"), ("outcome", "(b) Outcome accuracy")]):
     ys = range(len(ORDER))[::-1]
     for y, g in zip(ys, ORDER):
-        r = acc[g]; v = float(r[key]) * 100
-        lo, hi = float(r[key + "_lo"]) * 100, float(r[key + "_hi"]) * 100
+        h = sum(r[key] for r in MAJ[g].values()); n = len(MAJ[g])
+        v = h / n * 100; lo, hi = (x * 100 for x in wilson(h, n))
         ax.barh(y, v, height=0.55, color=C[g], zorder=2)
         ax.errorbar(v, y, xerr=[[v - lo], [hi - v]], fmt="none", ecolor=INK, elinewidth=0.9, capsize=2.5, zorder=3)
-        ax.text(hi + 1.2, y, f"{v:.1f}", va="center", fontsize=8, color=INK)
-    ax.set_xlim(50, 105); ax.set_title(title, loc="left")
-    ax.set_xlabel("% of predictions (95% interval)")
+        ax.text(hi + 1.2, y, f"{v:.1f}%", va="center", fontsize=8, color=INK)
+    ax.set_xlim(50, 108); ax.set_title(title, loc="left")
+    ax.set_xlabel("% of the 156 test requests")
     ax.grid(axis="y", visible=False)
 axes[0].set_yticks(list(range(len(ORDER))[::-1])); axes[0].set_yticklabels(ORDER)
 save(fig, "fig_test_accuracy")
 
 # ---------- F2: per-category heatmap ----------
-bg = rows(R/"results/final/breakdown/by_group.csv") + rows(R/"results/final/breakdown_stronger_model/by_group.csv")
 cats = ["explicit", "explicit_other_zone", "implicit", "zone_dependent", "following", "environment",
         "ambiguous", "unsupported", "out_of_scope", "adversarial"]
-M = [[float(next(r for r in bg if NAMES[r["grounder"]] == g and r["key"] == "category" and r["value"] == c)["strict"]) * 100
-      for g in ORDER] for c in cats]
+ncat = {c: sum(1 for r in MAJ["keyword"].values() if r["category"] == c) for c in cats}
+M = [[100 * sum(r["strict"] for r in MAJ[g].values() if r["category"] == c) / ncat[c] for g in ORDER] for c in cats]
 from matplotlib.colors import LinearSegmentedColormap
 blue = LinearSegmentedColormap.from_list("b", ["#f2f7fd", "#9ec5f4", "#3987e5", "#1c5cab", "#0d366b"])
+def heat(ax, M, rows, cols, fmt, vmax=100, txt=None):
+    im = ax.imshow(M, cmap=blue, vmin=0, vmax=vmax, aspect="auto")
+    for i, row in enumerate(M):
+        for j, v in enumerate(row):
+            s = txt[i][j] if txt else fmt(v)
+            ax.text(j, i, s, ha="center", va="center", fontsize=8, color="white" if v >= 0.6 * vmax else INK)
+    ax.set_xticks(range(len(cols))); ax.set_yticks(range(len(rows))); ax.set_yticklabels(rows)
+    ax.grid(False)
+    for s in ax.spines.values(): s.set_visible(False)
+    ax.set_xticks([x - .5 for x in range(1, len(cols))], minor=True)
+    ax.set_yticks([y - .5 for y in range(1, len(rows))], minor=True)
+    ax.grid(which="minor", color="white", linewidth=2); ax.tick_params(which="minor", length=0)
+    ax.tick_params(which="major", length=0)
+    return im
 fig, ax = plt.subplots(figsize=(W * 0.82, 3.1))
-im = ax.imshow(M, cmap=blue, vmin=0, vmax=100, aspect="auto")
-for i, row in enumerate(M):
-    for j, v in enumerate(row):
-        ax.text(j, i, f"{v:.0f}", ha="center", va="center", fontsize=8, color="white" if v >= 60 else INK)
-ax.set_xticks(range(len(ORDER))); ax.set_xticklabels(ORDER, rotation=20, ha="right")
-ax.set_yticks(range(len(cats))); ax.set_yticklabels([c.replace("_", " ") for c in cats])
-ax.grid(False)
-for s in ax.spines.values(): s.set_visible(False)
-ax.set_xticks([x - .5 for x in range(1, len(ORDER))], minor=True)
-ax.set_yticks([y - .5 for y in range(1, len(cats))], minor=True)
-ax.grid(which="minor", color="white", linewidth=2); ax.tick_params(which="minor", length=0)
+im = heat(ax, M, [f"{c.replace('_', ' ')} ({ncat[c]})" for c in cats], ORDER, lambda v: f"{v:.0f}")
+ax.set_xticklabels(ORDER, rotation=20, ha="right")
 cb = fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02); cb.set_label("strict accuracy (%)"); cb.outline.set_visible(False)
 save(fig, "fig_test_categories")
 
@@ -117,8 +144,8 @@ ax.plot(ks, ks, color=GRID, linewidth=1, zorder=1)
 ax.set_xticks(ks); ax.set_xlabel("actions asked in the message"); ax.set_ylabel("actions carried out correctly")
 ax.set_ylim(0, 5.3); ax.set_title("(b) Correct actions per message", loc="left")
 h, l = axes[1].get_legend_handles_labels()
-fig.legend(h, l, loc="upper center", ncol=6, bbox_to_anchor=(0.5, -0.02), handlelength=1.6, columnspacing=1.0)
-fig.subplots_adjust(bottom=0.32, wspace=0.3)
+fig.legend(h, l, loc="upper center", ncol=3, bbox_to_anchor=(0.5, -0.02), handlelength=4.2, numpoints=2, columnspacing=1.6)
+fig.subplots_adjust(bottom=0.31, wspace=0.3)
 save(fig, "fig_qualitative")
 
 # ---------- F4: emulator vs Orion-LD (backends harness) ----------
@@ -180,8 +207,8 @@ for ax in axes:
 axes[0].set_ylabel("request latency, p95 (ms)"); axes[0].set_title("(a) End-to-end latency", loc="left")
 axes[1].set_ylabel("tick delay, p95 (s)"); axes[1].set_title("(b) Delay of the positioning signals", loc="left")
 h, l = axes[0].get_legend_handles_labels()
-fig.legend(h, l, loc="upper center", ncol=4, bbox_to_anchor=(0.5, -0.02))
-fig.subplots_adjust(bottom=0.28, wspace=0.35)
+fig.legend(h, l, loc="upper center", ncol=2, bbox_to_anchor=(0.5, -0.02), handlelength=4.2, numpoints=2, columnspacing=2.0)
+fig.subplots_adjust(bottom=0.33, wspace=0.35)
 save(fig, "fig_load_closed")
 
 # ---------- F6: open loop ----------
@@ -194,7 +221,7 @@ for run, lab, col in (("open_memory_keyword_N10", "keyword", C["keyword"]), ("op
 ax.set_xscale("log"); ax.set_yscale("log")
 ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x:g}")); ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x:g}"))
 ax.set_xlabel("offered load (requests per second, 10 persons)"); ax.set_ylabel("latency (ms)")
-ax.legend(loc="upper left")
+ax.legend(loc="upper left", handlelength=4.2, numpoints=2)
 save(fig, "fig_load_open")
 
 # ---------- F7: language-model load ----------
@@ -205,7 +232,7 @@ for run, lab, col in (("closed_memory_llm_nemotron", "nemotron", C["nemotron"]),
     ax.plot(n, [float(r["lat_p50_ms"]) / 1000 for r in rs], color=col, marker="o", label=f"{lab}, request latency")
     ax.plot(n, [float(r["interpService_p50_ms"]) / 1000 for r in rs], color=col, marker="s", linestyle=":", label=f"{lab}, model call")
 ax.set_xscale("log", base=2); ax.set_xticks([1, 2, 4, 8]); ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x:g}"))
-ax.set_xlabel("persons (N)"); ax.set_ylabel("median (s)"); ax.legend(loc="upper left")
+ax.set_xlabel("persons (N)"); ax.set_ylabel("median (s)"); ax.legend(loc="upper left", handlelength=4.2, numpoints=2)
 save(fig, "fig_load_llm")
 
 # ---------- F8: resources ----------
