@@ -196,5 +196,4 @@ runs offline, without Docker, using the fake grounder and stub transports.
 Parts of the code, of the documentation and of the evaluation set were developed with the help of
 AI tools. Of the 210 evaluation requests in `data/requests.jsonl`, 180 were generated with a
 language model (150 English requests and their 30 Italian paraphrases, `source: llm`); the other
-30 were written by hand by the author and are marked `source: human`. The thesis describes in
-detail how these tools were used.
+30 were written by hand by the author and are marked `source: human`. The evaluation set was generated with a model of the Claude family (Anthropic); none of the models evaluated in the thesis belongs to that family.
