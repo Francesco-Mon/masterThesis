@@ -1,0 +1,19 @@
+{
+  "runId": "20261125-142031_llm_mistralai-mistral-large-4-0_test",
+  "time": "2026-11-25T14:20:31.942461Z",
+  "grounder": "llm",
+  "model": "mistralai/mistral-large-4-0",
+  "provider": "mistral/zdr",
+  "temperature": 0.0,
+  "split": "test",
+  "repeats": 3,
+  "cases": 60,
+  "cache": false,
+  "dataset": "data/fresh/requests_fresh.jsonl",
+  "datasetSha256": "d9d844afd5805e97",
+  "gitCommit": "790ef61",
+  "callsLogRunId": "6257bc19251c",
+  "promptVersion": "v3",
+  "promptSha256": "79825ef66d95b2e3",
+  "schemaSha256": "d00987ca62e50c53"
+}

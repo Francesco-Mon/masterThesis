@@ -1,0 +1,22 @@
+{
+  "runId": "20261125-141822_embedding_embedding_test",
+  "time": "2026-11-25T14:18:31.219808Z",
+  "grounder": "embedding",
+  "model": null,
+  "provider": null,
+  "temperature": 0.0,
+  "split": "test",
+  "repeats": 1,
+  "cases": 60,
+  "cache": true,
+  "dataset": "data/fresh/requests_fresh.jsonl",
+  "datasetSha256": "d9d844afd5805e97",
+  "gitCommit": "790ef61",
+  "callsLogRunId": null,
+  "embeddingModel": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "embeddingRevision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "threshold": 0.4,
+  "margin": 0.0,
+  "descriptionsSha256": "38a7b06cac9524b9",
+  "modelLoadS": 1.504
+}

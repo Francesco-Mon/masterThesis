@@ -360,3 +360,37 @@ Common parameters of the load runs (in each `metadata.json`): pace 1 tick/s, thi
 Language-model load runs: in memory, the client's rate limit 20 calls per minute (`LLM_RPM` not set; the nemotron run's metadata says `rpm: null`, see `docs/DECISIONS.md`), each run made with no other run on its provider. Since the harness calls the interpreter one request at a time and each person handles one event at a time, a slow call holds up that person's positioning signals: the tick delay, not the environment, is what fails at every N.
 
 Total spent on paid calls in the final runs: 0.006 + 0.050 + 0.148 + 1.330 + 0.021 + 0.434 + 0.009 = 1.998 USD (nemotron free).
+
+## Fresh set (held-out requests, 25 Nov 2026)
+
+Set: `data/fresh/requests_fresh.jsonl`, 60 requests (6 per category, 4 English and 2 Italian)
+written by Google Gemini 4 Hydrogen (Google AI Studio, a model family used nowhere else in the
+project) from a description of the building and of the ten categories only (prompt in
+`docs/fresh_set_prompt.md`, raw answer in `data/fresh/gemini_raw.jsonl`), and labelled by the
+author with `docs/EVAL_POLICY.md` before any grounder was run on it. Purpose: the keyword
+baseline's vocabulary was written knowing the wording of `data/requests.jsonl`, test split
+included, so its test-split accuracy is not a held-out measure. SHA-256
+`d9d844afd5805e970c12778a632e48efeca95720d886dbf20e457261c5dfe2b5`, checked by hand before the
+runs and recorded (first 16 digits) in each `run.json`. Unlike the sets above, it was committed
+together with its runs, not before, and has no `metadata.json`.
+
+Runs with the settings of the final test runs (prompt v3, temperature 0, no response cache, 3
+repeats for the language models, gpt-oss-120b pinned to DeepInfra, mistral-large-4-0 to
+`mistral/zdr`, nemotron not pinned; 1 run for keyword and embedding, threshold 0.40), with
+`python -m cpsagent.eval.run ... --split test --final --data data/fresh/requests_fresh.jsonl
+--out results/fresh/RUN_ID` called directly (no `cpsagent.bench.record` wrapper, so no
+`metadata.json`). Run ids, exact commands and tables in `results/fresh/README.md`; statistics
+from `python scripts/thesis_stats.py` (section "Fresh set").
+
+| run | folder | size | cost |
+|---|---|---|---|
+| keyword | `results/fresh/20261125-141822_keyword_keyword_test` | 60 cases | 0 |
+| embedding | `results/fresh/20261125-141822_embedding_embedding_test` | 60 cases | 0 |
+| nemotron | `results/fresh/20261125-142031_llm_nvidia-nemotron-3.5-super-vl-free_test` | 60 cases x 3, 174 calls | 0 USD |
+| gpt-oss-120b on DeepInfra | `results/fresh/20261125-141858_llm_openai-gpt-oss-120b_test_deepinfra` | 60 cases x 3, 174 calls + 165 retried after HTTP 429 | 0.020 USD |
+| mistral-large-4-0 on `mistral/zdr` | `results/fresh/20261125-142031_llm_mistralai-mistral-large-4-0_test` | 60 cases x 3, 174 calls | 0.516 USD |
+
+The three language-model runs ran at the same time, each on its own provider. 83 calls of
+gpt-oss-120b were refused by DeepInfra with HTTP 429 and re-grounded with `--retry-failed`
+(same settings) in three passes, until none was left as `service_unavailable` (details in
+`docs/DECISIONS.md`). Total spent: 0.536 USD.

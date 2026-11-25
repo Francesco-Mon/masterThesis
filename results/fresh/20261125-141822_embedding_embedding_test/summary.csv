@@ -1,0 +1,67 @@
+table,col1,col2,col3,col4,col5
+CLASSic overview,group,metric,value
+CLASSic overview,Accuracy,predictions,60
+CLASSic overview,Accuracy,kind accuracy,70.0% [57.5%-80.1%]
+CLASSic overview,Accuracy,strict accuracy,56.7% [44.1%-68.4%]
+CLASSic overview,Accuracy,outcome accuracy,61.7% [49.0%-72.9%]
+CLASSic overview,Accuracy,intent: all fields (gold intents),57.6% [40.8%-72.8%]
+CLASSic overview,Security,injection cases handled (outcome correct),33.3% [9.7%-70.0%]
+CLASSic overview,Security,injection-only cases with a command,1 / 3
+CLASSic overview,Security,mixed cases with commands beyond the legitimate part,0 / 3
+CLASSic overview,Security,raw grounder output off catalogue (all cases),0.0% [0.0%-6.0%]
+CLASSic overview,Security,final commands off catalogue (must be 0),0
+CLASSic overview,Cost,total USD,0.000000
+CLASSic overview,Cost,USD per 1000 requests,0.0000
+CLASSic overview,Cost,prompt / completion tokens,0 / 0
+CLASSic overview,Cost,tokens per request (prompt / completion),0 / 0
+CLASSic overview,Cost,LLM calls (incl. retries),0
+CLASSic overview,Cost,requests needing a retry,0
+CLASSic overview,Latency,requests measured (not cached),60
+CLASSic overview,Latency,mean s,0.01
+CLASSic overview,Latency,p50 s,0.01
+CLASSic overview,Latency,p95 s,0.02
+CLASSic overview,Latency,p50 ms,10.23
+CLASSic overview,Latency,p95 ms,15.13
+CLASSic overview,Stability,repeat agreement (all repeats identical),-
+CLASSic overview,Stability,EN-IT agreement (paraphrase pairs),-
+CLASSic overview,Stability,EN-IT pairs,0
+CLASSic overview,Failures,invalid output after retries,0
+CLASSic overview,Failures,service unavailable,0
+"Intent fields (gold intents, n = 33)",field,accuracy
+"Intent fields (gold intents, n = 33)",action,66.7% [49.6%-80.2%]
+"Intent fields (gold intents, n = 33)",controlledProperty,66.7% [49.6%-80.2%]
+"Intent fields (gold intents, n = 33)",scope,63.6% [46.6%-77.8%]
+"Intent fields (gold intents, n = 33)",persistence,63.6% [46.6%-77.8%]
+"Intent fields (gold intents, n = 33)",targetZoneId,69.7% [52.7%-82.6%]
+"Intent fields (gold intents, n = 33)",value,75.8% [59.0%-87.2%]
+"Intent fields (gold intents, n = 33)",all fields,57.6% [40.8%-72.8%]
+"Result kinds (rows gold, columns predicted)",,pred intent,pred clarification,pred unsupported
+"Result kinds (rows gold, columns predicted)",gold intent,25,1,7
+"Result kinds (rows gold, columns predicted)",gold clarification,2,7,1
+"Result kinds (rows gold, columns predicted)",gold unsupported,6,1,10
+"Result kinds (rows gold, columns predicted)",clarification precision / recall,77.8% [45.3%-93.7%],70.0% [39.7%-89.2%],
+Reasons,gold kind,n,kind correct,reason correct (given kind)
+Reasons,clarification,10,70.0% [39.7%-89.2%],71.4% [35.9%-91.8%]
+Reasons,unsupported,17,58.8% [36.0%-78.4%],90.0% [59.6%-98.2%]
+Strict errors by type (n = 26),type,errors,share
+Strict errors by type (n = 26),"non-intent predicted, intent expected",8,31%
+Strict errors by type (n = 26),"intent predicted, non-intent expected",8,31%
+Strict errors by type (n = 26),non-intent: wrong kind or reason,4,15%
+Strict errors by type (n = 26),"pair right, other field (scope, persistence, target, value)",3,12%
+Strict errors by type (n = 26),property (e.g. light vs shading),3,12%
+Per category,category,n,strict,outcome
+Per category,adversarial,6,33.3% [9.7%-70.0%],33.3% [9.7%-70.0%]
+Per category,ambiguous,6,33.3% [9.7%-70.0%],50.0% [18.8%-81.2%]
+Per category,environment,6,50.0% [18.8%-81.2%],50.0% [18.8%-81.2%]
+Per category,explicit,6,100.0% [61.0%-100.0%],100.0% [61.0%-100.0%]
+Per category,explicit_other_zone,6,83.3% [43.6%-97.0%],83.3% [43.6%-97.0%]
+Per category,following,6,50.0% [18.8%-81.2%],50.0% [18.8%-81.2%]
+Per category,implicit,6,33.3% [9.7%-70.0%],50.0% [18.8%-81.2%]
+Per category,out_of_scope,6,50.0% [18.8%-81.2%],66.7% [30.0%-90.3%]
+Per category,unsupported,6,33.3% [9.7%-70.0%],33.3% [9.7%-70.0%]
+Per category,zone_dependent,6,100.0% [61.0%-100.0%],100.0% [61.0%-100.0%]
+Per language,language,n,strict,outcome
+Per language,en,40,57.5% [42.2%-71.5%],65.0% [49.5%-77.9%]
+Per language,it,20,55.0% [34.2%-74.2%],55.0% [34.2%-74.2%]
+Per source,source,n,strict,outcome
+Per source,llm,60,56.7% [44.1%-68.4%],61.7% [49.0%-72.9%]

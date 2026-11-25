@@ -8,7 +8,9 @@ intervals on 156 requests), mean over repeats, exact McNemar tests, accuracy by
 category, source and language, correctness of the commands issued, predictions
 below the intent threshold, repeatability. Development split: Fisher's exact test of
 the keyword baseline, development against test. Call log: tokens per call of the test
-runs and latency of the calls of the load runs.
+runs and latency of the calls of the load runs. Fresh set (60 held-out requests,
+results/fresh): the same accuracies, McNemar tests against the keyword baseline, and
+Fisher's exact test of the keyword baseline, fresh set against test split.
 """
 import collections
 import json
@@ -30,6 +32,16 @@ TEST_RUNS = {
     "gpt-oss-120b": "20261121-154439_llm_openai-gpt-oss-120b_test_deepinfra",
     "mistral-large-4": "20261121-155508_llm_mistralai-mistral-large-4-0_test",
 }
+# Fresh set: 60 requests written by a model family never used in the project and
+# labelled before any grounder ran on them (results/fresh/README.md).
+FRESH = Path("results/fresh")
+FRESH_RUNS = {
+    "keyword": "20261125-141822_keyword_keyword_test",
+    "embedding": "20261125-141822_embedding_embedding_test",
+    "nemotron": "20261125-142031_llm_nvidia-nemotron-3.5-super-vl-free_test",
+    "gpt-oss-120b": "20261125-141858_llm_openai-gpt-oss-120b_test_deepinfra",
+    "mistral-large-4": "20261125-142031_llm_mistralai-mistral-large-4-0_test",
+}
 THETA = 0.6
 
 
@@ -46,16 +58,24 @@ def mcnemar(a, b):
 
 
 session = bind_scenario()
-per_run = {}
-for g, d in TEST_RUNS.items():
-    meta = json.loads((FINAL / d / "run.json").read_text())
-    cases = {c.id: c for c in load_cases(from_repo(meta["dataset"]))[0]}
-    per = collections.defaultdict(list)
-    for line in (FINAL / d / "predictions.jsonl").read_text().splitlines():
-        rec = json.loads(line)
-        pred = GroundingResultAdapter.validate_python(rec["prediction"])
-        per[rec["id"]].append(score(cases[rec["id"]], rec["repeat"], pred, session))
-    per_run[g] = per
+
+
+def load_runs(base, runs):
+    """{grounder: {case id: [Score of each repeat]}} for the run directories in `base`."""
+    out = {}
+    for g, d in runs.items():
+        meta = json.loads((base / d / "run.json").read_text())
+        cases = {c.id: c for c in load_cases(from_repo(meta["dataset"]))[0]}
+        per = collections.defaultdict(list)
+        for line in (base / d / "predictions.jsonl").read_text().splitlines():
+            rec = json.loads(line)
+            pred = GroundingResultAdapter.validate_python(rec["prediction"])
+            per[rec["id"]].append(score(cases[rec["id"]], rec["repeat"], pred, session))
+        out[g] = per
+    return out
+
+
+per_run = load_runs(FINAL, TEST_RUNS)
 
 maj = {}
 print("== Test split (majority answer; Wilson 95% on 156 requests) ==")
@@ -117,3 +137,37 @@ for p in sorted(Path("results/load").glob("closed_memory_llm_*/metadata.json")):
     run_id = json.loads(p.read_text()).get("callsLogRunId")
     if run_id:
         print(f"  load, {p.parent.name}: {summary(run_id)[1]}")
+
+print("\n== Fresh set (data/fresh/requests_fresh.jsonl; majority answer; Wilson 95% on 60 requests) ==")
+fresh = load_runs(FRESH, FRESH_RUNS)
+fmaj = {}
+for g, per in fresh.items():
+    ids = sorted(per)
+    n = len(ids)
+    ms = {i: sum(s.strict for s in per[i]) * 2 > len(per[i]) for i in ids}
+    mo = {i: sum(s.outcome_ok for s in per[i]) * 2 > len(per[i]) for i in ids}
+    fmaj[g] = (ms, mo)
+    all_s = [s for i in ids for s in per[i]]
+    print(f"\n{g} (repeats: {len(per[ids[0]])})")
+    print("  strict ", pct(sum(ms.values()), n), f" mean over repeats {100 * sum(s.strict for s in all_s) / len(all_s):.1f}%")
+    print("  outcome", pct(sum(mo.values()), n), f" mean over repeats {100 * sum(s.outcome_ok for s in all_s) / len(all_s):.1f}%")
+    for key in ("category", "language"):
+        groups = collections.defaultdict(list)
+        for i in ids:
+            groups[getattr(per[i][0].case, key)].append(i)
+        for name, m in (("strict", ms), ("outcome", mo)):
+            print(f"  {name} by {key}:", ", ".join(f"{k} {sum(m[i] for i in v)}/{len(v)}" for k, v in sorted(groups.items())))
+    acting = [s for s in all_s if not isinstance(s.out, str) and len(s.out) > 0]
+    print(f"  commands right when acting: {100 * sum(s.outcome_ok for s in acting) / len(acting):.1f}% of {len(acting)} predictions")
+
+print("\n== Fresh set, exact McNemar tests against the keyword baseline (majority answers) ==")
+for k, name in ((0, "strict"), (1, "outcome")):
+    for g in FRESH_RUNS:
+        if g != "keyword":
+            a, b, p = mcnemar(fmaj["keyword"][k], fmaj[g][k])
+            print(f"  {name}: keyword only {a}, {g} only {b}, p = {p:.4f}")
+
+print("\n== Keyword baseline, fresh set against the test split (strict) ==")
+fresh_ok = list(fmaj["keyword"][0].values())
+table = [[sum(fresh_ok), len(fresh_ok) - sum(fresh_ok)], [sum(test_ok), len(test_ok) - sum(test_ok)]]
+print(f"  fresh {table[0][0]}/{len(fresh_ok)}, test {table[1][0]}/{len(test_ok)}, Fisher p = {fisher_exact(table).pvalue:.3f}")
